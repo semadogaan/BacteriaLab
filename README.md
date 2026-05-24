@@ -1,6 +1,6 @@
 # 🧫 BacteriaLab — Mikrobiyoloji Simülasyonu
 
-> **🔗 Canlı Demo:** [buraya-site-linki-ekle](#)
+> **🔗 Canlı Demo:** https://semadogaan.github.io/BacteriaLab/intro.html
 
 Tarayıcı tabanlı, bilimsel verilerle desteklenmiş interaktif bakteri büyüme simülasyonu. 30 farklı bakteri türü, gerçek çevre koşulları parametreleri ve görsel koloni renderı ile gerçekçi bir petri kabı deneyimi sunar.
 
