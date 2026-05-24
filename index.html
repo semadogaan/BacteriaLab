@@ -1,0 +1,1748 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description"
+    content="BacteriaLab — Gerçek bakteri verilerine dayalı interaktif mikrobiyoloji simülasyonu. 30 bakteri türü, kontrol edilebilir çevre faktörleri, veri analizi.">
+  <title>BacteriaLab — Mikrobiyoloji Simülasyonu</title>
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧫</text></svg>">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap"
+    rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    /* ─── RESET & BASE ─── */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
+
+    :root {
+      --bg: #0a0c0d;
+      --bg2: #111417;
+      --bg3: #181c1f;
+      --bg4: #1e2328;
+      --border: #2a2f35;
+      --border2: #353b43;
+      --text: #e8eaed;
+      --text2: #9aa0a8;
+      --text3: #5f6368;
+      --text-muted: #5f6368;
+      --accent: #00e5a0;
+      --accent2: #00b87a;
+      --red: #ff4d4d;
+      --amber: #f9a825;
+      --blue: #4fc3f7;
+      --purple: #ce93d8;
+      --surface: #181c1f;
+      --panel-w: 300px;
+      --right-w: 320px;
+      --header-h: 44px;
+      --font-mono: 'Space Mono', monospace;
+      --font-sans: 'DM Sans', sans-serif;
+    }
+
+    html,
+    body {
+      height: 100%;
+      overflow: hidden;
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-sans);
+      font-size: 13px;
+    }
+
+    button {
+      font-family: inherit;
+      cursor: pointer;
+      border: none;
+      background: none;
+      color: inherit
+    }
+
+    input {
+      font-family: inherit;
+      color: inherit;
+      background: none;
+      border: none;
+      outline: none
+    }
+
+    /* ─── HEADER ─── */
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: var(--header-h);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      background: var(--bg2);
+      border-bottom: 1px solid var(--border);
+      z-index: 100;
+      font-family: var(--font-mono);
+    }
+
+    .logo {
+      color: var(--accent);
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: .08em
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 11px;
+      color: var(--text2);
+    }
+
+    .header-btn {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 10px;
+      border: 1px solid var(--border2);
+      border-radius: 4px;
+      font-size: 11px;
+      color: var(--text2);
+      font-family: var(--font-mono);
+      transition: all .15s;
+    }
+
+    .header-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent)
+    }
+
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent)
+    }
+
+    /* ─── MAIN LAYOUT ─── */
+    .main {
+      display: flex;
+      flex-direction: row;
+      height: calc(100vh - var(--header-h));
+      margin-top: var(--header-h);
+      overflow: hidden;
+    }
+
+    /* ─── LEFT PANEL ─── */
+    .left-panel {
+      flex: 0 0 20%;
+      background: var(--bg2);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    .workspace-area {
+      flex: 0 0 50%;
+      height: 100%;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .right-panel {
+      flex: 0 0 30%;
+      background: var(--bg2);
+      border-left: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    /* Scrollbars (Custom as requested) */
+    .bacteria-list::-webkit-scrollbar,
+    .workspace-area::-webkit-scrollbar,
+    .analysis-list::-webkit-scrollbar,
+    .analysis-chart-view::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .bacteria-list::-webkit-scrollbar-track,
+    .workspace-area::-webkit-scrollbar-track,
+    .analysis-list::-webkit-scrollbar-track,
+    .analysis-chart-view::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .bacteria-list::-webkit-scrollbar-thumb,
+    .workspace-area::-webkit-scrollbar-thumb,
+    .analysis-list::-webkit-scrollbar-thumb,
+    .analysis-chart-view::-webkit-scrollbar-thumb {
+      background: #2a2a2a;
+      border-radius: 2px;
+    }
+
+    .panel-label {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: .1em;
+      color: var(--text3);
+      text-transform: uppercase;
+      padding: 12px 14px 8px;
+    }
+
+    .panel-section {
+      padding: 0 12px 8px;
+      flex-shrink: 0
+    }
+
+    /* Search */
+    .search-box {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 6px 10px;
+      margin-bottom: 8px;
+    }
+
+    .search-icon {
+      color: var(--text3);
+      font-size: 15px
+    }
+
+    #searchInput {
+      flex: 1;
+      font-size: 12px;
+      color: var(--text)
+    }
+
+    #searchInput::placeholder {
+      color: var(--text3)
+    }
+
+    /* Filter chips */
+    .filter-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin-bottom: 4px
+    }
+
+    .filter-chip {
+      font-size: 10px;
+      font-family: var(--font-mono);
+      padding: 3px 8px;
+      border: 1px solid var(--border2);
+      border-radius: 20px;
+      color: var(--text3);
+      transition: all .15s;
+      white-space: nowrap;
+    }
+
+    .filter-chip:hover {
+      border-color: var(--accent);
+      color: var(--accent)
+    }
+
+    .filter-chip.active {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: rgba(0, 229, 160, .08)
+    }
+
+    /* Bacteria list */
+    .bacteria-list {
+      flex: 1;
+      padding: 4px 8px 8px;
+      overflow-y: auto;
+    }
+
+    /* Bacteria items — app.js uses .bacteria-item class */
+    .bacteria-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 8px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background .12s;
+      border: 1px solid transparent;
+    }
+
+    .bacteria-item:hover {
+      background: var(--bg3)
+    }
+
+    .bacteria-item.selected {
+      background: rgba(0, 229, 160, .06);
+      border-color: var(--accent)
+    }
+
+    .bac-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      flex-shrink: 0
+    }
+
+    .bac-info {
+      flex: 1;
+      min-width: 0
+    }
+
+    .bac-name {
+      font-style: italic;
+      font-size: 12px;
+      color: var(--text);
+      line-height: 1.3
+    }
+
+    .bac-taxonomy {
+      font-size: 9px;
+      color: var(--text3);
+      font-family: var(--font-mono)
+    }
+
+    /* Split panel (info + log) */
+    #panelModeList,
+    #panelModeSplit {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .split-top {
+      flex: 0 0 auto;
+      overflow-y: auto;
+      max-height: 50%;
+      border-bottom: 1px solid var(--border);
+      scrollbar-width: thin;
+      scrollbar-color: var(--border2) transparent;
+    }
+
+    .split-bottom {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden
+    }
+
+    .info-content {
+      padding: 6px 14px 12px;
+      font-size: 12px
+    }
+
+    .info-name {
+      font-style: italic;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 8px
+    }
+
+    .info-row {
+      display: flex;
+      gap: 6px;
+      padding: 5px 0;
+      border-bottom: 1px solid var(--border)
+    }
+
+    .info-row:last-child {
+      border: none
+    }
+
+    .info-icon {
+      font-size: 13px;
+      flex-shrink: 0;
+      width: 18px;
+      text-align: center;
+      margin-top: 1px
+    }
+
+    .info-label {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      color: var(--text3);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      width: 60px;
+      flex-shrink: 0;
+      padding-top: 2px;
+    }
+
+    .info-val {
+      color: var(--text2);
+      line-height: 1.5;
+      font-size: 11px
+    }
+
+    .info-divider {
+      height: 1px;
+      background: var(--border);
+      margin: 4px 0
+    }
+
+    .info-fact {
+      margin: 8px 0 0;
+      padding: 7px 9px;
+      background: rgba(249, 168, 37, .06);
+      border-left: 2px solid var(--amber);
+      border-radius: 3px;
+      color: var(--text2);
+      font-size: 11px;
+      line-height: 1.5;
+    }
+
+    .info-placeholder {
+      color: var(--text3);
+      font-size: 12px;
+      padding: 20px;
+      text-align: center
+    }
+
+    .microscopy-card {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 12px;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 10px;
+    }
+
+    .microscopy-img {
+      width: 80px;
+      height: 80px;
+      border-radius: 6px;
+      object-fit: cover;
+      background: var(--bg3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      border: 1px solid var(--border2);
+    }
+
+    .microscopy-info {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      justify-content: center;
+      flex: 1;
+    }
+
+    .microscopy-name {
+      font-weight: 600;
+      font-size: 13px;
+      color: var(--text);
+    }
+
+    .microscopy-gram {
+      font-size: 10px;
+      padding: 2px 6px;
+      border-radius: 3px;
+      display: inline-block;
+      width: fit-content;
+      font-family: var(--font-mono);
+      text-transform: uppercase;
+      letter-spacing: .05em;
+    }
+
+    .microscopy-gram.gram-pos {
+      background: rgba(100, 100, 255, 0.15);
+      color: #8c8cff;
+      border: 1px solid rgba(100, 100, 255, 0.3);
+    }
+
+    .microscopy-gram.gram-neg {
+      background: rgba(255, 100, 100, 0.15);
+      color: #ff7575;
+      border: 1px solid rgba(255, 100, 100, 0.3);
+    }
+
+    .microscopy-desc {
+      font-size: 11px;
+      color: var(--text2);
+      line-height: 1.4;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    /* Accordion */
+    .accordion-item {
+      border: none;
+      border-bottom: 1px dashed var(--border2);
+      border-radius: 0;
+      margin-bottom: 0;
+      background: transparent;
+      overflow: hidden;
+    }
+
+    .accordion-item:last-child {
+      border-bottom: none;
+    }
+
+    .accordion-header {
+      padding: 14px 4px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      font-weight: 500;
+      background: transparent;
+      color: var(--text);
+      transition: background 0.2s;
+      user-select: none;
+    }
+
+    .accordion-header:hover {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .accordion-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      letter-spacing: .03em;
+    }
+
+    .accordion-actions {
+      display: flex;
+      gap: 6px;
+    }
+
+    .export-btn {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text2);
+      padding: 4px 8px;
+      font-size: 9px;
+      font-family: var(--font-mono);
+      border-radius: 3px;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .export-btn:hover {
+      color: var(--accent);
+      border-color: var(--border2);
+      background: rgba(0, 229, 160, 0.05);
+    }
+
+    .accordion-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease-in-out;
+      background: transparent;
+    }
+
+    .accordion-body.open {
+      max-height: 500px;
+    }
+
+    .accordion-content {
+      padding: 10px 4px 16px 4px;
+    }
+
+    /* Chart View Container */
+    .chart-view-container {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+      z-index: -1;
+      width: 100%;
+      height: 100%;
+      padding: 10px;
+    }
+
+    .chart-view-container.active {
+      position: relative;
+      opacity: 1;
+      pointer-events: auto;
+      z-index: 1;
+    }
+
+    /* Log */
+    .log-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 14px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .log-download-btn {
+      padding: 4px;
+      border-radius: 4px;
+      color: var(--text3);
+      transition: color .15s
+    }
+
+    .log-download-btn:hover {
+      color: var(--accent)
+    }
+
+    .log-table-wrap {
+      flex: 1;
+      overflow: auto;
+      scrollbar-width: thin;
+      scrollbar-color: var(--border2) transparent
+    }
+
+    .log-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: var(--font-mono);
+      font-size: 9px;
+      white-space: nowrap
+    }
+
+    .log-table th {
+      padding: 4px 6px;
+      color: var(--text3);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      background: var(--bg2);
+    }
+
+    .log-table td {
+      padding: 4px 6px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text2)
+    }
+
+    .log-table tr:hover td {
+      background: var(--bg3)
+    }
+
+    /* ─── CENTER: WORKSPACE ─── */
+    .workspace-area {
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      background: var(--bg)
+    }
+
+    .workspace {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding: 20px 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      scrollbar-width: thin;
+      scrollbar-color: var(--border2) transparent;
+    }
+
+    .workspace::-webkit-scrollbar {
+      width: 5px
+    }
+
+    .workspace::-webkit-scrollbar-thumb {
+      background: var(--border2);
+      border-radius: 3px
+    }
+
+    /* Petri dish wrap — app.js uses .petri-wrap */
+    .petri-wrap {
+      width: 300px;
+      flex-shrink: 0;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px;
+      transition: transform .2s, box-shadow .2s;
+      animation: dishIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes dishIn {
+      from {
+        opacity: 0;
+        transform: scale(0.85)
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1)
+      }
+    }
+
+    .petri-wrap:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, .4)
+    }
+
+    /* Dish top row */
+    .dish-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px
+    }
+
+    .dish-name-tag {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--text2);
+      letter-spacing: .04em
+    }
+
+    .dish-btns {
+      display: flex;
+      gap: 4px
+    }
+
+    .dish-btn {
+      width: 22px;
+      height: 22px;
+      border-radius: 4px;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--border2);
+      color: var(--text3);
+      transition: all .15s;
+    }
+
+    .dish-btn.save:hover {
+      border-color: var(--accent);
+      color: var(--accent)
+    }
+
+    .dish-btn.delete:hover {
+      border-color: var(--red);
+      color: var(--red)
+    }
+
+    /* Petri canvas area */
+    .dish-circle-wrapper {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 10px
+    }
+
+    .dish-glass {
+      position: relative;
+      width: 260px;
+      height: 260px;
+      border-radius: 50%;
+      background: radial-gradient(ellipse at 35% 35%, #2a2f35, #111417);
+      border: 6px solid #1a1e23;
+      box-shadow: inset 0 2px 8px rgba(0, 0, 0, .6), 0 0 0 2px #0d0f11;
+      overflow: hidden;
+    }
+
+    .petri-canvas {
+      display: block;
+      border-radius: 50%
+    }
+
+    .dish-hint {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: #353b43;
+      line-height: 1.6;
+      pointer-events: none;
+    }
+
+    /* Controls panel */
+    .controls-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 4px
+    }
+
+    .ctrl-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      padding: 4px 0
+    }
+
+    .ctrl-icon {
+      font-size: 13px;
+      width: 18px;
+      text-align: center;
+      flex-shrink: 0;
+      margin-top: 2px
+    }
+
+    .ctrl-track {
+      flex: 1;
+      min-width: 0
+    }
+
+    .ctrl-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 4px
+    }
+
+    .ctrl-label {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      color: var(--text3);
+      text-transform: uppercase;
+      letter-spacing: .06em
+    }
+
+    .ctrl-value {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--text)
+    }
+
+    .oxy-warning {
+      color: var(--amber) !important;
+      font-size: 9px !important
+    }
+
+    .ctrl-slider {
+      width: 100%;
+      -webkit-appearance: none;
+      height: 2px;
+      background: var(--border2);
+      border-radius: 2px;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .ctrl-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--accent);
+      cursor: pointer;
+    }
+
+    .ctrl-slider::-moz-range-thumb {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--accent);
+      border: none;
+      cursor: pointer;
+    }
+
+    /* Phase bar under time slider */
+    .phase-bar {
+      height: 3px;
+      background: var(--border);
+      border-radius: 2px;
+      overflow: hidden;
+      margin-top: 4px;
+    }
+
+    .phase-fill {
+      height: 100%;
+      border-radius: 2px;
+      transition: width .3s, background .3s
+    }
+
+    /* Oxygen buttons */
+    .oxy-row {
+      display: flex;
+      gap: 4px;
+      margin-top: 4px
+    }
+
+    .oxy-btn {
+      flex: 1;
+      padding: 4px 0;
+      font-family: var(--font-mono);
+      font-size: 9px;
+      border: 1px solid var(--border2);
+      border-radius: 4px;
+      color: var(--text3);
+      transition: all .15s;
+    }
+
+    .oxy-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent)
+    }
+
+    .oxy-btn.active {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: rgba(0, 229, 160, .08)
+    }
+
+    /* Add dish button */
+    .add-dish-card {
+      width: 300px;
+      height: 80px;
+      flex-shrink: 0;
+      border: 2px dashed var(--border2);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      color: var(--text3);
+      cursor: pointer;
+      font-size: 12px;
+      font-family: var(--font-mono);
+      transition: all .2s;
+    }
+
+    .add-dish-card:hover {
+      border-color: var(--accent);
+      color: var(--accent)
+    }
+
+    /* Library */
+    .library {
+      padding: 10px 16px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      min-height: 60px;
+      align-items: center;
+    }
+
+    .library-empty {
+      color: var(--text3);
+      font-size: 11px;
+      font-family: var(--font-mono);
+      width: 100%;
+      text-align: center
+    }
+
+    .lib-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+      transition: all .15s;
+    }
+
+    .lib-dish {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: var(--bg3);
+      border: 1px solid var(--border2);
+      overflow: hidden;
+      transition: border-color .15s;
+    }
+
+    .lib-item:hover .lib-dish {
+      border-color: var(--accent)
+    }
+
+    .lib-canvas {
+      display: block
+    }
+
+    .lib-label {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      color: var(--text3);
+      text-align: center;
+      max-width: 60px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    /* ─── RIGHT PANEL ─── */
+    .right-panel {
+      background: var(--bg2);
+      border-left: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      min-height: 0;
+    }
+
+    .analysis-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 10px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      scrollbar-width: thin;
+      scrollbar-color: var(--border2) transparent;
+    }
+
+
+    .analysis-card {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 12px;
+    }
+
+    .card-title {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      color: var(--text3);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      margin-bottom: 8px;
+    }
+
+    .chart-placeholder {
+      color: var(--text3);
+      font-size: 11px;
+      font-family: var(--font-mono);
+      padding: 12px 0;
+      text-align: center
+    }
+
+    /* ─── SELECTED BADGE ─── */
+    .selected-badge {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--bg3);
+      border: 1px solid var(--border2);
+      border-radius: 20px;
+      padding: 7px 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      font-family: var(--font-mono);
+      z-index: 50;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, .4);
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity .2s;
+    }
+
+    .selected-badge.visible {
+      opacity: 1
+    }
+
+    /* ─── DETAIL PANEL ─── */
+    .bac-detail-panel {
+      position: fixed;
+      top: 54px;
+      right: 330px;
+      background: var(--bg3);
+      border: 1px solid var(--border2);
+      border-radius: 8px;
+      padding: 12px 14px;
+      min-width: 200px;
+      max-width: 260px;
+      font-size: 11px;
+      z-index: 60;
+      display: none;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, .5);
+      animation: fadeUp 0.2s ease;
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(6px)
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0)
+      }
+    }
+
+    .detail-name {
+      font-style: italic;
+      font-size: 13px;
+      color: var(--text);
+      margin-bottom: 8px;
+      font-weight: 600
+    }
+
+    .detail-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4px 8px;
+      margin-bottom: 6px
+    }
+
+    .detail-cell {}
+
+    .detail-cell-label {
+      color: var(--text3);
+      font-family: var(--font-mono);
+      font-size: 9px
+    }
+
+    .detail-cell-val {
+      color: var(--text2);
+      font-size: 11px
+    }
+
+    .detail-badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin-top: 4px
+    }
+
+    .detail-badge {
+      font-size: 9px;
+      padding: 2px 7px;
+      border-radius: 10px;
+      font-family: var(--font-mono);
+      border: 1px solid var(--border2);
+      color: var(--text2)
+    }
+
+    .detail-badge.hi {
+      border-color: var(--red);
+      color: var(--red)
+    }
+
+    .detail-badge.glow {
+      border-color: var(--accent);
+      color: var(--accent)
+    }
+
+    /* ─── MODALS ─── */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, .6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 200;
+    }
+
+    .modal-box {
+      background: var(--bg3);
+      border: 1px solid var(--border2);
+      border-radius: 10px;
+      padding: 20px 24px;
+      min-width: 300px;
+    }
+
+    .modal-title {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--text);
+      margin-bottom: 4px
+    }
+
+    .modal-subtitle {
+      font-size: 11px;
+      color: var(--text3);
+      margin-bottom: 12px
+    }
+
+    .modal-input {
+      width: 100%;
+      padding: 8px 10px;
+      background: var(--bg);
+      border: 1px solid var(--border2);
+      border-radius: 6px;
+      font-size: 12px;
+      color: var(--text);
+      margin-top: 8px;
+      font-family: var(--font-mono);
+      outline: none;
+    }
+
+    .modal-input:focus {
+      border-color: var(--accent)
+    }
+
+    .modal-petri-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      max-height: 200px;
+      overflow-y: auto;
+      margin: 8px 0;
+    }
+
+    .modal-petri-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 8px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 11px;
+      font-family: var(--font-mono);
+    }
+
+    .modal-petri-item:hover {
+      border-color: var(--accent)
+    }
+
+    .modal-btns {
+      display: flex;
+      gap: 8px;
+      margin-top: 14px;
+      justify-content: flex-end
+    }
+
+    .modal-btn {
+      padding: 7px 16px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-family: var(--font-mono);
+      transition: all .15s
+    }
+
+    .modal-btn.cancel {
+      border: 1px solid var(--border2);
+      color: var(--text3)
+    }
+
+    .modal-btn.cancel:hover {
+      border-color: var(--text3)
+    }
+
+    .modal-btn.confirm {
+      background: var(--accent);
+      color: #000;
+      font-weight: 700
+    }
+
+    .modal-btn.confirm:hover {
+      background: var(--accent2)
+    }
+
+    ::-webkit-scrollbar {
+      width: 4px;
+      height: 4px
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--border2);
+      border-radius: 2px
+    }
+
+    /* Morphology Microscopy Styles */
+    .morphology-image-wrapper {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 4/3;
+      background: #111;
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 12px;
+    }
+
+    .morphology-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .morphology-placeholder {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #111;
+      flex-direction: column;
+      gap: 8px;
+      color: #555;
+      font-size: 12px;
+    }
+
+    .morph-spinner {
+      width: 24px;
+      height: 24px;
+      border: 2px solid #333;
+      border-top-color: #6ECB70;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .morph-license {
+      position: absolute;
+      bottom: 6px;
+      right: 6px;
+      background: rgba(0, 0, 0, 0.6);
+      color: #aaa;
+      font-size: 10px;
+      padding: 2px 6px;
+      border-radius: 4px;
+      backdrop-filter: blur(4px);
+    }
+
+    /* Chart Search Dropdown */
+    .chart-search-input {
+      width: 100%;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text);
+      font-size: 12px;
+      padding: 6px 10px;
+      cursor: pointer;
+      caret-color: transparent;
+      font-family: inherit;
+    }
+
+    .chart-search-input:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+
+    .chart-dropdown {
+      display: none;
+      position: absolute;
+      top: calc(100% + 4px);
+      left: 0;
+      right: 0;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      z-index: 100;
+      max-height: 280px;
+      overflow-y: auto;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      scrollbar-width: thin;
+    }
+
+    .chart-dropdown.open {
+      display: block;
+    }
+
+    .chart-option {
+      padding: 10px 14px;
+      font-size: 13px;
+      color: var(--text2);
+      cursor: pointer;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .chart-option:last-child {
+      border-bottom: none;
+    }
+
+    .chart-option:hover {
+      background: var(--bg2);
+      color: #fff;
+    }
+
+    .chart-option.active {
+      color: var(--accent);
+    }
+  </style>
+</head>
+
+<body>
+  <script>
+    if (!sessionStorage.getItem('introSeen')) {
+      window.location.replace('intro.html');
+    }
+  </script>
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="logo">BacteriaLab</div>
+    <div class="header-right">
+      <button class="header-btn" id="howToBtn">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10" />
+          <line x1="12" y1="8" x2="12" y2="12" />
+          <line x1="12" y1="16" x2="12" y2="16" />
+        </svg>
+        NASIL ÇALIŞIR?
+      </button>
+      <button class="header-btn" id="datasetDownloadBtn" title="Download Dataset">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+          <polyline points="7 10 12 15 17 10" />
+          <line x1="12" y1="15" x2="12" y2="3" />
+        </svg>
+        DOWNLOAD DATASET
+      </button>
+      <div class="status-dot"></div>
+      <span id="bacteriaCountLabel">— strain loaded</span>
+      <span style="color:var(--border)">|</span>
+      <span id="dishCountLabel">0 dishes active</span>
+    </div>
+  </header>
+
+  <div class="main">
+
+    <!-- LEFT PANEL -->
+    <aside class="left-panel" id="leftPanel">
+      <!-- MODE A: Bacteria list -->
+      <div id="panelModeList">
+        <div class="panel-section">
+          <div class="panel-label">Strain Library</div>
+          <div class="search-box">
+            <span class="search-icon">⌕</span>
+            <input type="text" id="searchInput" placeholder="Search bacteria...">
+          </div>
+          <div class="filter-row">
+            <button class="filter-chip active" data-filter="all">All</button>
+            <button class="filter-chip" data-filter="gram-pos">Gram +</button>
+            <button class="filter-chip" data-filter="gram-neg">Gram −</button>
+            <button class="filter-chip" data-filter="bioluminescent">Biolum.</button>
+            <button class="filter-chip" data-filter="toxic">Toxigenic</button>
+            <button class="filter-chip" data-filter="aerobic">Aerobic</button>
+            <button class="filter-chip" data-filter="anaerobic">Anaerobic</button>
+          </div>
+        </div>
+        <div class="bacteria-list" id="bacteriaList"></div>
+      </div>
+
+      <!-- MODE B: Split panel (info + log) -->
+      <div id="panelModeSplit" style="display:none;">
+        <div class="split-top">
+          <div style="display: flex; justify-content: space-between; align-items: center; padding-right: 14px;">
+            <div class="panel-label">Bilimsel Bilgi</div>
+            <button class="header-btn" id="backToListBtn"
+              style="padding: 2px 6px; font-size: 10px; margin-top: 4px;">&larr; Kütüphane</button>
+          </div>
+          <div class="info-content" id="infoContent">
+            <div class="info-placeholder">Bir bakteri türü seçin</div>
+          </div>
+        </div>
+        <div class="split-bottom">
+          <div class="log-header">
+            <div class="panel-label" style="padding:0">Experiment Log</div>
+            <button class="log-download-btn" id="logDownloadBtn" title="CSV İndir">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                <polyline points="7 10 12 15 17 10" />
+                <line x1="12" y1="15" x2="12" y2="3" />
+              </svg>
+            </button>
+          </div>
+          <div class="log-table-wrap" id="logTableWrap">
+            <table class="log-table" id="logTable">
+              <thead>
+                <tr>
+                  <th>Petri</th>
+                  <th>Tarih</th>
+                  <th>Saat</th>
+                  <th>İşlem</th>
+                  <th>Temp</th>
+                  <th>pH</th>
+                  <th>O₂</th>
+                  <th>NaCl%</th>
+                </tr>
+              </thead>
+              <tbody id="logTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- WORKSPACE AREA -->
+    <div class="workspace-area">
+      <div class="workspace" id="workspace">
+        <div class="add-dish-card" id="addDishBtn">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="12" cy="12" r="10" />
+            <line x1="12" y1="7" x2="12" y2="17" />
+            <line x1="7" y1="12" x2="17" y2="12" />
+          </svg>
+          <span>New Dish</span>
+        </div>
+      </div>
+      <div class="library" id="library">
+        <div class="library-empty" id="libraryEmpty">— Saved dishes appear here —</div>
+      </div>
+    </div>
+
+    <!-- RIGHT PANEL (ANALYSIS) -->
+    <aside class="right-panel" id="analysisPanel">
+      <div class="panel-section" style="border-bottom:none;padding-bottom:8px;">
+        <div class="panel-label">ANALYSIS</div>
+      </div>
+
+      <!-- Pinned Microscopy Card -->
+      <div class="analysis-card" id="microscopyCard" style="display:none; margin: 0 14px 14px 14px; flex-shrink: 0;">
+        <div class="card-title"><span>🔬</span> MORPHOLOGY & MICROSCOPY</div>
+        <div class="microscopy-card">
+          <div class="morphology-image-wrapper">
+            <div class="morphology-placeholder" id="morph-placeholder">
+              <div class="morph-spinner"></div>
+            </div>
+            <img id="morph-img" class="morphology-img" alt="" style="display:none" />
+            <span class="morph-license" id="morph-license"></span>
+          </div>
+          <div class="microscopy-info">
+            <div class="microscopy-name" id="microscopyName">-</div>
+            <div class="microscopy-gram" id="microscopyGram">-</div>
+            <div class="microscopy-desc" id="microscopyDesc" title="">-</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="analysis-split"
+        style="flex: 1; display: flex; flex-direction: column; min-height: 0; position: relative; padding: 14px;">
+
+        <div class="chart-search-wrapper"
+          style="position: relative; display: flex; gap: 8px; margin-bottom: 12px; flex-shrink: 0;">
+          <input type="text" id="chart-search-input" class="chart-search-input" placeholder="Search charts..."
+            readonly />
+          <button id="chart-export-btn" class="export-btn"
+            style="padding: 0 14px; height: auto; border-radius: 6px; display: none;">İNDİR</button>
+
+          <div class="chart-dropdown" id="chart-dropdown">
+            <div class="chart-option" data-chart="growth" data-export="growth_curve">Büyüme Eğrisi (OD₆₀₀)</div>
+            <div class="chart-option" data-chart="heatmap" data-export="tolerance_heatmap">Çevresel Tolerans Haritası
+            </div>
+            <div class="chart-option" data-chart="radar" data-export="antibiotic_radar">Antibiyotik Direnç Radarı</div>
+            <div class="chart-option" data-chart="mic" data-export="mic_profile">MIC Profili (Minimal İnhibitör)</div>
+            <div class="chart-option" data-chart="population" data-export="population_dynamics">Popülasyon Dinamikleri
+            </div>
+            <div class="chart-option" data-chart="nutrient" data-export="nutrient_depletion">Besin Tüketimi</div>
+            <div class="chart-option" data-chart="survival" data-export="survival_curve">Hücre Canlılık Oranı</div>
+            <div class="chart-option" data-chart="mutation" data-export="mutation_freq">Mutasyon Frekansı</div>
+            <div class="chart-option" data-chart="biofilm" data-export="biofilm_thickness">Biyofilm Kalınlığı</div>
+            <div class="chart-option" data-chart="stress" data-export="stress_index">Çevresel Stres İndeksi</div>
+          </div>
+        </div>
+
+        <div class="analysis-chart-view" id="analysisChartView"
+          style="flex: 1; overflow-y: auto; border: 1px solid var(--border); border-radius: 8px; padding: 16px; display: flex; align-items: center; justify-content: center; position: relative; background: var(--bg2);">
+          <div id="chart-placeholder"
+            style="color: var(--text3); font-family: var(--font-mono); font-size: 12px; position: absolute;">← Bir
+            grafik seçin</div>
+
+          <div class="chart-view-container" id="cv-growth"><canvas id="chart-growth" width="400" height="200"></canvas>
+          </div>
+          <div class="chart-view-container" id="cv-heatmap">
+            <div id="chart-heatmap-container"
+              style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;"></div>
+          </div>
+          <div class="chart-view-container" id="cv-radar"><canvas id="chart-radar" width="400" height="200"></canvas>
+          </div>
+          <div class="chart-view-container" id="cv-mic">
+            <div id="chart-mic-table"></div>
+          </div>
+          <div class="chart-view-container" id="cv-population"><canvas id="chart-population" width="400"
+              height="200"></canvas></div>
+          <div class="chart-view-container" id="cv-nutrient"><canvas id="chart-nutrient" width="400"
+              height="200"></canvas></div>
+          <div class="chart-view-container" id="cv-survival"><canvas id="chart-survival" width="400"
+              height="200"></canvas></div>
+          <div class="chart-view-container" id="cv-mutation"><canvas id="chart-mutation" width="400"
+              height="200"></canvas></div>
+          <div class="chart-view-container" id="cv-biofilm"><canvas id="chart-biofilm" width="400"
+              height="200"></canvas></div>
+          <div class="chart-view-container" id="cv-stress"><canvas id="chart-stress" width="400" height="200"></canvas>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <!-- SELECTED BACTERIA BADGE -->
+  <div class="selected-badge" id="selectedBadge">
+    <span id="selectedBadgeDot"
+      style="width:8px;height:8px;border-radius:50%;background:var(--accent);display:inline-block;"></span>
+    <span id="selectedBadgeName">—</span>
+    <span style="color:var(--text3);font-size:10px">· click dish to inoculate</span>
+  </div>
+
+  <!-- DETAIL PANEL -->
+  <div class="bac-detail-panel" id="detailPanel">
+    <div class="detail-name" id="detailName"></div>
+    <div class="detail-grid" id="detailGrid"></div>
+    <div class="detail-badge-row" id="detailBadges"></div>
+  </div>
+
+  <!-- SAVE MODAL -->
+  <div class="modal-overlay" id="saveModal" style="display:none;">
+    <div class="modal-box">
+      <div class="modal-title">Save to Library</div>
+      <input type="text" class="modal-input" id="saveModalInput" placeholder="Deney adı girin...">
+      <div class="modal-btns">
+        <button class="modal-btn cancel" id="saveModalCancel">İptal</button>
+        <button class="modal-btn confirm" id="saveModalConfirm">Kaydet</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- LOG DOWNLOAD MODAL -->
+  <div class="modal-overlay" id="logDownloadModal" style="display:none;">
+    <div class="modal-box">
+      <div class="modal-title">CSV İndir</div>
+      <div class="modal-subtitle">İndirmek istediğiniz petri kaplarını seçiniz</div>
+      <div class="modal-petri-list" id="modalPetriList"></div>
+      <div class="modal-btns">
+        <button class="modal-btn cancel" id="logModalCancel">İptal</button>
+        <button class="modal-btn confirm" id="logModalDownloadAll">Tümünü İndir</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SVG Gooey Filter -->
+  <svg style="display:none;" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <filter id="gooey">
+        <feGaussianBlur in="SourceGraphic" stdDeviation="5" result="blur" />
+        <feColorMatrix in="blur" type="matrix" values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 16 -7" result="goo" />
+        <feComposite in="SourceGraphic" in2="goo" operator="atop" />
+      </filter>
+    </defs>
+  </svg>
+
+  <!-- Modüler Data Dosyaları (JSON olarak yükleniyor) -->
+  <script src="data_loader.js"></script>
+
+  <!-- 3rd Party Libraries -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Modüler JS Motoru -->
+  <script src="bacteria-store.js"></script>
+  <script src="simulation.js"></script>
+  <script src="renderer.js"></script>
+  <script src="ui-panels.js"></script>
+  <script src="app.js"></script>
+  <script type="module">
+    import { getBacteriaImage, loadBacteriaImage } from './bacteria-images.js';
+
+    const morphImg = document.getElementById('morph-img');
+    const morphPlaceholder = document.getElementById('morph-placeholder');
+    const morphLicense = document.getElementById('morph-license');
+
+    window.updateMorphologyImage = async function (bacteriaName) {
+      if (!morphImg || !morphPlaceholder || !morphLicense) return;
+
+      morphImg.style.display = 'none';
+      morphPlaceholder.style.display = 'flex';
+      morphLicense.textContent = '';
+      morphImg.alt = bacteriaName;
+
+      const data = getBacteriaImage(bacteriaName);
+      if (data) {
+        morphLicense.textContent = data.license;
+        await loadBacteriaImage(bacteriaName, morphImg, morphPlaceholder);
+      } else {
+        morphPlaceholder.innerHTML = '<span style="font-size:28px">🔬</span><span>Görsel bulunamadı</span>';
+      }
+    };
+
+    // Chart Search Dropdown Logic
+    const chartInput = document.getElementById('chart-search-input');
+    const chartDropdown = document.getElementById('chart-dropdown');
+
+    if (chartInput && chartDropdown) {
+      chartInput.addEventListener('click', (e) => {
+        e.stopPropagation();
+        chartDropdown.classList.toggle('open');
+      });
+
+      document.addEventListener('click', () => {
+        chartDropdown.classList.remove('open');
+      });
+
+      document.querySelectorAll('.chart-option').forEach(option => {
+        option.addEventListener('click', (e) => {
+          e.stopPropagation();
+
+          // Aktif stili güncelle
+          document.querySelectorAll('.chart-option').forEach(o => o.classList.remove('active'));
+          option.classList.add('active');
+
+          // Input'ta grafik adını göster
+          chartInput.value = option.textContent;
+
+          // Popup kapat
+          chartDropdown.classList.remove('open');
+
+          // Grafiği render et
+          if (window.selectChart) {
+            window.selectChart(option.dataset.chart, null);
+          }
+
+          // PNG İndirme Butonunu Ayarla
+          const exportBtn = document.getElementById('chart-export-btn');
+          exportBtn.style.display = 'block';
+          exportBtn.onclick = (e) => {
+            e.preventDefault();
+            let bakteriAdi = 'Bilinmeyen';
+            if (window.selectedBacteria && window.selectedBacteria.name) {
+              bakteriAdi = window.selectedBacteria.name;
+            } else {
+              const badge = document.getElementById('selectedBadgeName');
+              if (badge && badge.textContent && badge.textContent !== '—') {
+                bakteriAdi = badge.textContent;
+              }
+            }
+
+            const canvas = document.getElementById('chart-' + option.dataset.chart);
+            if (!canvas || !canvas.toDataURL) {
+              alert("Bu grafik için PNG indirme desteklenmiyor.");
+              return;
+            }
+
+            try {
+              const dataUrl = canvas.toDataURL('image/png');
+              const a = document.createElement("a");
+              a.href = dataUrl;
+              a.download = `${bakteriAdi}_${option.dataset.export}.png`;
+              document.body.appendChild(a);
+              a.click();
+              document.body.removeChild(a);
+            } catch (e) {
+              console.error(e);
+            }
+          };
+        });
+      });
+    }
+
+    document.getElementById('howToBtn').addEventListener('click', () => {
+      sessionStorage.removeItem('introSeen');
+      window.location.href = 'intro.html';
+    });
+  </script>
+</body>
+
+</html>

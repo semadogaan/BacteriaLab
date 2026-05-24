@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BacteriaLab — Giriş</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧫</text></svg>">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0a0c0d;
+      --bg2: #111417;
+      --bg3: #181c1f;
+      --border: #2a2f35;
+      --border2: #353b43;
+      --text: #e8eaed;
+      --text2: #9aa0a8;
+      --text3: #5f6368;
+      --accent: #00e5a0;
+      --accent2: #00b87a;
+      --font-mono: 'Space Mono', monospace;
+      --font-sans: 'DM Sans', sans-serif;
+    }
+
+    html, body {
+      height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-sans);
+      overflow: hidden;
+    }
+
+    /* ─── AMBIENT BACKGROUND ─── */
+    .bg-canvas {
+      position: fixed;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .bg-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(120px);
+      opacity: 0.07;
+    }
+    .bg-orb-1 {
+      width: 600px; height: 600px;
+      background: var(--accent);
+      top: -200px; left: -150px;
+      animation: drift1 18s ease-in-out infinite alternate;
+    }
+    .bg-orb-2 {
+      width: 400px; height: 400px;
+      background: #4fc3f7;
+      bottom: -100px; right: -100px;
+      animation: drift2 22s ease-in-out infinite alternate;
+    }
+    .bg-orb-3 {
+      width: 300px; height: 300px;
+      background: var(--accent);
+      top: 50%; right: 20%;
+      opacity: 0.04;
+      animation: drift3 15s ease-in-out infinite alternate;
+    }
+
+    @keyframes drift1 { from { transform: translate(0,0); } to { transform: translate(60px, 40px); } }
+    @keyframes drift2 { from { transform: translate(0,0); } to { transform: translate(-40px, -60px); } }
+    @keyframes drift3 { from { transform: translate(0,0); } to { transform: translate(30px, -50px); } }
+
+    .bg-grid {
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0,229,160,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,229,160,0.025) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ─── SCREENS ─── */
+    .screen {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+    }
+
+    /* ─── SCREEN 1: LOGO SPLASH ─── */
+    #screen-logo { flex-direction: column; }
+
+    .splash-logo {
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: clamp(48px, 8vw, 96px);
+      color: var(--accent);
+      letter-spacing: 0.08em;
+      animation: logoAppear 1s ease forwards, logoFade 1s ease 2.5s forwards;
+      opacity: 0;
+    }
+
+    .splash-tagline {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text3);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-top: 16px;
+      animation: logoAppear 1s ease 0.4s forwards, logoFade 1s ease 2.5s forwards;
+      opacity: 0;
+    }
+
+    @keyframes logoAppear {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes logoFade {
+      from { opacity: 1; }
+      to   { opacity: 0; }
+    }
+
+    /* ─── SCREEN 2: CONTROLS GUIDE ─── */
+    #screen-guide {
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+      opacity: 0;
+      transition: opacity 0.8s ease;
+      pointer-events: none;
+      overflow-y: auto;
+      padding: 32px 20px;
+    }
+
+    #screen-guide.visible {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .guide-inner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      max-width: 960px;
+    }
+
+    .guide-header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .guide-title {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      color: var(--text3);
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .guide-subtitle {
+      font-family: var(--font-mono);
+      font-size: 22px;
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    /* ─── COLUMNS LAYOUT ─── */
+    .controls-cols {
+      display: flex;
+      flex-direction: row;
+      gap: 12px;
+      width: 100%;
+      margin-bottom: 36px;
+      align-items: stretch;
+    }
+
+    /* Each column is one card — tall, vertical */
+    .ctrl-col {
+      flex: 1;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 22px 18px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      transition: border-color 0.2s, transform 0.2s;
+      animation: cardIn 0.5s ease both;
+    }
+
+    .ctrl-col:hover {
+      border-color: rgba(0,229,160,0.3);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+    }
+
+    .ctrl-col:nth-child(1) { animation-delay: 0.05s; }
+    .ctrl-col:nth-child(2) { animation-delay: 0.10s; }
+    .ctrl-col:nth-child(3) { animation-delay: 0.15s; }
+    .ctrl-col:nth-child(4) { animation-delay: 0.20s; }
+    .ctrl-col:nth-child(5) { animation-delay: 0.25s; }
+    .ctrl-col:nth-child(6) { animation-delay: 0.30s; }
+
+    @keyframes cardIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Thin top accent line on each column */
+    .ctrl-col::before {
+      content: '';
+      display: block;
+      height: 2px;
+      border-radius: 2px;
+      background: linear-gradient(90deg, var(--accent), transparent);
+      margin: -22px -18px 0;
+      border-radius: 12px 12px 0 0;
+      opacity: 0.4;
+    }
+
+    .ctrl-icon-wrap {
+      width: 38px;
+      height: 38px;
+      border-radius: 8px;
+      background: rgba(0, 229, 160, 0.08);
+      border: 1px solid rgba(0, 229, 160, 0.18);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 17px;
+      flex-shrink: 0;
+    }
+
+    .ctrl-col-name {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-top: 6px;
+    }
+
+    .ctrl-col-desc {
+      font-size: 12px;
+      color: var(--text2);
+      line-height: 1.65;
+      flex: 1;
+    }
+
+    .ctrl-col-desc strong {
+      color: var(--text);
+    }
+
+    /* Divider between icon/title and description */
+    .ctrl-divider {
+      height: 1px;
+      background: var(--border);
+      margin: 0 -2px;
+    }
+
+    /* Key badges */
+    .key-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+
+    .key-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-family: var(--font-mono);
+      font-size: 9px;
+      color: var(--text3);
+      background: var(--bg3);
+      border: 1px solid var(--border2);
+      border-radius: 4px;
+      padding: 2px 7px;
+    }
+
+    .key-badge .key {
+      color: var(--text2);
+      font-weight: 700;
+      font-size: 10px;
+    }
+
+    /* ─── CTA BUTTON ─── */
+    .cta-btn {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      color: #000;
+      background: var(--accent);
+      border: none;
+      border-radius: 8px;
+      padding: 14px 44px;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.15s, box-shadow 0.15s;
+      text-transform: uppercase;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      animation: ctaPulse 3s ease-in-out infinite;
+    }
+
+    .cta-btn:hover {
+      background: var(--accent2);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(0, 229, 160, 0.25);
+      animation: none;
+    }
+
+    .cta-btn:active { transform: translateY(0); }
+
+    @keyframes ctaPulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(0,229,160,0); }
+      50%       { box-shadow: 0 0 0 8px rgba(0,229,160,0.12); }
+    }
+
+    .cta-arrow {
+      font-size: 16px;
+      transition: transform 0.2s;
+    }
+    .cta-btn:hover .cta-arrow { transform: translateX(4px); }
+
+    /* ─── SCAN LINE ─── */
+    .scanline {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(0,229,160,0.3), transparent);
+      animation: scanMove 4s linear infinite;
+      pointer-events: none;
+      z-index: 20;
+    }
+    @keyframes scanMove {
+      from { top: -2px; }
+      to   { top: 100vh; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="bg-canvas">
+    <div class="bg-orb bg-orb-1"></div>
+    <div class="bg-orb bg-orb-2"></div>
+    <div class="bg-orb bg-orb-3"></div>
+  </div>
+  <div class="bg-grid"></div>
+  <div class="scanline"></div>
+
+  <!-- SCREEN 1: Logo Splash -->
+  <div class="screen" id="screen-logo">
+    <div style="text-align:center;">
+      <div class="splash-logo">BacteriaLab</div>
+      <div class="splash-tagline">Mikrobiyoloji Simülasyonu</div>
+    </div>
+  </div>
+
+  <!-- SCREEN 2: Controls Guide -->
+  <div class="screen" id="screen-guide">
+    <div class="guide-inner">
+
+      <div class="guide-header">
+        <div class="guide-title">Kontrol Rehberi</div>
+        <div class="guide-subtitle">Nasıl kullanılır?</div>
+      </div>
+
+      <div class="controls-cols">
+
+        <!-- 1 -->
+        <div class="ctrl-col">
+          <div class="ctrl-icon-wrap">🧫</div>
+          <div class="ctrl-col-name">Petri Kabı</div>
+          <div class="ctrl-divider"></div>
+          <div class="ctrl-col-desc">Çalışma alanındaki <strong>+ New Dish</strong> kartına tıklayarak yeni bir petri kabı ekle. Her kaba bağımsız çevre koşulları atanabilir.</div>
+          <div class="key-row">
+            <span class="key-badge">Tıkla <span class="key">+ New Dish</span></span>
+          </div>
+        </div>
+
+        <!-- 2 -->
+        <div class="ctrl-col">
+          <div class="ctrl-icon-wrap">🔬</div>
+          <div class="ctrl-col-name">Bakteri Ekimi</div>
+          <div class="ctrl-divider"></div>
+          <div class="ctrl-col-desc">Sol panelden bir bakteri türü seç — seçili tür <strong>yeşil rozet</strong> ile işaretlenir. Ardından istediğin petri kabına tıklayarak ekimlemeyi gerçekleştir.</div>
+          <div class="key-row">
+            <span class="key-badge">Sol Panel → <span class="key">Bakteri</span></span>
+          </div>
+        </div>
+
+        <!-- 3 -->
+        <div class="ctrl-col">
+          <div class="ctrl-icon-wrap">🌡️</div>
+          <div class="ctrl-col-name">Çevre Koşulları</div>
+          <div class="ctrl-divider"></div>
+          <div class="ctrl-col-desc">Her petri kabında <strong>Sıcaklık</strong>, <strong>pH</strong> ve <strong>O₂ Konsantrasyonu</strong> için kaydırıcılar vardır. Değerleri değiştirerek bakteri büyümesini etkile.</div>
+          <div class="key-row">
+            <span class="key-badge"><span class="key">Sıcaklık</span></span>
+            <span class="key-badge"><span class="key">pH</span></span>
+            <span class="key-badge"><span class="key">O₂</span></span>
+          </div>
+        </div>
+
+        <!-- 4 -->
+        <div class="ctrl-col">
+          <div class="ctrl-icon-wrap">📊</div>
+          <div class="ctrl-col-name">Grafik Analizi</div>
+          <div class="ctrl-divider"></div>
+          <div class="ctrl-col-desc">Sağ panelden büyüme eğrisi, antibiyotik direnci, mutasyon frekansı gibi <strong>10 farklı grafik</strong> türüne erişebilirsin.</div>
+          <div class="key-row">
+            <span class="key-badge">Sağ Panel → <span class="key">Search charts…</span></span>
+          </div>
+        </div>
+
+        <!-- 5 -->
+        <div class="ctrl-col">
+          <div class="ctrl-icon-wrap">💾</div>
+          <div class="ctrl-col-name">Deney Kaydet</div>
+          <div class="ctrl-divider"></div>
+          <div class="ctrl-col-desc">Petri kabındaki <strong>💾 simgesiyle</strong> deneyi kütüphaneye kaydet. Kayıtlı deneyler ekranın alt kısmında listelenir; istediğin kabın verilerini oradan indirebilirsin.</div>
+          <div class="key-row">
+            <span class="key-badge"><span class="key">💾</span> Petri Üstü</span>
+            <span class="key-badge">Sol Alt <span class="key">Experiment Log</span></span>
+          </div>
+        </div>
+
+        <!-- 6 -->
+        <div class="ctrl-col">
+          <div class="ctrl-icon-wrap">⬇️</div>
+          <div class="ctrl-col-name">Dataset İndir</div>
+          <div class="ctrl-divider"></div>
+          <div class="ctrl-col-desc">Üst bardaki <strong>DOWNLOAD DATASET</strong> butonu simülasyonda kullanılan tüm bakteri türlerine ait bilimsel veri setini tek tıkla indirir.</div>
+          <div class="key-row">
+            <span class="key-badge">Üst Bar → <span class="key">↓ DOWNLOAD DATASET</span></span>
+          </div>
+        </div>
+
+      </div>
+
+      <a class="cta-btn" href="#" onclick="sessionStorage.setItem('introSeen','1'); window.location.href='index.html'; return false;">
+        Laboratuvara Gir
+        <span class="cta-arrow">→</span>
+      </a>
+
+    </div>
+  </div>
+
+  <script>
+    setTimeout(() => {
+      document.getElementById('screen-logo').style.display = 'none';
+      document.getElementById('screen-guide').classList.add('visible');
+    }, 3600);
+  </script>
+
+</body>
+</html>
