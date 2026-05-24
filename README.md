@@ -4,13 +4,6 @@
 
 Tarayıcı tabanlı, bilimsel verilerle desteklenmiş interaktif bakteri büyüme simülasyonu. 30 farklı bakteri türü, gerçek çevre koşulları parametreleri ve görsel koloni renderı ile gerçekçi bir petri kabı deneyimi sunar.
 
----
-
-## 📸 Ekran Görüntüsü
-
-<!-- Buraya ekran görüntüsü ekle -->
-
----
 
 ## ✨ Özellikler
 
