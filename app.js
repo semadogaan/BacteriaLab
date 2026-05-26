@@ -183,6 +183,7 @@ function addDish() {
     inocIdx: 0,
     time: 0, temp: 37, ph: 7.0, nacl: 0.5, oxy: 'aerobic',
     element: wrap,
+    envHistory: [],  // Her zaman adımı için envFactor kaydı
   };
 
   activeDishes.push(state);
@@ -228,13 +229,60 @@ function addDish() {
     document.getElementById(`${id}-tval`).textContent = state.inoculations.length > 0
       ? `${(state.time/100 * (state.inoculations[0].bacteria.maxTime)).toFixed(1)}h`
       : `${(state.time*0.72).toFixed(1)}h`;
+    
+    // Mevcut çevre koşullarından envFactor hesapla ve geçmişe kaydet
+    if (state.inoculations.length > 0) {
+      const tIdx = Math.round(state.time); // 0-100 arası tamsayı indeks
+      // Her inokulasyonun ortalamasını al
+      let totalEnv = 0;
+      state.inoculations.forEach(cfu => {
+        const b = cfu.bacteria;
+        const phFac = calcPhFactor(state.ph, b.phMin, b.phOptimum, b.phMax);
+        const tempFac = calcTempFactor(state.temp, b.tempMin, b.tempOptimum, b.tempMax);
+        let oxyFac = 1.0;
+        if (b.oxygenReq !== 'facultative' && b.oxygenReq !== state.oxy) oxyFac = 0.25;
+        if (state.oxy === 'anaerobic' && b.oxygenReq === 'aerobic') oxyFac = 0.1;
+        const naclFac = calcNaClFactor(state.nacl || 0.5, b.naclMin, b.naclOptimal, b.naclMax);
+        totalEnv += phFac * tempFac * oxyFac * naclFac;
+      });
+      const avgEnv = totalEnv / state.inoculations.length;
+      // Sadece ileri gidişte kaydet; geri alındığında geçmiş değişmez
+      if (state.envHistory[tIdx] === undefined) {
+        state.envHistory[tIdx] = avgEnv;
+      }
+    }
+    
     redraw(state);
   });
   tslider.addEventListener('change', () => addLogEntry(state.dishNum, 'Zaman Değiştirildi', state));
 
+  // Çevre koşulları değiştiğinde mevcut zaman adımındaki envHistory'ı güncelle
+  // ve gelecek adımları geçersiz kıl (koşullar değişti)
+  function updateEnvHistoryAtCurrentTime() {
+    if (state.inoculations.length === 0) return;
+    const tIdx = Math.round(state.time);
+    let totalEnv = 0;
+    state.inoculations.forEach(cfu => {
+      const b = cfu.bacteria;
+      const phFac = calcPhFactor(state.ph, b.phMin, b.phOptimum, b.phMax);
+      const tempFac = calcTempFactor(state.temp, b.tempMin, b.tempOptimum, b.tempMax);
+      let oxyFac = 1.0;
+      if (b.oxygenReq !== 'facultative' && b.oxygenReq !== state.oxy) oxyFac = 0.25;
+      if (state.oxy === 'anaerobic' && b.oxygenReq === 'aerobic') oxyFac = 0.1;
+      const naclFac = calcNaClFactor(state.nacl || 0.5, b.naclMin, b.naclOptimal, b.naclMax);
+      totalEnv += phFac * tempFac * oxyFac * naclFac;
+    });
+    state.envHistory[tIdx] = totalEnv / state.inoculations.length;
+    // Gelecek adımları temizle — koşullar değişti, ileriye dönük geçmiş geçersiz
+    for (let i = tIdx + 1; i < state.envHistory.length; i++) {
+      delete state.envHistory[i];
+    }
+  }
+
   tempslider.addEventListener('input', e => {
     state.temp = +e.target.value;
     document.getElementById(`${id}-tempval`).textContent = `${state.temp.toFixed(1)}°C`;
+    updateEnvHistoryAtCurrentTime();
     redraw(state);
   });
   tempslider.addEventListener('change', () => addLogEntry(state.dishNum, 'Sıcaklık Değiştirildi', state));
@@ -242,6 +290,7 @@ function addDish() {
   phslider.addEventListener('input', e => {
     state.ph = parseFloat(e.target.value);
     document.getElementById(`${id}-phval`).textContent = state.ph.toFixed(1);
+    updateEnvHistoryAtCurrentTime();
     redraw(state);
   });
   phslider.addEventListener('change', () => addLogEntry(state.dishNum, 'pH Değiştirildi', state));
@@ -249,6 +298,7 @@ function addDish() {
   naclslider.addEventListener('input', e => {
     state.nacl = parseFloat(e.target.value);
     document.getElementById(`${id}-naclval`).textContent = `${state.nacl.toFixed(1)}%`;
+    updateEnvHistoryAtCurrentTime();
     redraw(state);
   });
   naclslider.addEventListener('change', () => addLogEntry(state.dishNum, 'NaCl Değiştirildi', state));
@@ -258,6 +308,7 @@ function addDish() {
       oxyBtns.forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       state.oxy = btn.dataset.oxy;
+      updateEnvHistoryAtCurrentTime();
       addLogEntry(state.dishNum, 'O₂ Değiştirildi', state);
       redraw(state);
     });
@@ -269,7 +320,7 @@ function addDish() {
 }
 
 function deleteDish(state) {
-  state.element.style.animation = 'dishIn 0.3s cubic-bezier(0.34,1.56,0.64,1) reverse';
+  state.element.style.animation = 'dishOut 0.28s ease forwards';
   setTimeout(() => {
     state.element.remove();
     activeDishes = activeDishes.filter(d => d.id !== state.id);
@@ -346,7 +397,9 @@ function commitSave(name) {
 
   item.addEventListener('click', () => {
     state.element.style.display = '';
-    activeDishes.push(state);
+    if (!activeDishes.find(d => d.id === state.id)) {
+      activeDishes.push(state);
+    }
     item.remove();
     updateDishCount(activeDishes);
     updatePanelMode(activeDishes, selectedBacteria);
@@ -360,7 +413,9 @@ function commitSave(name) {
   lib.appendChild(item);
   state.element.style.display = 'none';
   activeDishes = activeDishes.filter(d => d.id !== state.id);
-  savedDishes.push(state);
+  if (!savedDishes.find(d => d.id === state.id)) {
+    savedDishes.push(state);
+  }
   updateDishCount(activeDishes);
   updatePanelMode(activeDishes, selectedBacteria);
 }
@@ -527,5 +582,3 @@ DataLoader.load().then((success) => {
   }
 });
 
-// Attach event listener to initial New Dish button, to fix the old bug
-document.getElementById('addDishBtn').addEventListener('click', addDish);
