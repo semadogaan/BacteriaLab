@@ -106,3 +106,5 @@ const BacteriaStore = {
     return this.interactions.filter(i => i.bacteria_a === idStr || i.bacteria_b === idStr);
   }
 };
+
+window.BacteriaStore = BacteriaStore;
