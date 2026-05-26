@@ -6,7 +6,7 @@
 function seededRandom(seed) {
   let s = seed;
   return function() {
-    s = (s * 1664525 + 1013904223) & 0xffffffff;
+    s = ((s * 1664525) + 1013904223) >>> 0;
     return (s >>> 0) / 0xffffffff;
   };
 }
