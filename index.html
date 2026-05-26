@@ -12,7 +12,6 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap"
     rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     /* ─── RESET & BASE ─── */
     *,
@@ -157,6 +156,7 @@
       overflow-y: auto;
       display: flex;
       flex-direction: column;
+      background: var(--bg);
     }
 
     .right-panel {
@@ -167,6 +167,7 @@
       flex-direction: column;
       height: 100%;
       overflow: hidden;
+      min-height: 0;
     }
 
     /* Scrollbars (Custom as requested) */
@@ -638,12 +639,7 @@
     }
 
     /* ─── CENTER: WORKSPACE ─── */
-    .workspace-area {
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      background: var(--bg)
-    }
+
 
     .workspace {
       flex: 1;
@@ -688,6 +684,18 @@
       to {
         opacity: 1;
         transform: scale(1)
+      }
+    }
+
+    @keyframes dishOut {
+      from {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      to {
+        opacity: 0;
+        transform: scale(0.85);
       }
     }
 
@@ -982,14 +990,7 @@
     }
 
     /* ─── RIGHT PANEL ─── */
-    .right-panel {
-      background: var(--bg2);
-      border-left: 1px solid var(--border);
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      min-height: 0;
-    }
+
 
     .analysis-content {
       flex: 1;
@@ -1529,7 +1530,7 @@
           <input type="text" id="chart-search-input" class="chart-search-input" placeholder="Search charts..."
             readonly />
           <button id="chart-export-btn" class="export-btn"
-            style="padding: 0 14px; height: auto; border-radius: 6px; display: none;">İNDİR</button>
+            style="padding: 0 14px; height: auto; border-radius: 6px; display: none;">CSV İNDİR</button>
 
           <div class="chart-dropdown" id="chart-dropdown">
             <div class="chart-option" data-chart="growth" data-export="growth_curve">Büyüme Eğrisi (OD₆₀₀)</div>
@@ -1632,14 +1633,12 @@
     </defs>
   </svg>
 
-  <!-- Modüler Data Dosyaları (JSON olarak yükleniyor) -->
-  <script src="data_loader.js"></script>
-
   <!-- 3rd Party Libraries -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <!-- Modüler JS Motoru -->
   <script src="bacteria-store.js"></script>
+  <script src="data_loader.js"></script>
   <script src="simulation.js"></script>
   <script src="renderer.js"></script>
   <script src="ui-panels.js"></script>
@@ -1697,13 +1696,20 @@
           chartDropdown.classList.remove('open');
 
           // Grafiği render et
-          if (window.selectChart) {
+          if (window.selectChart && window.ChartManager) {
             window.selectChart(option.dataset.chart, null);
           }
 
           // PNG İndirme Butonunu Ayarla
           const exportBtn = document.getElementById('chart-export-btn');
           exportBtn.style.display = 'block';
+
+          if (!window.selectedBacteria) {
+            exportBtn.disabled = true;
+          } else {
+            exportBtn.disabled = false;
+          }
+
           exportBtn.onclick = (e) => {
             e.preventDefault();
             let bakteriAdi = 'Bilinmeyen';
@@ -1717,19 +1723,24 @@
             }
 
             const canvas = document.getElementById('chart-' + option.dataset.chart);
-            if (!canvas || !canvas.toDataURL) {
-              alert("Bu grafik için PNG indirme desteklenmiyor.");
+            if (!canvas) {
+              if (window.showFlash) {
+                window.showFlash("Bu grafik için indirme desteklenmiyor");
+              }
               return;
             }
 
             try {
-              const dataUrl = canvas.toDataURL('image/png');
-              const a = document.createElement("a");
-              a.href = dataUrl;
-              a.download = `${bakteriAdi}_${option.dataset.export}.png`;
-              document.body.appendChild(a);
-              a.click();
-              document.body.removeChild(a);
+              const data = window.DataExportEngine.getChartData(option.dataset.export, window.selectedBacteria);
+              if (data && data.length > 0) {
+                let csvContent = "x,y\n";
+                data.forEach(row => {
+                  csvContent += `${row.x},${row.y !== null ? row.y : ''}\n`;
+                });
+                window.downloadCSV(csvContent, `${bakteriAdi}_${option.dataset.export}.csv`);
+              } else {
+                if (window.showFlash) window.showFlash("Dışa aktarılacak veri bulunamadı.");
+              }
             } catch (e) {
               console.error(e);
             }
