@@ -1,0 +1,4181 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description"
+    content="BacteriaLab — Gerçek bakteri verilerine dayalı interaktif mikrobiyoloji simülasyonu. 30 bakteri türü, kontrol edilebilir çevre faktörleri, veri analizi.">
+  <title>BacteriaLab — Mikrobiyoloji Simülasyonu</title>
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧫</text></svg>">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap"
+    rel="stylesheet">
+  <style>
+    /* ─── RESET & BASE ─── */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
+
+    :root {
+      --bg: #0a0c0d;
+      --bg2: #111417;
+      --bg3: #181c1f;
+      --bg4: #1e2328;
+      --border: #2a2f35;
+      --border2: #353b43;
+      --text: #e8eaed;
+      --text2: #9aa0a8;
+      --text3: #5f6368;
+      --text-muted: #5f6368;
+      --accent: #00e5a0;
+      --accent2: #00b87a;
+      --red: #ff4d4d;
+      --amber: #f9a825;
+      --blue: #4fc3f7;
+      --purple: #ce93d8;
+      --surface: #181c1f;
+      --left-w: 260px;
+      --right-w: 330px;
+      --header-h: 44px;
+      --font-mono: 'Space Mono', monospace;
+      --font-sans: 'DM Sans', sans-serif;
+    }
+
+    html,
+    body {
+      height: 100%;
+      overflow: hidden;
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-sans);
+      font-size: 13px;
+    }
+
+    button {
+      font-family: inherit;
+      cursor: pointer;
+      border: none;
+      background: none;
+      color: inherit
+    }
+
+    input {
+      font-family: inherit;
+      color: inherit;
+      background: none;
+      border: none;
+      outline: none
+    }
+
+    /* ─── HEADER ─── */
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: var(--header-h);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      background: var(--bg2);
+      border-bottom: 1px solid var(--border);
+      z-index: 100;
+      font-family: var(--font-mono);
+    }
+
+    .logo {
+      color: var(--accent);
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: .08em
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 11px;
+      color: var(--text2);
+    }
+
+    .header-btn {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 10px;
+      border: 1px solid var(--border2);
+      border-radius: 4px;
+      font-size: 11px;
+      color: var(--text2);
+      font-family: var(--font-mono);
+      transition: all .15s;
+    }
+
+    .header-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent)
+    }
+
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent)
+    }
+
+    /* ─── CSS GRID LAYOUT ─── */
+    .main {
+      display: grid;
+      grid-template-columns: var(--left-w) 1fr var(--right-w);
+      height: calc(100vh - var(--header-h));
+      margin-top: var(--header-h);
+      transition: grid-template-columns 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      overflow: hidden;
+    }
+
+    .main.left-collapsed {
+      grid-template-columns: 28px 1fr var(--right-w);
+    }
+    .main.right-collapsed {
+      grid-template-columns: var(--left-w) 1fr 28px;
+    }
+    .main.both-collapsed {
+      grid-template-columns: 28px 1fr 28px;
+    }
+
+    /* ─── LEFT PANEL ─── */
+    .left-panel {
+      background: var(--bg2);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .left-inner {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      overflow: hidden;
+      width: var(--left-w);
+    }
+
+    .left-collapsed .left-inner,
+    .right-collapsed .right-inner {
+      display: none;
+    }
+
+    .panel-toggle {
+      position: absolute;
+      top: 8px;
+      z-index: 10;
+      width: 22px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--border2);
+      border-radius: 4px;
+      color: var(--text3);
+      font-size: 10px;
+      background: var(--bg3);
+      transition: all .15s;
+      cursor: pointer;
+    }
+    .panel-toggle:hover {
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+    .panel-toggle.left-toggle {
+      right: 4px;
+    }
+    .panel-toggle.right-toggle {
+      left: 4px;
+    }
+
+    /* ─── CENTER AREA (3D) ─── */
+    .center-area {
+      position: relative;
+      background: var(--bg);
+      overflow: hidden;
+      min-width: 0;
+      min-height: 0;
+    }
+
+    .center-layer {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      transition: opacity 0.35s ease;
+    }
+
+    .tissue-toolbar {
+      position: absolute;
+      bottom: 60px;
+      right: 16px;
+      z-index: 5;
+      pointer-events: none;
+    }
+
+    .center-layer {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      transition: opacity 0.35s ease;
+    }
+
+    #tissue3d-container {
+      width: 100%;
+      height: 100%;
+    }
+
+    #tissue3d-container canvas {
+      display: block;
+    }
+
+    .tissue-toolbar {
+      position: absolute;
+      bottom: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(17, 20, 23, 0.85);
+      backdrop-filter: blur(8px);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 6px 12px;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    /* Toolbar butonları tıklanabilir kalır */
+    .tissue-toolbar button, .tissue-toolbar .cam-btn {
+      pointer-events: auto;
+    }
+
+    .cam-btn {
+      padding: 4px 10px;
+      font-family: var(--font-mono);
+      font-size: 9px;
+      border: 1px solid var(--border);
+      color: var(--text2);
+      border-radius: 4px;
+      background: transparent;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+    .cam-btn:hover,
+    .cam-btn.active {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: rgba(0, 229, 160, 0.05);
+    }
+
+    .fps-display {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      color: var(--text3);
+      padding-left: 8px;
+      border-left: 1px solid var(--border);
+    }
+
+    .tissue-watermark {
+      position: absolute;
+      bottom: 60px;
+      right: 16px;
+      font-family: var(--font-mono);
+      font-size: 9px;
+      color: rgba(255,255,255,0.08);
+      z-index: 5;
+      pointer-events: none;
+      letter-spacing: 0.05em;
+    }
+
+    /* ─── KONTROL TAB (right panel) ─── */
+    .tab-pane.control {
+      padding: 8px 10px;
+      overflow-y: auto;
+    }
+
+    .ctrl-section-label {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      color: var(--text3);
+      letter-spacing: .12em;
+      margin-bottom: 8px;
+      padding-bottom: 4px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .kc-row {
+      margin-bottom: 10px;
+    }
+
+    .kc-header {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 3px;
+    }
+
+    .kc-icon {
+      font-size: 12px;
+      width: 18px;
+      text-align: center;
+    }
+
+    .kc-label {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--text2);
+      flex: 1;
+    }
+
+    .kc-value {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .kc-slider {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 4px;
+      border-radius: 2px;
+      background: var(--border);
+      outline: none;
+      cursor: pointer;
+    }
+
+    .kc-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--accent);
+      cursor: pointer;
+      border: 2px solid #000;
+    }
+
+    .kc-oxy-row {
+      display: flex;
+      gap: 3px;
+    }
+
+    .kc-oxy-btn {
+      flex: 1;
+      padding: 4px 0;
+      font-family: var(--font-mono);
+      font-size: 9px;
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text3);
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all .2s;
+    }
+
+    .kc-oxy-btn:hover {
+      color: var(--text1);
+      border-color: var(--text3);
+    }
+
+    .kc-oxy-btn.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #000;
+      font-weight: 700;
+    }
+
+    /* ─── 2D TOOLTIP ─── */
+    .v2d-tooltip {
+      position: absolute;
+      z-index: 50;
+      pointer-events: none;
+      background: #0a0c0d;
+      border: 1px solid var(--accent);
+      border-radius: 6px;
+      padding: 8px 10px;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--text1);
+      line-height: 1.5;
+      max-width: 220px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+    }
+
+    .kc-row .phase-bar {
+      height: 3px;
+      margin-top: 2px;
+      background: var(--bg);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .kc-row .phase-fill {
+      height: 100%;
+      border-radius: 2px;
+      transition: width 0.2s, background 0.3s;
+    }
+
+    .kc-select {
+      width: 100%;
+      padding: 5px 6px;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--text1);
+      border-radius: 4px;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .kc-mic-ref {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      color: var(--text3);
+      padding-top: 2px;
+    }
+
+    .kc-bac-list {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      min-height: 40px;
+    }
+
+    .kc-bac-empty {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--text3);
+      text-align: center;
+      padding: 16px 0;
+    }
+
+    .kc-bac-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 6px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+    }
+
+    .kc-bac-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      border: 1px solid rgba(255,255,255,0.15);
+    }
+
+    .kc-bac-name {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--text1);
+      flex: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .kc-bac-cfu {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      color: var(--text3);
+    }
+
+    .kc-bac-remove {
+      width: 18px;
+      height: 18px;
+      border: none;
+      background: transparent;
+      color: var(--text3);
+      cursor: pointer;
+      font-size: 13px;
+      border-radius: 3px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .kc-bac-remove:hover {
+      background: rgba(239,68,68,0.2);
+      color: #ef4444;
+    }
+
+    /* ─── RIGHT PANEL ─── */
+    .right-panel {
+      background: var(--bg2);
+      border-left: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      overflow: hidden;
+      position: relative;
+      min-height: 0;
+    }
+
+    .right-inner {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      overflow: hidden;
+      width: var(--right-w);
+    }
+
+    /* ─── 2D VIEW (center area) ─── */
+    .center-layer {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .v2d-toolbar {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 8px 12px;
+      background: var(--bg2);
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    .v2d-tab {
+      padding: 5px 14px;
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text3);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all .2s;
+      letter-spacing: .05em;
+    }
+
+    .v2d-tab:hover {
+      color: var(--text1);
+      border-color: var(--text3);
+    }
+
+    .v2d-tab.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #000;
+      font-weight: 700;
+    }
+
+    .v2d-spacer {
+      flex: 1;
+    }
+
+    .v2d-back-3d {
+      padding: 5px 14px;
+      background: transparent;
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all .2s;
+      letter-spacing: .05em;
+    }
+
+    .v2d-back-3d:hover {
+      background: rgba(0, 229, 160, 0.1);
+      box-shadow: 0 0 16px rgba(0, 229, 160, 0.2);
+    }
+
+    .v2d-top-view, .v2d-side-view, .v2d-layers-view {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .v2d-side-view canvas, .v2d-layers-view canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    /* Petri workspace inside 2D top view */
+    .v2d-top-view .workspace {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      overflow: auto;
+      padding: 24px;
+      height: 100%;
+      width: 100%;
+    }
+
+    .v2d-top-view .petri-wrap {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px;
+      animation: dishIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      flex-shrink: 0;
+      position: relative;
+      z-index: 10;
+    }
+
+    .v2d-top-view .dish-glass {
+      width: 340px;
+      height: 340px;
+      border-radius: 50%;
+      background: radial-gradient(ellipse at 35% 35%, #2a2f35, #111417);
+      border: 6px solid #1a1e23;
+      box-shadow: inset 0 2px 12px rgba(0, 0, 0, .6), 0 0 0 2px #0d0f11;
+      overflow: hidden;
+    }
+
+    .v2d-top-view .petri-canvas {
+      width: 340px;
+      height: 340px;
+      border-radius: 50%;
+    }
+
+    .v2d-top-view .dish-hint {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: #353b43;
+      line-height: 1.6;
+      pointer-events: none;
+    }
+
+    .v2d-top-view .controls-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .v2d-top-view .ctrl-row {
+      display: grid;
+      grid-template-columns: 22px 1fr;
+      gap: 8px;
+      padding: 4px 0;
+    }
+
+    .v2d-top-view .ctrl-icon {
+      font-size: 14px;
+      text-align: center;
+      align-self: center;
+    }
+
+    .v2d-top-view .ctrl-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2px;
+    }
+
+    .v2d-top-view .ctrl-label {
+      font-size: 10px;
+    }
+
+    .v2d-top-view .ctrl-value {
+      font-size: 11px;
+    }
+
+    .v2d-top-view .ctrl-slider {
+      height: 3px;
+    }
+
+    .v2d-top-view .ctrl-slider::-webkit-slider-thumb {
+      width: 12px;
+      height: 12px;
+    }
+
+    .v2d-top-view .dish-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .v2d-top-view .dish-name-tag {
+      font-size: 11px;
+    }
+
+    .dish-btn {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      border: 1px solid var(--border2);
+      background: var(--bg3);
+      color: var(--text2);
+      font-size: 16px;
+      line-height: 1;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s;
+      flex-shrink: 0;
+    }
+    .dish-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+    .dish-btn.delete:hover {
+      border-color: var(--red);
+      color: var(--red);
+    }
+    .dish-btns {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      position: relative;
+      z-index: 100;
+    }
+
+    /* Küçük + petri ekleme butonu */
+    .v2d-top-view .add-dish-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1.5px solid var(--border2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--text3);
+      font-size: 20px;
+      line-height: 1;
+      transition: border-color 0.2s, color 0.2s, background 0.2s;
+      flex-shrink: 0;
+      background: var(--bg3);
+      margin-top: 6px;
+    }
+    .v2d-top-view .add-dish-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: rgba(0,229,160,0.07);
+    }
+
+    .v2d-top-view .dish-btn {
+      width: 24px;
+      height: 24px;
+      font-size: 15px;
+    }
+
+    .v2d-top-view .oxy-row {
+      display: flex;
+      gap: 4px;
+      margin-top: 4px;
+    }
+
+    .v2d-top-view .oxy-btn {
+      flex: 1;
+      padding: 4px 0;
+      font-size: 10px;
+    }
+
+    .v2d-top-view .phase-bar {
+      height: 3px;
+      margin-top: 4px;
+    }
+
+    /* ─── SAVED DISHES BUTTON ─── */
+    .v2d-saved-btn {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      color: var(--text2);
+      background: var(--bg3);
+      border: 1px solid var(--border2);
+      border-radius: 5px;
+      padding: 4px 10px;
+      cursor: pointer;
+      transition: all 0.15s;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .v2d-saved-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+    .v2d-saved-btn.active {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: rgba(0,229,160,0.08);
+    }
+
+    /* ─── 3D TOOLBAR EXTRA ─── */
+    .toolbar-sep {
+      width: 1px;
+      height: 16px;
+      background: var(--border);
+      margin: 0 4px;
+    }
+
+    .toolbar-toggle-2d {
+      padding: 3px 10px;
+      background: transparent;
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      font-family: var(--font-mono);
+      font-size: 9px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all .2s;
+      letter-spacing: .05em;
+      pointer-events: auto;
+    }
+
+    .toolbar-toggle-2d:hover {
+      background: rgba(0, 229, 160, 0.1);
+      box-shadow: 0 0 12px rgba(0, 229, 160, 0.2);
+    }
+
+    /* ─── INOCULATE BAR (left panel) ─── */
+    .inoculate-bar {
+      padding: 6px 12px 10px;
+      flex-shrink: 0;
+    }
+
+    .inoculate-btn {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 8px 0;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #000;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      transition: all .2s;
+    }
+
+    .inoculate-btn:hover {
+      transform: scale(1.02);
+      box-shadow: 0 0 20px rgba(0, 229, 160, 0.3);
+    }
+
+    .inoculate-btn:active {
+      transform: scale(0.98);
+    }
+
+    /* ─── RIGHT: TAB SYSTEM ─── */
+    .right-tab-bar {
+      display: flex;
+      flex-shrink: 0;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg2);
+    }
+
+    .right-tab-btn {
+      flex: 1;
+      padding: 8px 4px;
+      font-family: var(--font-mono);
+      font-size: 9px;
+      color: var(--text3);
+      letter-spacing: .06em;
+      border-bottom: 2px solid transparent;
+      transition: all .15s;
+      background: transparent;
+      cursor: pointer;
+    }
+
+    .right-tab-btn:hover {
+      color: var(--text2);
+    }
+
+    .right-tab-btn.active {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
+
+    .right-tab-content {
+      flex: 1;
+      overflow: hidden;
+      position: relative;
+      min-height: 0;
+    }
+
+    .tab-pane {
+      position: absolute;
+      inset: 0;
+      overflow-y: auto;
+      padding: 8px 10px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .15s;
+    }
+
+    .tab-pane.active {
+      opacity: 1;
+      pointer-events: auto;
+      position: relative;
+    }
+
+    /* ─── TAB: GRAPHS ─── */
+    .tab-pane.graphs .analysis-chart-view {
+      flex: 1;
+      min-height: 200px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      background: var(--bg);
+    }
+
+    .tab-pane.graphs .chart-view-container canvas {
+      max-width: 100%;
+    }
+
+    .tab-pane.graphs .chart-search-wrapper {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 8px;
+      position: relative;
+    }
+
+    .tab-pane.graphs .chart-search-input {
+      flex: 1;
+    }
+
+    .tab-pane.graphs .chart-dropdown {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      z-index: 50;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      max-height: 200px;
+      overflow-y: auto;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      display: none;
+    }
+
+    .tab-pane.graphs .chart-option {
+      padding: 8px 12px;
+      font-size: 11px;
+      color: var(--text2);
+      cursor: pointer;
+      border-bottom: 1px solid var(--border);
+      transition: background .1s;
+    }
+
+    .tab-pane.graphs .chart-option:hover {
+      background: var(--bg2);
+      color: #fff;
+    }
+
+    /* ─── TAB: OPTIMIZATION ─── */
+    .tab-pane.optimization .opt-controls {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .tab-pane.optimization select {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 4px;
+      border-radius: 4px;
+      height: 60px;
+      font-size: 11px;
+      width: 100%;
+    }
+
+    .tab-pane.optimization label {
+      font-size: 9px;
+      color: var(--text3);
+      font-family: var(--font-mono);
+      letter-spacing: .05em;
+    }
+
+    .tab-pane.optimization input[type=range] {
+      width: 100%;
+      -webkit-appearance: none;
+      height: 2px;
+      background: var(--border2);
+      border-radius: 2px;
+      outline: none;
+    }
+
+    .tab-pane.optimization input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--accent);
+      cursor: pointer;
+    }
+
+    .tab-pane.optimization .opt-result {
+      margin-top: 8px;
+      padding: 8px;
+      background: var(--bg3);
+      border-radius: 6px;
+      font-size: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .tab-pane.optimization .opt-drug {
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    /* ─── TAB: REPORT ─── */
+    .tab-pane.report .val-metrics {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      background: var(--bg3);
+      padding: 8px;
+      border-radius: 6px;
+    }
+
+    .tab-pane.report .val-row {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .tab-pane.report .val-row .val {
+      color: var(--accent);
+    }
+
+    /* ─── SCROLLBARS ─── */
+    .bacteria-list::-webkit-scrollbar,
+    .tab-pane::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .bacteria-list::-webkit-scrollbar-track,
+    .tab-pane::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .bacteria-list::-webkit-scrollbar-thumb,
+    .tab-pane::-webkit-scrollbar-thumb {
+      background: #2a2a2a;
+      border-radius: 2px;
+    }
+
+    ::-webkit-scrollbar {
+      width: 4px;
+      height: 4px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--border2);
+      border-radius: 2px;
+    }
+
+    /* ─── PANEL LABEL & SECTION ─── */
+    .panel-label {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: .1em;
+      color: var(--text3);
+      text-transform: uppercase;
+      padding: 10px 12px 6px;
+    }
+
+    .panel-section {
+      padding: 0 10px 6px;
+      flex-shrink: 0;
+    }
+
+    .search-box {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 5px 8px;
+      margin-bottom: 6px;
+    }
+
+    .search-icon {
+      color: var(--text3);
+      font-size: 15px;
+    }
+
+    #searchInput {
+      flex: 1;
+      font-size: 11px;
+      color: var(--text);
+    }
+
+    #searchInput::placeholder {
+      color: var(--text3);
+    }
+
+    .filter-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 3px;
+      margin-bottom: 4px;
+    }
+
+    .filter-chip {
+      font-size: 9px;
+      font-family: var(--font-mono);
+      padding: 2px 7px;
+      border: 1px solid var(--border2);
+      border-radius: 20px;
+      color: var(--text3);
+      transition: all .15s;
+      white-space: nowrap;
+    }
+
+    .filter-chip:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .filter-chip.active {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: rgba(0, 229, 160, .08);
+    }
+
+    /* ─── BACTERIA LIST ─── */
+    .bacteria-list {
+      flex: 1;
+      padding: 4px 8px 8px;
+      overflow-y: auto;
+    }
+
+    .bacteria-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 8px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background .12s;
+      border: 1px solid transparent;
+    }
+
+    .bacteria-item:hover {
+      background: var(--bg3);
+    }
+
+    .bacteria-item.selected {
+      background: rgba(0, 229, 160, .06);
+      border-color: var(--accent);
+    }
+
+    .bac-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .bac-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .bac-name {
+      font-style: italic;
+      font-size: 11px;
+      color: var(--text);
+      line-height: 1.3;
+    }
+
+    .bac-taxonomy {
+      font-size: 8px;
+      color: var(--text3);
+      font-family: var(--font-mono);
+    }
+
+    /* ─── INFO + LOG ─── */
+    #panelModeList,
+    #panelModeSplit {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .split-top {
+      flex: 0 0 auto;
+      overflow-y: auto;
+      max-height: 45%;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .split-bottom {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .info-content {
+      padding: 4px 12px 8px;
+      font-size: 11px;
+    }
+
+    .info-name {
+      font-style: italic;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .info-row {
+      display: flex;
+      gap: 4px;
+      padding: 3px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .info-row:last-child {
+      border: none;
+    }
+
+    .info-icon {
+      font-size: 11px;
+      flex-shrink: 0;
+      width: 16px;
+      text-align: center;
+    }
+
+    .info-label {
+      font-family: var(--font-mono);
+      font-size: 8px;
+      color: var(--text3);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      width: 55px;
+      flex-shrink: 0;
+      padding-top: 2px;
+    }
+
+    .info-val {
+      color: var(--text2);
+      line-height: 1.5;
+      font-size: 10px;
+    }
+
+    .info-fact {
+      margin: 6px 0 0;
+      padding: 6px 8px;
+      background: rgba(249, 168, 37, .06);
+      border-left: 2px solid var(--amber);
+      border-radius: 3px;
+      color: var(--text2);
+      font-size: 10px;
+      line-height: 1.4;
+    }
+
+    .info-placeholder {
+      color: var(--text3);
+      font-size: 11px;
+      padding: 16px;
+      text-align: center;
+    }
+
+    .log-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 6px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .log-download-btn {
+      padding: 4px;
+      border-radius: 4px;
+      color: var(--text3);
+      transition: color .15s;
+    }
+
+    .log-download-btn:hover {
+      color: var(--accent);
+    }
+
+    .log-table-wrap {
+      flex: 1;
+      overflow: auto;
+    }
+
+    .log-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: var(--font-mono);
+      font-size: 8px;
+      white-space: nowrap;
+    }
+
+    .log-table th {
+      padding: 3px 4px;
+      color: var(--text3);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      background: var(--bg2);
+    }
+
+    .log-table td {
+      padding: 3px 4px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text2);
+    }
+
+    .log-table tr:hover td {
+      background: var(--bg3);
+    }
+
+    /* ─── MORPHOLOGY ─── */
+    .morphology-image-wrapper {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 4/3;
+      background: #111;
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 10px;
+    }
+
+    .morphology-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .morphology-placeholder {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #111;
+      flex-direction: column;
+      gap: 8px;
+      color: #555;
+      font-size: 12px;
+    }
+
+    .morph-spinner {
+      width: 24px;
+      height: 24px;
+      border: 2px solid #333;
+      border-top-color: #6ECB70;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .morph-license {
+      position: absolute;
+      bottom: 6px;
+      right: 6px;
+      background: rgba(0, 0, 0, 0.6);
+      color: #aaa;
+      font-size: 10px;
+      padding: 2px 6px;
+      border-radius: 4px;
+      backdrop-filter: blur(4px);
+    }
+
+    .microscopy-card {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 10px;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 8px;
+    }
+
+    .microscopy-img {
+      width: 70px;
+      height: 70px;
+      border-radius: 6px;
+      object-fit: cover;
+      background: var(--bg3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      border: 1px solid var(--border2);
+    }
+
+    .microscopy-info {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      justify-content: center;
+      flex: 1;
+    }
+
+    .microscopy-name {
+      font-weight: 600;
+      font-size: 12px;
+      color: var(--text);
+    }
+
+    .microscopy-gram {
+      font-size: 9px;
+      padding: 2px 6px;
+      border-radius: 3px;
+      display: inline-block;
+      width: fit-content;
+      font-family: var(--font-mono);
+      text-transform: uppercase;
+      letter-spacing: .05em;
+    }
+
+    .microscopy-gram.gram-pos {
+      background: rgba(100, 100, 255, 0.15);
+      color: #8c8cff;
+      border: 1px solid rgba(100, 100, 255, 0.3);
+    }
+
+    .microscopy-gram.gram-neg {
+      background: rgba(255, 100, 100, 0.15);
+      color: #ff7575;
+      border: 1px solid rgba(255, 100, 100, 0.3);
+    }
+
+    .microscopy-desc {
+      font-size: 10px;
+      color: var(--text2);
+      line-height: 1.4;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    /* ─── SELECTED BADGE ─── */
+    .selected-badge {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--bg3);
+      border: 1px solid var(--border2);
+      border-radius: 20px;
+      padding: 6px 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      font-family: var(--font-mono);
+      z-index: 50;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, .4);
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity .2s;
+    }
+
+    .selected-badge.visible {
+      opacity: 1;
+    }
+
+    /* ─── DETAIL PANEL ─── */
+    .bac-detail-panel {
+      position: fixed;
+      top: 54px;
+      right: 340px;
+      background: var(--bg3);
+      border: 1px solid var(--border2);
+      border-radius: 8px;
+      padding: 10px 12px;
+      min-width: 200px;
+      max-width: 260px;
+      font-size: 11px;
+      z-index: 60;
+      display: none;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, .5);
+      animation: fadeUp 0.2s ease;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .detail-name {
+      font-style: italic;
+      font-size: 12px;
+      color: var(--text);
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+
+    .detail-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3px 6px;
+      margin-bottom: 4px;
+    }
+
+    .detail-cell-label {
+      color: var(--text3);
+      font-family: var(--font-mono);
+      font-size: 8px;
+    }
+
+    .detail-cell-val {
+      color: var(--text2);
+      font-size: 10px;
+    }
+
+    .detail-badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 3px;
+      margin-top: 4px;
+    }
+
+    .detail-badge {
+      font-size: 8px;
+      padding: 2px 6px;
+      border-radius: 10px;
+      font-family: var(--font-mono);
+      border: 1px solid var(--border2);
+      color: var(--text2);
+    }
+
+    .detail-badge.hi {
+      border-color: var(--red);
+      color: var(--red);
+    }
+
+    .detail-badge.glow {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    /* ─── MODALS ─── */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, .6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 200;
+    }
+
+    .modal-box {
+      background: var(--bg3);
+      border: 1px solid var(--border2);
+      border-radius: 10px;
+      padding: 20px 24px;
+      min-width: 300px;
+    }
+
+    .modal-title {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .modal-subtitle {
+      font-size: 11px;
+      color: var(--text3);
+      margin-bottom: 12px;
+    }
+
+    .modal-input {
+      width: 100%;
+      padding: 8px 10px;
+      background: var(--bg);
+      border: 1px solid var(--border2);
+      border-radius: 6px;
+      font-size: 12px;
+      color: var(--text);
+      margin-top: 8px;
+      font-family: var(--font-mono);
+      outline: none;
+    }
+
+    .modal-input:focus {
+      border-color: var(--accent);
+    }
+
+    .modal-petri-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      max-height: 200px;
+      overflow-y: auto;
+      margin: 8px 0;
+    }
+
+    .modal-petri-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 8px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 11px;
+      font-family: var(--font-mono);
+    }
+
+    .modal-petri-item:hover {
+      border-color: var(--accent);
+    }
+
+    .modal-btns {
+      display: flex;
+      gap: 8px;
+      margin-top: 14px;
+      justify-content: flex-end;
+    }
+
+    .modal-btn {
+      padding: 7px 16px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-family: var(--font-mono);
+      transition: all .15s;
+    }
+
+    .modal-btn.cancel {
+      border: 1px solid var(--border2);
+      color: var(--text3);
+    }
+
+    .modal-btn.cancel:hover {
+      border-color: var(--text3);
+    }
+
+    .modal-btn.confirm {
+      background: var(--accent);
+      color: #000;
+      font-weight: 700;
+    }
+
+    .modal-btn.confirm:hover {
+      background: var(--accent2);
+    }
+
+    /* ─── CHART VIEW CONTAINERS (preserved) ─── */
+    .chart-view-container {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+      z-index: -1;
+      width: 100%;
+      height: 100%;
+      padding: 8px;
+    }
+
+    .chart-view-container.active {
+      position: relative;
+      opacity: 1;
+      pointer-events: auto;
+      z-index: 1;
+    }
+
+    .analysis-card {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 8px 10px;
+    }
+
+    .card-title {
+      font-family: var(--font-mono);
+      font-size: 8px;
+      color: var(--text3);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      margin-bottom: 6px;
+    }
+
+    .chart-placeholder {
+      color: var(--text3);
+      font-size: 11px;
+      font-family: var(--font-mono);
+      padding: 10px 0;
+      text-align: center;
+    }
+
+    .export-btn {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text2);
+      padding: 3px 8px;
+      font-size: 9px;
+      font-family: var(--font-mono);
+      border-radius: 3px;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .export-btn:hover {
+      color: var(--accent);
+      border-color: var(--border2);
+      background: rgba(0, 229, 160, 0.05);
+    }
+  </style>
+</head>
+
+<body>
+  <script>
+    if (!sessionStorage.getItem('introSeen')) {
+      window.location.replace('intro.html');
+    }
+  </script>
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="logo">BacteriaLab</div>
+    <div class="header-right">
+      
+      <button class="header-btn" id="howToBtn">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10" />
+          <line x1="12" y1="8" x2="12" y2="12" />
+          <line x1="12" y1="16" x2="12" y2="16" />
+        </svg>
+        NASIL ÇALIŞIR?
+      </button>
+      <button class="header-btn" id="datasetDownloadBtn" title="Download Dataset">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+          <polyline points="7 10 12 15 17 10" />
+          <line x1="12" y1="15" x2="12" y2="3" />
+        </svg>
+        DOWNLOAD DATASET
+      </button>
+      <div class="status-dot"></div>
+      <span id="bacteriaCountLabel">— strain loaded</span>
+      <span style="color:var(--border)">|</span>
+      <span id="dishCountLabel">0 dishes active</span>
+    </div>
+  </header>
+
+  <!-- CSS GRID LAYOUT -->
+  <div class="main" id="mainLayout">
+
+    <!-- ─── LEFT PANEL ─── -->
+    <aside class="left-panel" id="leftPanel">
+      <button class="panel-toggle left-toggle" id="toggleLeftPanel" title="Toggle left panel  (快捷键 [)">◀</button>
+      <div class="left-inner">
+        <!-- MODE A: Bacteria list -->
+        <div id="panelModeList">
+          <div class="panel-section">
+            <div class="panel-label">Strain Library</div>
+            <div class="search-box">
+              <span class="search-icon">⌕</span>
+              <input type="text" id="searchInput" placeholder="Search bacteria...">
+            </div>
+            <div class="filter-row">
+              <button class="filter-chip active" data-filter="all">All</button>
+              <button class="filter-chip" data-filter="gram-pos">Gram +</button>
+              <button class="filter-chip" data-filter="gram-neg">Gram −</button>
+              <button class="filter-chip" data-filter="bioluminescent">Biolum.</button>
+              <button class="filter-chip" data-filter="toxic">Toxigenic</button>
+              <button class="filter-chip" data-filter="aerobic">Aerobic</button>
+              <button class="filter-chip" data-filter="anaerobic">Anaerobic</button>
+            </div>
+          </div>
+          <div class="bacteria-list" id="bacteriaList"></div>
+        </div>
+
+        <!-- MODE B: Split panel (info + log) -->
+        <div id="panelModeSplit" style="display:none;">
+          <div class="split-top">
+            <div style="display: flex; justify-content: space-between; align-items: center; padding-right: 12px;">
+              <div class="panel-label">Bilimsel Bilgi</div>
+              <button class="header-btn" id="backToListBtn"
+                style="padding: 2px 6px; font-size: 10px; margin-top: 4px;">&larr; Kütüphane</button>
+            </div>
+            <div class="info-content" id="infoContent">
+              <div class="info-placeholder">Bir bakteri türü seçin</div>
+            </div>
+          </div>
+          <div class="split-bottom">
+            <div class="log-header">
+              <div class="panel-label" style="padding:0">Deney Kayıtları <span id="logEntryCount" style="background:var(--accent);color:#000;border-radius:10px;padding:1px 6px;font-size:9px;margin-left:4px;vertical-align:middle;">0</span></div>
+              <button class="log-download-btn" id="logDownloadBtn" title="Petri seç ve indir">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                  <polyline points="7 10 12 15 17 10" />
+                  <line x1="12" y1="15" x2="12" y2="3" />
+                </svg>
+              </button>
+              <button class="log-download-btn" id="logDownloadAllBtn"
+                title="Tüm kayıtları indir"
+                style="background:rgba(0,229,160,0.12);border-color:rgba(0,229,160,0.5);color:var(--accent);">
+                ↓ ALL
+              </button>
+            </div>
+            <div class="log-table-wrap" id="logTableWrap">
+              <table class="log-table" id="logTable">
+                <thead>
+                  <tr>
+                    <th>Petri</th>
+                    <th>Saat</th>
+                    <th style="color:var(--accent)">Sim.t</th>
+                    <th>İşlem</th>
+                    <th>Temp</th>
+                    <th>pH</th>
+                    <th>Doku</th>
+                    <th>Bakteri / AB</th>
+                  </tr>
+                </thead>
+                <tbody id="logTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- MODE C: Library panel -->
+        <div id="panelModeLib" style="display:none; flex-direction:column; height:100%; flex:1; overflow:hidden;">
+          <div class="panel-section">
+            <div class="panel-label" style="margin-bottom:8px;">💾 Kaydedilen Deneyler</div>
+            <div id="savedDishesList" style="display:flex;flex-direction:column;gap:8px;overflow-y:auto;flex:1;"></div>
+          </div>
+        </div>
+
+      </div>
+    </aside>
+
+    <!-- ─── CENTER: 2D / 3D VIEW ─── -->
+    <main class="center-area" id="centerArea">
+      <!-- 3D Scene Layer -->
+      <div id="tissue3d-container" class="center-layer" style="display:none;"></div>
+
+      <!-- 2D View Layer -->
+      <div id="view2d" class="center-layer" style="display:flex;">
+        <!-- 2D View Toolbar -->
+        <div class="v2d-toolbar">
+          <button class="v2d-tab active" data-view2d="top">Üst Görünüm</button>
+          <button class="v2d-tab" data-view2d="side">Yan Görünüm</button>
+          <button class="v2d-tab" data-view2d="layers">Katmanlar</button>
+          <div class="v2d-spacer"></div>
+          <button class="v2d-saved-btn" id="savedDishesToggleBtn" title="Kaydedilen petri kapları">
+            💾 Kaydedilenler <span id="savedDishesCount" style="background:var(--accent);color:#000;border-radius:10px;padding:0 5px;font-size:9px;margin-left:3px;display:none;">0</span>
+          </button>
+          <button class="v2d-back-3d" id="backTo3DBtn">3D'YE GEÇ ▸</button>
+        </div>
+
+        <!-- Kaydedilen Petri Kapları Paneli -->
+        <div id="savedDishesPanel" style="
+          display:none; position:absolute; top:44px; right:120px; z-index:200;
+          background:var(--bg2); border:1px solid var(--border2); border-radius:10px;
+          padding:12px; min-width:240px; max-width:320px; max-height:400px;
+          overflow-y:auto; box-shadow:0 8px 24px rgba(0,0,0,0.4);
+          font-family:var(--font-mono);
+        ">
+          <div style="font-size:10px;color:var(--text3);letter-spacing:0.1em;margin-bottom:10px;">KAYDEDİLEN DENEYLEr</div>
+          <div id="savedDishesPanelList">
+            <div style="color:var(--text3);font-size:11px;text-align:center;padding:16px 0;">Henüz kaydedilen deney yok</div>
+          </div>
+        </div>
+        <!-- 2D Top View: petri workspace -->
+        <div class="v2d-top-view" id="v2dTopView">
+          <div class="workspace" id="workspace">
+            <button class="add-dish-btn" id="addDishBtn" title="Yeni petri kabı ekle">+</button>
+          </div>
+        </div>
+        <!-- 2D Side View: tissue cross-section -->
+        <div class="v2d-side-view" id="v2dSideView" style="display:none;">
+          <canvas id="v2dSideCanvas"></canvas>
+        </div>
+        <!-- 2D Layers View -->
+        <div class="v2d-layers-view" id="v2dLayersView" style="display:none;">
+          <canvas id="v2dLayersCanvas"></canvas>
+        <!-- 2D Tooltip (hover) -->
+        <div class="v2d-tooltip" id="v2dTooltip" style="display:none;"></div>
+        </div>
+      </div>
+
+      <!-- 3D Toolbar -->
+      <div class="tissue-toolbar">
+        <button class="cam-btn active" data-view="angle">ANGLE</button>
+        <button class="cam-btn" data-view="top">TOP</button>
+        <button class="cam-btn" data-view="side">SIDE</button>
+        <span class="toolbar-sep"></span>
+        <button class="toolbar-toggle-2d" id="toggle2DBtn">3D'YE GEÇ ▸</button>
+        <span class="toolbar-sep"></span>
+        <span class="fps-display">FPS: <span id="fpsValue">60</span></span>
+      </div>
+      <div class="tissue-watermark">BACTERIALAB · TISSUE VIEW</div>
+    </main>
+
+    <!-- ─── RIGHT PANEL ─── -->
+    <aside class="right-panel" id="rightPanel">
+      <button class="panel-toggle right-toggle" id="toggleRightPanel" title="Toggle right panel (快捷键 ])">▶</button>
+      <div class="right-inner">
+
+        <!-- Tab bar -->
+        <div class="right-tab-bar">
+          <button class="right-tab-btn active" data-tab="control">Kontrol</button>
+          <button class="right-tab-btn" data-tab="graphs">Grafik</button>
+          <button class="right-tab-btn" data-tab="optimization">Optimizasyon</button>
+          <button class="right-tab-btn" data-tab="report">Rapor</button>
+        </div>
+
+        <!-- Tab content -->
+        <div class="right-tab-content">
+
+          <!-- CONTROL TAB -->
+          <div class="tab-pane control active" id="tabControl">
+            <div class="ctrl-section-label">DOKU TİPİ</div>
+            <div class="kc-row" id="tissueSelectRow">
+              <select class="kc-select" id="kcTissueType" style="font-size:11px;">
+                <optgroup label="── Yara Dokuları ──">
+                  <option value="skin-wound">🩹 Cilt Yarası</option>
+                  <option value="burn-wound">🔥 Yanık Yarası</option>
+                  <option value="chronic-wound">⏳ Kronik Yara</option>
+                </optgroup>
+                <optgroup label="── Organ Dokuları ──">
+                  <option value="lung">🫁 Akciğer</option>
+                  <option value="gut">🧬 Bağırsak</option>
+                  <option value="urinary">💧 İdrar Yolu</option>
+                  <option value="bone">🦴 Kemik / Osteomiyelit</option>
+                </optgroup>
+                <optgroup label="── Sistemik ──">
+                  <option value="bloodstream">🩸 Kan / Septisemi</option>
+                </optgroup>
+              </select>
+            </div>
+            <div id="tissueDescBox" style="
+              font-size:9px; color:var(--text3); font-family:var(--font-mono);
+              padding:6px 8px; background:var(--bg3); border-radius:5px;
+              border:1px solid var(--border); margin-bottom:6px; line-height:1.5;
+              display:none;
+            "></div>
+
+            <div class="ctrl-section-label">ÇEVRE KOŞULLARI</div>
+
+            <div class="kc-row">
+              <div class="kc-header"><span class="kc-icon">⏱</span><span class="kc-label">Zaman</span><span class="kc-value" id="kcTimeVal">0.00 h</span></div>
+              <input type="range" class="kc-slider" id="kcTime" min="0" max="200" step="0.01" value="0">
+              <div class="phase-bar"><div class="phase-fill" id="kcPhaseBar" style="width:0%;background:var(--accent)"></div></div>
+            </div>
+
+            <div class="kc-row">
+              <div class="kc-header"><span class="kc-icon">🌡</span><span class="kc-label">Sıcaklık</span><span class="kc-value" id="kcTempVal">37.00 °C</span></div>
+              <input type="range" class="kc-slider" id="kcTemp" min="0" max="100" step="0.01" value="37">
+            </div>
+
+            <div class="kc-row">
+              <div class="kc-header"><span class="kc-icon">⚗</span><span class="kc-label">pH</span><span class="kc-value" id="kcPhVal">7.00</span></div>
+              <input type="range" class="kc-slider" id="kcPh" min="0" max="14" step="0.01" value="7.0">
+            </div>
+
+            <div class="kc-row">
+              <div class="kc-header"><span class="kc-icon">🧂</span><span class="kc-label">NaCl</span><span class="kc-value" id="kcNaClVal">0.50%</span></div>
+              <input type="range" class="kc-slider" id="kcNaCl" min="0" max="25" step="0.01" value="0.5">
+            </div>
+
+            <div class="kc-row">
+              <div class="kc-header"><span class="kc-icon">💨</span><span class="kc-label">O₂</span></div>
+              <div class="kc-oxy-row">
+                <button class="kc-oxy-btn active" data-oxy="aerobic">Aerobic</button>
+                <button class="kc-oxy-btn" data-oxy="microaerophilic">Micro</button>
+                <button class="kc-oxy-btn" data-oxy="anaerobic">Anaerobic</button>
+              </div>
+            </div>
+
+            <div class="ctrl-section-label" style="margin-top:12px;">ANTİBİYOTİK</div>
+
+            <div class="kc-row">
+              <div class="kc-header"><span class="kc-icon">💊</span><span class="kc-label">İlaç</span></div>
+              <select class="kc-select" id="kcDrug">
+                <option value="">— Seçilmedi —</option>
+              </select>
+            </div>
+
+            <div class="kc-row" id="kcRouteRow" style="display:none;">
+              <div class="kc-header">
+                <span class="kc-icon">🛣</span>
+                <span class="kc-label">Uygulama Yolu</span>
+              </div>
+              <select class="kc-select" id="kcRoute">
+                <option value="iv">💉 IV (İntravenöz)</option>
+                <option value="oral">💊 Oral</option>
+                <option value="topical">🩹 Topikal</option>
+                <option value="inhaled">🫁 İnhale</option>
+                <option value="im">💉 İM (İntramusküler)</option>
+              </select>
+              <div id="kcRouteWarning" style="
+                font-size:9px; color:#f87171; font-family:var(--font-mono);
+                padding:4px 6px; margin-top:4px; display:none;
+                background:rgba(248,113,113,0.1); border-radius:4px; border:1px solid rgba(248,113,113,0.3);
+              "></div>
+            </div>
+
+            <div class="kc-row" id="kcDrugConcRow" style="display:none;">
+              <div class="kc-header"><span class="kc-icon">📊</span><span class="kc-label">Konsantrasyon</span><span class="kc-value" id="kcConcVal">0 mg/L</span></div>
+              <input type="range" class="kc-slider" id="kcConc" min="0" max="100" step="1" value="0">
+              <div class="kc-mic-ref" id="kcMicRef"></div>
+            </div>
+
+
+          </div>
+
+          <!-- GRAPHS TAB -->
+          <div class="tab-pane graphs" id="tabGraphs">
+            <!-- Microscopy card (always visible when tab active) -->
+            <div class="analysis-card" id="microscopyCard" style="display:none; margin-bottom: 8px;">
+              <div class="card-title"><span>🔬</span> MORPHOLOGY & MICROSCOPY</div>
+              <div class="microscopy-card">
+                <div class="morphology-image-wrapper">
+                  <div class="morphology-placeholder" id="morph-placeholder">
+                    <div class="morph-spinner"></div>
+                  </div>
+                  <img id="morph-img" class="morphology-img" alt="" style="display:none" />
+                  <span class="morph-license" id="morph-license"></span>
+                </div>
+                <div class="microscopy-info">
+                  <div class="microscopy-name" id="microscopyName">-</div>
+                  <div class="microscopy-gram" id="microscopyGram">-</div>
+                  <div class="microscopy-desc" id="microscopyDesc" title="">-</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Chart search + view -->
+            <div class="chart-search-wrapper">
+              <div style="position:relative;flex:1;display:flex;align-items:center;">
+                <span style="position:absolute;left:10px;color:var(--text3);font-size:13px;pointer-events:none;">🔍</span>
+                <input type="text" id="chart-search-input" class="chart-search-input"
+                  placeholder="Grafik seçin..."
+                  readonly
+                  style="padding-left:32px;width:100%;border:1.5px solid var(--border2);border-radius:6px;
+                         background:var(--bg3);color:var(--text);font-family:var(--font-mono);
+                         font-size:10px;padding-top:7px;padding-bottom:7px;cursor:pointer;" />
+              </div>
+              <button id="chart-export-btn" class="export-btn" style="display:none; white-space:nowrap;">CSV</button>
+              <div class="chart-dropdown" id="chart-dropdown">
+                <div class="chart-option" data-chart="growth" data-export="growth_curve">Büyüme Eğrisi (OD₆₀₀)</div>
+                <div class="chart-option" data-chart="heatmap" data-export="tolerance_heatmap">Çevresel Tolerans Haritası</div>
+                <div class="chart-option" data-chart="radar" data-export="antibiotic_radar">Antibiyotik Direnç Radarı</div>
+                <div class="chart-option" data-chart="mic" data-export="mic_profile">MIC Profili (Minimal İnhibitör)</div>
+                <div class="chart-option" data-chart="population" data-export="population_dynamics">Popülasyon Dinamikleri</div>
+                <div class="chart-option" data-chart="nutrient" data-export="nutrient_depletion">Besin Tüketimi</div>
+                <div class="chart-option" data-chart="survival" data-export="survival_curve">Hücre Canlılık Oranı</div>
+                <div class="chart-option" data-chart="mutation" data-export="mutation_freq">Mutasyon Frekansı</div>
+                <div class="chart-option" data-chart="biofilm" data-export="biofilm_thickness">Biyofilm Kalınlığı</div>
+                <div class="chart-option" data-chart="stress" data-export="stress_index">Çevresel Stres İndeksi</div>
+              </div>
+            </div>
+
+            <div class="analysis-chart-view" id="analysisChartView">
+              <div id="chart-placeholder" style="color: var(--text3); font-family: var(--font-mono); font-size: 11px; position: absolute;">← Bir grafik seçin</div>
+              <div class="chart-view-container" id="cv-growth"><canvas id="chart-growth" width="400" height="200"></canvas></div>
+              <div class="chart-view-container" id="cv-heatmap"><div id="chart-heatmap-container" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;"></div></div>
+              <div class="chart-view-container" id="cv-radar"><canvas id="chart-radar" width="400" height="200"></canvas></div>
+              <div class="chart-view-container" id="cv-mic"><div id="chart-mic-table"></div></div>
+              <div class="chart-view-container" id="cv-population"><canvas id="chart-population" width="400" height="200"></canvas></div>
+              <div class="chart-view-container" id="cv-nutrient"><canvas id="chart-nutrient" width="400" height="200"></canvas></div>
+              <div class="chart-view-container" id="cv-survival"><canvas id="chart-survival" width="400" height="200"></canvas></div>
+              <div class="chart-view-container" id="cv-mutation"><canvas id="chart-mutation" width="400" height="200"></canvas></div>
+              <div class="chart-view-container" id="cv-biofilm"><canvas id="chart-biofilm" width="400" height="200"></canvas></div>
+              <div class="chart-view-container" id="cv-stress"><canvas id="chart-stress" width="400" height="200"></canvas></div>
+            </div>
+          </div>
+
+          <!-- OPTIMIZATION TAB -->
+          <div class="tab-pane optimization" id="tabOptimization">
+            <div class="opt-controls">
+              <label>Target Species</label>
+              <select id="optTargetSpecies" multiple></select>
+              <label>Max Duration (h): <span id="optDurationLabel">48</span></label>
+              <input type="range" id="optDuration" min="0" max="168" step="1" value="48" style="width:100%;">
+              <button id="runOptimizationBtn" class="header-btn" style="justify-content:center;width:100%;margin-top:4px;">RUN OPTIMIZATION</button>
+            </div>
+            <div id="optimizationResult" style="display:none; margin-top: 10px;">
+              <div class="opt-result">
+                <div class="opt-drug" id="optDrugName">-</div>
+                <div id="optConcentration">Konsantrasyon: -</div>
+                <div id="optDurationResult">Süre: -</div>
+                <div id="optFitness">Uygunluk: -</div>
+                <div style="margin-top:8px;"><canvas id="optConvergenceChart" width="300" height="100"></canvas></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- REPORT TAB -->
+          <div class="tab-pane report" id="tabReport">
+            <button id="runValidationBtn" class="header-btn" style="justify-content:center;width:100%;margin-bottom:8px;">RUN VALIDATION</button>
+            <div id="validationMetrics" style="display:none;" class="val-metrics">
+              <div class="val-row"><span>R²:</span> <span class="val" id="valRSquared">-</span></div>
+              <div class="val-row"><span>RMSE:</span> <span class="val" id="valRMSE">-</span></div>
+              <div class="val-row"><span>Grade:</span> <span class="val" id="valGrade" style="font-weight:bold;">-</span></div>
+            </div>
+            <button id="exportValidationBtn" class="export-btn" style="display:none;width:100%;justify-content:center;margin-top:8px;">EXPORT REPORT (CSV)</button>
+          </div>
+
+        </div><!-- /right-tab-content -->
+      </div><!-- /right-inner -->
+    </aside>
+
+  </div><!-- /main -->
+
+  <!-- SELECTED BACTERIA BADGE -->
+  <div class="selected-badge" id="selectedBadge">
+    <span id="selectedBadgeDot" style="width:8px;height:8px;border-radius:50%;background:var(--accent);display:inline-block;"></span>
+    <span id="selectedBadgeName">—</span>
+    <span style="color:var(--text3);font-size:10px">· click dish to inoculate</span>
+  </div>
+
+  <!-- DETAIL PANEL -->
+  <div class="bac-detail-panel" id="detailPanel">
+    <div class="detail-name" id="detailName"></div>
+    <div class="detail-grid" id="detailGrid"></div>
+    <div class="detail-badge-row" id="detailBadges"></div>
+  </div>
+
+  <!-- SAVE MODAL -->
+  <div class="modal-overlay" id="saveModal" style="display:none;">
+    <div class="modal-box">
+      <div class="modal-title">Save to Library</div>
+      <input type="text" class="modal-input" id="saveModalInput" placeholder="Deney adı girin...">
+      <div class="modal-btns">
+        <button class="modal-btn cancel" id="saveModalCancel">İptal</button>
+        <button class="modal-btn confirm" id="saveModalConfirm">Kaydet</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- LOG DOWNLOAD MODAL -->
+  <div class="modal-overlay" id="logDownloadModal" style="display:none;">
+    <div class="modal-box">
+      <div class="modal-title">CSV İndir</div>
+      <div class="modal-subtitle">İndirmek istediğiniz petri kaplarını seçiniz</div>
+      <div class="modal-petri-list" id="modalPetriList"></div>
+      <div class="modal-btns">
+        <button class="modal-btn cancel" id="logModalCancel">İptal</button>
+        <button class="modal-btn confirm" id="logModalDownloadAll">Tümünü İndir</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hidden library for app.js compatibility -->
+  <div id="library" style="display:none;"><div id="libraryEmpty" style="display:none;"></div></div>
+
+  <!-- SVG Gooey Filter -->
+  <svg style="display:none;" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <filter id="gooey">
+        <feGaussianBlur in="SourceGraphic" stdDeviation="5" result="blur" />
+        <feColorMatrix in="blur" type="matrix" values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 16 -7" result="goo" />
+        <feComposite in="SourceGraphic" in2="goo" operator="atop" />
+      </filter>
+    </defs>
+  </svg>
+
+  <!-- 3rd Party Libraries -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Modüler JS Motoru -->
+  <script src="bacteria-store.js"></script>
+  <script src="data_loader.js"></script>
+  <script src="src/core/simulation.js"></script>
+  <script src="src/core/optimizer.js"></script>
+  <script src="src/core/validation.js"></script>
+  <script src="src/render/renderer.js"></script>
+  <script src="src/ui/ui-panels.js"></script>
+  <script src="app.js"></script>
+
+  <script type="module">
+    import { getBacteriaImage, loadBacteriaImage } from './src/ui/bacteria-images.js';
+
+    // ─── MORPHOLOGY IMAGE ───
+    const morphImg = document.getElementById('morph-img');
+    const morphPlaceholder = document.getElementById('morph-placeholder');
+    const morphLicense = document.getElementById('morph-license');
+
+    window.updateMorphologyImage = async function (bacteriaName) {
+      if (!morphImg || !morphPlaceholder || !morphLicense) return;
+      morphImg.style.display = 'none';
+      morphPlaceholder.style.display = 'flex';
+      morphLicense.textContent = '';
+      morphImg.alt = bacteriaName;
+      const data = getBacteriaImage(bacteriaName);
+      if (data) {
+        morphLicense.textContent = data.license;
+        await loadBacteriaImage(bacteriaName, morphImg, morphPlaceholder);
+      } else {
+        morphPlaceholder.innerHTML = '<span style="font-size:28px">🔬</span><span>Görsel bulunamadı</span>';
+      }
+    };
+
+    // ─── CHART SEARCH DROPDOWN ───
+    const chartInput = document.getElementById('chart-search-input');
+    const chartDropdown = document.getElementById('chart-dropdown');
+
+    if (chartInput && chartDropdown) {
+      chartInput.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = chartDropdown.style.display === 'block';
+        chartDropdown.style.display = isOpen ? 'none' : 'block';
+      });
+      document.addEventListener('click', () => {
+        chartDropdown.style.display = 'none';
+      });
+      document.querySelectorAll('.chart-option').forEach(option => {
+        option.addEventListener('click', (e) => {
+          e.stopPropagation();
+          document.querySelectorAll('.chart-option').forEach(o => o.classList.remove('active'));
+          option.classList.add('active');
+          chartInput.value = option.textContent.trim();
+          chartDropdown.style.display = 'none';
+          chartDropdown.classList.remove('open');
+          if (window.selectChart && window.ChartManager) {
+            window.selectChart(option.dataset.chart, null);
+            const _bac = window.selectedBacteria
+              || ((window.activeDishes||[]).slice(-1)[0]?.inoculations?.[0]?.bacteria)
+              || null;
+            const _env = (window.activeDishes||[]).slice(-1)[0] || {temp:37,ph:7.0,nacl:0.5,inoculations:[]};
+            if (_bac) {
+              const CM = window.ChartManager, cid = option.dataset.chart;
+              if      (cid==='growth')     CM.renderGrowthCurve(_bac,_env);
+              else if (cid==='heatmap')    CM.renderHeatmap(_bac,_env);
+              else if (cid==='radar')      CM.renderRadar(_bac,_env);
+              else if (cid==='mic')        CM.renderMICProfile(_bac,_env);
+              else if (cid==='population') CM.renderPopulationDynamics(_bac,_env);
+              else if (cid==='nutrient')   CM.renderNutrientDepletion(_bac,_env);
+              else if (cid==='survival')   CM.renderSurvivalCurve(_bac,_env);
+              else if (cid==='mutation')   CM.renderMutationFreq(_bac,_env);
+              else if (cid==='biofilm')    CM.renderBiofilmThickness(_bac,_env);
+              else if (cid==='stress')     CM.renderStressIndex(_bac,_env);
+            }
+          }
+          const exportBtn = document.getElementById('chart-export-btn');
+          exportBtn.style.display = 'block';
+          if (!window.selectedBacteria) {
+            exportBtn.disabled = true;
+          } else {
+            exportBtn.disabled = false;
+          }
+          exportBtn.onclick = (e) => {
+            e.preventDefault();
+            let bakteriAdi = 'Bilinmeyen';
+            if (window.selectedBacteria && window.selectedBacteria.name) {
+              bakteriAdi = window.selectedBacteria.name;
+            } else {
+              const badge = document.getElementById('selectedBadgeName');
+              if (badge && badge.textContent && badge.textContent !== '—') {
+                bakteriAdi = badge.textContent;
+              }
+            }
+            const canvas = document.getElementById('chart-' + option.dataset.chart);
+            if (!canvas) {
+              if (window.showFlash) window.showFlash("Bu grafik için indirme desteklenmiyor");
+              return;
+            }
+            try {
+              const data = window.DataExportEngine.getChartData(option.dataset.export, window.selectedBacteria);
+              if (data && data.length > 0) {
+                let csvContent = "x,y\n";
+                data.forEach(row => { csvContent += `${row.x},${row.y !== null ? row.y : ''}\n`; });
+                window.downloadCSV(csvContent, `${bakteriAdi}_${option.dataset.export}.csv`);
+              } else {
+                if (window.showFlash) window.showFlash("Dışa aktarılacak veri bulunamadı.");
+              }
+            } catch (e) { console.error(e); }
+          };
+        });
+      });
+    }
+
+    // ─── HOW TO BUTTON ───
+    document.getElementById('howToBtn').addEventListener('click', () => {
+      sessionStorage.removeItem('introSeen');
+      window.location.href = 'intro.html';
+    });
+
+    // ─── LAYOUT: PANEL TOGGLES ───
+    const mainLayout = document.getElementById('mainLayout');
+    const toggleLeft = document.getElementById('toggleLeftPanel');
+    const toggleRight = document.getElementById('toggleRightPanel');
+    let leftVisible = true;
+    let rightVisible = true;
+
+    function updateLayout() {
+      mainLayout.classList.toggle('left-collapsed', !leftVisible);
+      mainLayout.classList.toggle('right-collapsed', !rightVisible);
+      toggleLeft.textContent = leftVisible ? '◀' : '▶';
+      toggleRight.textContent = rightVisible ? '▶' : '◀';
+      // Dispatch resize so 3D can adjust
+      setTimeout(() => window.dispatchEvent(new Event('resize')), 300);
+    }
+
+    toggleLeft.addEventListener('click', () => {
+      leftVisible = !leftVisible;
+      updateLayout();
+    });
+
+    toggleRight.addEventListener('click', () => {
+      rightVisible = !rightVisible;
+      updateLayout();
+    });
+
+    // Keyboard shortcuts
+    document.addEventListener('keydown', (e) => {
+      if (e.key === '[') {
+        leftVisible = !leftVisible;
+        updateLayout();
+        e.preventDefault();
+      } else if (e.key === ']') {
+        rightVisible = !rightVisible;
+        updateLayout();
+        e.preventDefault();
+      }
+    });
+
+    // ─── VIEW MODE: 2D / 3D ───
+    function switchTo2D() {
+      const view2d = document.getElementById('view2d');
+      const container = document.getElementById('tissue3d-container');
+      if (!view2d) return;
+      view2d.style.display = 'flex';
+      if (container) container.style.display = 'none';
+      // Aktif sekmeye göre doğru paneli göster; varsayılan olarak 'top' (petri kabı)
+      const topView = document.getElementById('v2dTopView');
+      const sideView = document.getElementById('v2dSideView');
+      const layersView = document.getElementById('v2dLayersView');
+      const activeTab = currentView2DTab || 'top';
+      if (topView) topView.style.display = activeTab === 'top' ? 'flex' : 'none';
+      if (sideView) sideView.style.display = activeTab === 'side' ? 'flex' : 'none';
+      if (layersView) layersView.style.display = activeTab === 'layers' ? 'flex' : 'none';
+      if (activeTab === 'side') setTimeout(() => render2DSideView(), 100);
+      if (activeTab === 'layers') setTimeout(() => render2DLayersView(), 100);
+      if (typeof syncWith3D === 'function') syncWith3D();
+    }
+
+    function switchTo3D() {
+      // Canvas 3D playback sayfasına geç
+      if (typeof syncWith3D === 'function') syncWith3D();
+      // Kısa gecikme ile aç (sync tamamlansın)
+      setTimeout(() => window.open('canvas3d.html', '_blank'), 100);
+    }
+
+    // Toggle buttons
+    document.getElementById('toggle2DBtn').addEventListener('click', switchTo3D);
+
+    // ─── 2D VIEW TABS (Üst / Yan / Katmanlar) ───
+    let currentView2DTab = 'top';
+
+    function switch2DTab(tabId) {
+      currentView2DTab = tabId;
+      document.querySelectorAll('.v2d-tab').forEach(t => t.classList.toggle('active', t.dataset.view2d === tabId));
+      document.getElementById('v2dTopView').style.display = tabId === 'top' ? 'flex' : 'none';
+      document.getElementById('v2dSideView').style.display = tabId === 'side' ? 'flex' : 'none';
+      document.getElementById('v2dLayersView').style.display = tabId === 'layers' ? 'flex' : 'none';
+      // Update dish state and redraw
+      const state = getActiveDish();
+      if (state) {
+        state.viewMode = tabId;
+        if (typeof redraw === 'function') redraw(state);
+      }
+      if (tabId === 'side') {
+        _sideHoverInitialized = false;  // Yeni canvas boyutları için hover'ı yenile
+        render2DSideView();
+      }
+      if (tabId === 'layers') {
+        if (window._layersHoverItems) window._layersHoverItems.length = 0;
+        render2DLayersView();
+      }
+    }
+
+    document.querySelectorAll('.v2d-tab').forEach(tab => {
+      tab.addEventListener('click', () => switch2DTab(tab.dataset.view2d));
+    });
+
+    // ─── 2D SIDE VIEW (cross-section) ───
+    // ─── HELPERS ───
+    function seededRandom(seed) {
+      let s = seed % 2147483647;
+      if (s <= 0) s += 2147483646;
+      return function() {
+        s = (s * 16807) % 2147483647;
+        return (s - 1) / 2147483646;
+      };
+    }
+    function hexToRgbArr(hex) {
+      if (!hex || hex[0] !== '#') return [0, 229, 160];
+      return [parseInt(hex.slice(1,3), 16), parseInt(hex.slice(3,5), 16), parseInt(hex.slice(5,7), 16)];
+    }
+
+    // ─── TOOLTIP SYSTEM ───
+    const _sideHoverItems = [];
+    let _tooltipTimeout = null;
+
+    function showTooltip(text, x, y) {
+      const tip = document.getElementById('v2dTooltip');
+      if (!tip) return;
+      tip.innerHTML = text;
+      tip.style.display = 'block';
+      tip.style.left = Math.min(x + 14, window.innerWidth - 230) + 'px';
+      tip.style.top = Math.min(y - 10, window.innerHeight - 120) + 'px';
+    }
+
+    function hideTooltip() {
+      const tip = document.getElementById('v2dTooltip');
+      if (tip) tip.style.display = 'none';
+    }
+
+    let _sideHoverInitialized = false;
+
+    function initSideHover() {
+      // Her zaman çalışır — listener bir kez eklenir, items dinamik okunur
+      if (_sideHoverInitialized) return;
+      _sideHoverInitialized = true;
+
+      const canvas = document.getElementById('v2dSideCanvas');
+      if (!canvas) return;
+
+      canvas.addEventListener('mousemove', (e) => {
+        const rect  = canvas.getBoundingClientRect();
+        const scaleX = canvas.width  / rect.width;
+        const scaleY = canvas.height / rect.height;
+        const mx = (e.clientX - rect.left) * scaleX;
+        const my = (e.clientY - rect.top)  * scaleY;
+
+        let found = null;
+
+        // Önce bakteri ve kan damarı hit'lerini kontrol et (r değeri var)
+        for (const item of _sideHoverItems) {
+          if (item.isLayer) continue;  // katmanlar sonra
+          const r = item.r || 10;
+          if (Math.hypot(mx - item.x, my - item.y) <= r) {
+            found = item; break;
+          }
+        }
+
+        // Bulunamadıysa katman zone'larını kontrol et
+        if (!found) {
+          for (const item of _sideHoverItems) {
+            if (!item.isLayer) continue;
+            if (my >= item.y0 && my <= item.y1) {
+              found = item; break;
+            }
+          }
+        }
+
+        if (found) {
+          showTooltip(found.tip, e.clientX, e.clientY);
+        } else {
+          hideTooltip();
+        }
+      });
+
+      canvas.addEventListener('mouseleave', hideTooltip);
+
+      // Layers canvas hover
+      const layersCanvas = document.getElementById('v2dLayersCanvas');
+      if (layersCanvas && !layersCanvas._hoverBound) {
+        layersCanvas._hoverBound = true;
+        layersCanvas.addEventListener('mousemove', (e) => {
+          const rect  = layersCanvas.getBoundingClientRect();
+          const scaleX = layersCanvas.width  / rect.width;
+          const scaleY = layersCanvas.height / rect.height;
+          const mx = (e.clientX - rect.left) * scaleX;
+          const my = (e.clientY - rect.top)  * scaleY;
+          // _layersHoverItems varsa kullan
+          const items = window._layersHoverItems || [];
+          let found = null;
+          for (const item of items) {
+            const r = item.r || 10;
+            if (Math.hypot(mx - item.x, my - item.y) <= r) { found = item; break; }
+          }
+          if (found) showTooltip(found.tip, e.clientX, e.clientY);
+          else hideTooltip();
+        });
+        layersCanvas.addEventListener('mouseleave', hideTooltip);
+      }
+    }
+
+    // ─── DRAW BLOB (matches renderer.js — smooth quadraticCurveTo) ───
+    function drawBlob(ctx, cx, cy, r, rng, elongate) {
+      const N = 8, step = Math.PI * 2 / N;
+      const pts = [];
+      for (let i = 0; i < N; i++) {
+        const a = i * step;
+        let rad = r * (0.82 + rng() * 0.38);
+        if (elongate) rad *= (Math.abs(Math.cos(a)) * 0.6 + 0.4);
+        pts.push({ x: cx + Math.cos(a) * rad, y: cy + Math.sin(a) * rad });
+      }
+      ctx.beginPath();
+      const sx = (pts[N - 1].x + pts[0].x) / 2, sy = (pts[N - 1].y + pts[0].y) / 2;
+      ctx.moveTo(sx, sy);
+      for (let i = 0; i < N; i++) {
+        const p1 = pts[i], p2 = pts[(i + 1) % N];
+        ctx.quadraticCurveTo(p1.x, p1.y, (p1.x + p2.x) / 2, (p1.y + p2.y) / 2);
+      }
+      ctx.closePath();
+    }
+
+    // ─── 2D SIDE VIEW (horizontal tissue strips, bacteria blobs) ───
+    function render2DSideView() {
+      const canvas = document.getElementById('v2dSideCanvas');
+      if (!canvas) return;
+      const rect = canvas.parentElement.getBoundingClientRect();
+      canvas.width  = Math.max(rect.width,  400);
+      canvas.height = Math.max(rect.height, 320);
+      const ctx = canvas.getContext('2d');
+      const w = canvas.width, h = canvas.height;
+      _sideHoverItems.length = 0;
+
+      const state    = getActiveDish();
+      const time     = state ? state.time : 0;
+      const tRatio   = Math.min(1, time / 200);
+      const tissueId = (state && state.tissueType) ? state.tissueType : 'skin-wound';
+
+      // ── DOKU GÖRSEL KONFİGÜRASYONU ──────────────────────────────────────────
+      const TISSUE_CONFIG = {
+        'skin-wound': {
+          layers: [
+            { key:'epidermis', name:'EPİTEL', pct:0.10,
+              base:'#e8c9a8', dark:'#d4b48a', vasc:0.05,
+              thickness:'0.1–0.3 mm', desc:'Stratum korneum + keratinosit. Dış mekanik bariyer.' },
+            { key:'dermis', name:'DERMİS', pct:0.55,
+              base:'#b8734a', dark:'#9a5f3a', vasc:0.65,
+              thickness:'1.5–3 mm', desc:'Kollajen, kan damarları, sinir lifleri. Antibiyotik giriş noktası.' },
+            { key:'vascular', name:'VASKÜLER', pct:0.35,
+              base:'#8a3030', dark:'#6a2020', vasc:0.92,
+              thickness:'0.3 mm', desc:'Yoğun kapiller ağ. Sistemik antibiyotik buradan dağılır.' }
+          ],
+          abDirection: 'top_down', abEntryLayerIdx: 1
+        },
+        'burn-wound': {
+          layers: [
+            { key:'eschar', name:'NEKROTİK ESKAR', pct:0.25,
+              base:'#2a2018', dark:'#1a1008', vasc:0.00,
+              thickness:'~500 µm', desc:'Yanmış ölü doku. Antibiyotiğe bariyer. Biyofilm için ideal ortam.' },
+            { key:'viable', name:'CANLI DOKU', pct:0.75,
+              base:'#c05040', dark:'#903020', vasc:0.55,
+              thickness:'~2 mm', desc:'Granülasyon başlangıcı. İV antibiyotik buraya ulaşabilir.' }
+          ],
+          abDirection: 'inside_out', abEntryLayerIdx: 1
+        },
+        'chronic-wound': {
+          layers: [
+            { key:'biofilm', name:'BİYOFİLM', pct:0.15,
+              base:'#2d3b1a', dark:'#1d2810', vasc:0.00,
+              thickness:'~100 µm', desc:'Polisakkarit matriks. Antibiyotiğe %95 direnç. Mekanik debridman şart.' },
+            { key:'granulation', name:'GRANÜLASYON', pct:0.85,
+              base:'#c04040', dark:'#903030', vasc:0.78,
+              thickness:'~1 mm', desc:'Aktif iyileşme dokusu. Yoğun damar, fibroblast.' }
+          ],
+          abDirection: 'inside_out', abEntryLayerIdx: 1
+        },
+        'lung': {
+          layers: [
+            { key:'mucus', name:'MUKUS', pct:0.10,
+              base:'#8ab8c8', dark:'#6a98a8', vasc:0.02,
+              thickness:'~50 µm', desc:'Mukosilier klirens. Patojenleri tuzağa düşürür.' },
+            { key:'alveolar', name:'ALVEOLAR EPİTEL', pct:0.40,
+              base:'#c8e8f0', dark:'#a0c8d8', vasc:0.15,
+              thickness:'~200 µm', desc:'Gaz değişimi yüzeyi. İnhale antibiyotik buraya iner.' },
+            { key:'interstitium', name:'İNTERSTİSYUM', pct:0.50,
+              base:'#607890', dark:'#405870', vasc:0.85,
+              thickness:'~500 µm', desc:'Bağ dokusu ve kapiller ağ. İV antibiyotik burada.' }
+          ],
+          abDirection: 'center_out', abEntryLayerIdx: 2
+        },
+        'gut': {
+          layers: [
+            { key:'mucus', name:'MUKUS', pct:0.15,
+              base:'#d4b870', dark:'#b49850', vasc:0.01,
+              thickness:'~300 µm', desc:'Koruyucu mukus tabakası. Kommensal flora burada. H. pylori deler.' },
+            { key:'epithelium', name:'EPİTEL / VİLLUSLAR', pct:0.40,
+              base:'#e8a050', dark:'#c88030', vasc:0.20,
+              thickness:'~400 µm', desc:'Besin emilimi. Villuslar yüzeyi 600× artırır. Oral antibiyotik emilimi.' },
+            { key:'lamina', name:'LAMİNA PROPRİA', pct:0.45,
+              base:'#c06840', dark:'#904820', vasc:0.75,
+              thickness:'~600 µm', desc:'Bağ dokusu, lenf damarları. İmmün hücreler burada yoğun.' }
+          ],
+          abDirection: 'inside_out', abEntryLayerIdx: 2
+        },
+        'urinary': {
+          layers: [
+            { key:'uroepithelium', name:'ÜROEPİTEL', pct:0.20,
+              base:'#d8c8a0', dark:'#b8a880', vasc:0.05,
+              thickness:'~100 µm', desc:'Geçirgen epitel. İdrardaki antibiyotik konsantrasyonu çok yüksek.' },
+            { key:'lamina', name:'LAMİNA PROPRİA', pct:0.80,
+              base:'#a08060', dark:'#806040', vasc:0.60,
+              thickness:'~800 µm', desc:'Bağ dokusu. Florokinolonlar çok iyi penetre eder.' }
+          ],
+          abDirection: 'top_down', abEntryLayerIdx: 0
+        },
+        'bloodstream': {
+          layers: [
+            { key:'plasma', name:'PLAZMA', pct:0.65,
+              base:'#c83030', dark:'#a01010', vasc:1.00,
+              thickness:'—', desc:'Kan plazması. Antibiyotik anında dağılır. Protein bağlanması önemli.' },
+            { key:'endothelium', name:'ENDOTEL', pct:0.35,
+              base:'#802020', dark:'#601010', vasc:0.95,
+              thickness:'~500 µm', desc:'Damar iç yüzeyi. Gram negatif endotoksin buraya yapışır.' }
+          ],
+          abDirection: 'uniform', abEntryLayerIdx: 0
+        },
+        'bone': {
+          layers: [
+            { key:'periosteum', name:'PERİOST', pct:0.08,
+              base:'#e8e0c0', dark:'#c8c0a0', vasc:0.30,
+              thickness:'~200 µm', desc:'Fibröz dış tabaka. Antibiyotik ilk buradan girer.' },
+            { key:'cortical', name:'KORTİKAL KEMİK', pct:0.50,
+              base:'#d4c890', dark:'#b4a870', vasc:0.05,
+              thickness:'~5 mm', desc:'Sert kemik. Havers kanalları. Antibiyotik çok yavaş geçer (%20).' },
+            { key:'medulla', name:'MEDULLA', pct:0.42,
+              base:'#d08040', dark:'#a06020', vasc:0.35,
+              thickness:'~10 mm', desc:'Kemik iliği. Kan hücre üretimi. Enfeksiyon burada yerleşir.' }
+          ],
+          abDirection: 'outside_in_slow', abEntryLayerIdx: 0
+        }
+      };
+
+      const cfg = TISSUE_CONFIG[tissueId] || TISSUE_CONFIG['skin-wound'];
+      const LAYERS = cfg.layers;
+
+      // Y koordinatları
+      let cumY = 4;
+      LAYERS.forEach(l => {
+        l.y0  = Math.round(cumY);
+        cumY += l.pct * (h - 8);
+        l.y1  = Math.round(cumY);
+        l.mid = (l.y0 + l.y1) / 2;
+        l.layH = l.y1 - l.y0;
+      });
+
+      // ── KATMAN ZEMİNLERİ ────────────────────────────────────────────────────
+      LAYERS.forEach(l => {
+        const g = ctx.createLinearGradient(0, l.y0, 0, l.y1);
+        g.addColorStop(0, l.base);
+        g.addColorStop(1, l.dark);
+        ctx.fillStyle = g;
+        ctx.fillRect(0, l.y0, w, l.layH);
+      });
+
+      // ── ANTİBİYOTİK DURUMU (drawTissueExtras için gerekli)
+      const hasAb = state && state.antibiotic && state.antibiotic.concentration > 0;
+
+      // ── DOKUYA ÖZGÜ DETAYLAR ─────────────────────────────────────────────────
+      _drawTissueExtras(ctx, tissueId, LAYERS, w, h, tRatio, state, hasAb);
+
+      // ── KATMAN ETİKETLERİ + HOVER ────────────────────────────────────────────
+      LAYERS.forEach(l => {
+        ctx.fillStyle = 'rgba(0,0,0,0.50)';
+        ctx.fillRect(0, l.y0, 120, 22);
+        ctx.fillStyle = 'rgba(255,255,255,0.88)';
+        ctx.font = 'bold 9px Space Mono,monospace';
+        ctx.textAlign = 'left';
+        ctx.fillText(l.name, 6, l.y0 + 14);
+        ctx.fillStyle = 'rgba(255,255,255,0.38)';
+        ctx.font = '8px Space Mono,monospace';
+        ctx.fillText(l.thickness, 6, l.y0 + 25);
+        // Vaskülarite bar
+        ctx.fillStyle = 'rgba(255,255,255,0.10)';
+        ctx.fillRect(6, l.y0 + 28, 60, 2);
+        ctx.fillStyle = `rgba(220,80,80,${0.35 + l.vasc * 0.6})`;
+        ctx.fillRect(6, l.y0 + 28, 60 * l.vasc, 2);
+
+        _sideHoverItems.push({
+          x: w*0.5, y: l.mid, isLayer: true, y0: l.y0, y1: l.y1,
+          tip: `<b>${l.name}</b><br>${l.desc}<br><br>Kalınlık: <b>${l.thickness}</b><br>Vaskülarite: <b>${(l.vasc*100).toFixed(0)}%</b>`
+        });
+      });
+
+      // ── ANTİBİYOTİK ─────────────────────────────────────────────────────────
+      if (hasAb) {
+        const pkList = (typeof BacteriaStore !== 'undefined' && BacteriaStore.antibioticPK) ? BacteriaStore.antibioticPK : [];
+        const pkM    = pkList.find(p => p.id === state.antibiotic.drugId);
+        const tissueModel = (typeof BacteriaStore !== 'undefined' && BacteriaStore.tissueModels)
+          ? BacteriaStore.tissueModels.find(t => t.id === tissueId) : null;
+        const penMod = tissueModel ? (tissueModel.antibiotic_penetration_modifier || 1.0) : 1.0;
+        const rawPen = pkM ? (pkM.tissue_penetration[tissueId] || pkM.tissue_penetration['skin-wound'] || 0.5) : 0.5;
+        const abPen  = rawPen * penMod;
+        const conc   = state.antibiotic.concentration;
+        const alpha  = Math.min(0.38, (conc / 256) * abPen);
+        const entryIdx = cfg.abEntryLayerIdx;
+        const entryL   = LAYERS[entryIdx] || LAYERS[0];
+
+        _drawAntibioticGradient(ctx, cfg.abDirection, LAYERS, entryL, alpha, w, h);
+
+        // Etiket
+        ctx.fillStyle = 'rgba(0,0,0,0.55)';
+        ctx.fillRect(w-210, 4, 206, 26);
+        ctx.fillStyle = 'rgba(0,229,160,0.9)';
+        ctx.font = 'bold 9px Space Mono,monospace';
+        ctx.textAlign = 'right';
+        ctx.fillText(`${state.antibiotic.drugName || 'AB'} ${conc}mg/L`, w-8, 17);
+        ctx.fillStyle = 'rgba(0,229,160,0.5)';
+        ctx.font = '8px Space Mono,monospace';
+        const routeLabel = pkM ? pkM.primary_route.toUpperCase() : 'IV';
+        ctx.fillText(`${routeLabel} · pen ${(abPen*100).toFixed(0)}% · ${cfg.abDirection}`, w-8, 27);
+      }
+
+      // ── BAKTERİ DAĞILIMI ─────────────────────────────────────────────────────
+      const layerMap = { epidermis:0, dermis:1, vascular:2, vasküler:2,
+                         eschar:0, viable:1, biofilm:0, granulation:1,
+                         mucus:0, alveolar:1, interstitium:2, interstisyum:2,
+                         epithelium:1, lamina:2,
+                         uroepithelium:0, plasma:0, endothelium:1,
+                         periosteum:0, cortical:1, medulla:2 };
+      const spreadCfg = {
+        epidermis:{ spreadX:0.20, spreadY:0.06 },  dermis:{ spreadX:0.55, spreadY:0.35 },
+        vascular:{ spreadX:0.80, spreadY:0.50 },   vasküler:{ spreadX:0.80, spreadY:0.50 },
+        eschar:{ spreadX:0.30, spreadY:0.08 },     viable:{ spreadX:0.65, spreadY:0.45 },
+        biofilm:{ spreadX:0.90, spreadY:0.10 },    granulation:{ spreadX:0.65, spreadY:0.50 },
+        mucus:{ spreadX:0.80, spreadY:0.06 },      alveolar:{ spreadX:0.70, spreadY:0.40 },
+        interstitium:{ spreadX:0.60, spreadY:0.50 }, interstisyum:{ spreadX:0.60, spreadY:0.50 },
+        epithelium:{ spreadX:0.60, spreadY:0.35 }, lamina:{ spreadX:0.65, spreadY:0.50 },
+        uroepithelium:{ spreadX:0.85, spreadY:0.08 },
+        plasma:{ spreadX:0.95, spreadY:0.80 },     endothelium:{ spreadX:0.90, spreadY:0.30 },
+        periosteum:{ spreadX:0.30, spreadY:0.06 }, cortical:{ spreadX:0.20, spreadY:0.04 },
+        medulla:{ spreadX:0.55, spreadY:0.45 }
+      };
+
+      const affToLayerKey = {
+        epidermis:'epidermis', dermis:'dermis', subcutaneous:'dermis',
+        muscle:'viable', lung:'alveolar', gut:'epithelium',
+        urinary:'uroepithelium', bloodstream:'plasma', bone:'medulla'
+      };
+
+      const activeDishes = window.activeDishes || [];
+      activeDishes.forEach(dish => {
+        if (!dish.inoculations) return;
+        const dTR = Math.min(1, (dish.time||0) / 200);
+        dish.inoculations.forEach((inoc, inocIdx) => {
+          const bac = inoc.bacteria;
+          if (!bac) return;
+
+          const affRaw = (bac.tissueAffinity || bac.tissue_affinity || 'dermis').toLowerCase();
+          const lKey   = affToLayerKey[affRaw] || 'dermis';
+          const lIdx   = layerMap[lKey] !== undefined ? layerMap[lKey] : Math.min(1, LAYERS.length-1);
+          const layer  = LAYERS[Math.min(lIdx, LAYERS.length-1)];
+          const sc     = spreadCfg[lKey] || { spreadX:0.5, spreadY:0.3 };
+
+          // Minimum spread: t=0'da da bakteri görünür
+          const sX = Math.max(w * 0.06, w * 0.44 * sc.spreadX * dTR);
+          const sY = Math.max(layer.layH * 0.05, layer.layH * 0.44 * sc.spreadY * dTR);
+          const colCount  = inoc.colonies ? inoc.colonies.length : 60;
+          const visCount  = Math.max(8, Math.floor(colCount * 0.06 * (0.4 + dTR * 0.6)));
+          const blobR     = 5 + dTR * 6;
+          const rgb       = hexToRgbArr(bac.hex || '#00e5a0');
+
+          let killRate = 0;
+          if (hasAb && state && dish.id === state.id) {
+            const pkList2 = (typeof BacteriaStore !== 'undefined') ? BacteriaStore.antibioticPK : [];
+            const pkM2    = pkList2 ? pkList2.find(p => p.id === state.antibiotic.drugId) : null;
+            const abList  = (typeof BacteriaStore !== 'undefined') ? BacteriaStore.getAntibioticsFor(bac._id) : [];
+            const abMatch = abList ? abList.find(a => a.name === state.antibiotic.drugId) : null;
+            const mic     = abMatch ? (abMatch.mic || 8) : 8;
+            const tissueM = (typeof BacteriaStore !== 'undefined' && BacteriaStore.tissueModels)
+              ? BacteriaStore.tissueModels.find(t => t.id === tissueId) : null;
+            const penM2   = tissueM ? (tissueM.antibiotic_penetration_modifier || 1.0) : 1.0;
+            const rawPen2 = pkM2 ? (pkM2.tissue_penetration[tissueId] || 0.5) : 0.5;
+            const C       = state.antibiotic.concentration * rawPen2 * penM2;
+            killRate      = C / (mic + C);
+          }
+
+          // Poisson: küme merkezleri + Gaussian saçılma
+          const clusterCount = Math.max(1, Math.floor(visCount / 5));
+          const rngC = seededRandom((bac._id ? bac._id.charCodeAt(0) : 42) + inocIdx * 7);
+          const clusters = Array.from({length: clusterCount}, () => ({
+            cx: (w/2) + (rngC()-0.5)*2*sX,
+            cy: layer.mid + (rngC()-0.5)*2*sY,
+            w:  0.3 + rngC()*0.7
+          }));
+          const lateAb = hasAb && tRatio > 0.4;
+          const yellowShift = lateAb ? Math.min(1, (tRatio-0.4)*killRate*2.5) : 0;
+
+          const rng = seededRandom((bac._id ? bac._id.charCodeAt(0) : 42) + inocIdx * 17);
+          for (let i = 0; i < visCount; i++) {
+            const cl  = clusters[i % clusterCount];
+            const ang = rng() * Math.PI * 2;
+            const d   = (rng() + rng()) * 0.5 * sX * 0.55 * cl.w;
+            const bx  = cl.cx + Math.cos(ang) * d;
+            const by  = cl.cy + Math.sin(ang) * d * 0.5;
+            const br  = blobR*(0.5+rng()*0.7)*(1-killRate*0.8);
+            if (br < 1) continue;
+            const drawRgb2 = yellowShift > 0
+              ? [Math.min(255,rgb[0]+Math.floor(70*yellowShift)), Math.min(255,rgb[1]+Math.floor(50*yellowShift)), Math.max(0,rgb[2]-Math.floor(50*yellowShift))]
+              : rgb;
+            const al = 0.70*(1-killRate*0.55);
+            ctx.fillStyle = `rgba(${drawRgb2[0]},${drawRgb2[1]},${drawRgb2[2]},${al})`;
+            drawBlob(ctx,bx,by,br,seededRandom(Math.round(bx*by+i)),false); ctx.fill();
+            ctx.fillStyle = `rgba(${drawRgb2[0]},${drawRgb2[1]},${drawRgb2[2]},${al*0.12})`;
+            drawBlob(ctx,bx,by,br*1.8,seededRandom(Math.round(bx*by+i+2)),false); ctx.fill();
+            if (i%3===0) _sideHoverItems.push({ x:bx, y:by, r: Math.max(10, blobR*2.5),
+              tip: (() => {
+                // İnteraksiyon bilgisi
+                const interactions = (typeof BacteriaStore !== 'undefined')
+                  ? BacteriaStore.getInteractionsFor(bac._id) : [];
+                const otherBacteria = dish.inoculations
+                  .filter(ii => ii.bacteria._id !== bac._id)
+                  .map(ii => ii.bacteria);
+
+                let interactionLines = '';
+                otherBacteria.forEach(other => {
+                  const ix = interactions.find(i =>
+                    (i.bacteria_a === bac._id && i.bacteria_b === other._id) ||
+                    (i.bacteria_b === bac._id && i.bacteria_a === other._id)
+                  );
+                  if (ix) {
+                    const icon = ix.interaction_type === 'competition' ? '⚔️'
+                              : ix.interaction_type === 'synergy'      ? '🤝' : '↔️';
+                    interactionLines += `<br>${icon} <i>${other.name}</i>: ${ix.mechanism||ix.interaction_type}`;
+                  }
+                });
+
+                const abLine = (typeof BacteriaStore !== 'undefined' && hasAb && dish.id === state.id)
+                  ? (() => {
+                      const abList = BacteriaStore.getAntibioticsFor(bac._id);
+                      const abMatch = abList ? abList.find(a => a.name === state.antibiotic.drugId) : null;
+                      return abMatch
+                        ? `<br>💊 MIC: <b>${abMatch.mic} mg/L</b> · Direnç: ${(abMatch.resistance_score*100).toFixed(0)}%`
+                        : '';
+                    })() : '';
+
+                return `<b style="color:#00e5a0">${bac.name}</b>`
+                  + `<br>📍 Katman: ${layer.name}`
+                  + `<br>🔬 Gram: ${bac.gram} · ${bac.morphology||'bacillus'}`
+                  + `<br>💨 O₂: ${bac.oxygenReq}`
+                  + `<br>⏱ µmax: ${bac.mu_max} h⁻¹`
+                  + (killRate > 0 ? `<br><b style="color:#f87171">Kill rate: ${(killRate*100).toFixed(0)}%</b>` : '')
+                  + abLine
+                  + (interactionLines ? `<br><br><b style="color:#f59e0b">İnteraksiyonlar:</b>${interactionLines}` : '');
+              })()
+            });
+          }
+        });
+      });
+
+      // ── DOKU TAHRİBATI ───────────────────────────────────────────────────────
+      // Bakterinin bulunduğu yerde zaman ilerledikçe doku rengi bozulur
+      activeDishes.forEach(dish => {
+        if (!dish.inoculations || dish.inoculations.length === 0) return;
+        const dTR = Math.min(1, (dish.time||0)/200);
+        if (dTR < 0.25) return; // Erken evrede tahribat yok
+
+        dish.inoculations.forEach((inoc, inocIdx) => {
+          const bac = inoc.bacteria;
+          if (!bac) return;
+
+          const affRaw  = (bac.tissueAffinity || 'dermis').toLowerCase();
+          const lKey2   = affToLayerKey[affRaw] || 'dermis';
+          const lIdx2   = layerMap[lKey2] !== undefined ? layerMap[lKey2] : 1;
+          const layer2  = LAYERS[Math.min(lIdx2, LAYERS.length-1)];
+
+          // Tahribat: zaman × agresiflik × antibiyotik tersi
+          const aggressMult = bac.aggressiveness === 'Yüksek' ? 1.0
+                            : bac.aggressiveness === 'Orta'   ? 0.60 : 0.30;
+          // killRate lokal hesapla (scope bağımsız)
+          let localKillR = 0;
+          if (hasAb) {
+            const abListD = (typeof BacteriaStore !== 'undefined') ? BacteriaStore.getAntibioticsFor(bac._id) : [];
+            const abMatchD = abListD ? abListD.find(a => a.name === (state && state.antibiotic && state.antibiotic.drugId)) : null;
+            const micD = abMatchD ? (abMatchD.mic || 8) : 8;
+            const CD   = (state && state.antibiotic) ? state.antibiotic.concentration * 0.5 : 0;
+            localKillR = CD / (micD + CD);
+          }
+          const damageLevel = Math.min(0.65, Math.max(0, (dTR - 0.10) * aggressMult * (1 - localKillR * 0.85)));
+          if (damageLevel < 0.03) return;
+
+          const clusterCountD = Math.max(1, Math.floor(5 * dTR));
+          const rngD = seededRandom((bac._id ? bac._id.charCodeAt(0) : 55) + inocIdx * 31);
+
+          for (let d = 0; d < clusterCountD; d++) {
+            const sXD = w * 0.35 * dTR;
+            const sYD = layer2.layH * 0.3 * dTR;
+            const dx = (w/2) + (rngD()-0.5)*2*sXD;
+            const dy = layer2.mid + (rngD()-0.5)*2*sYD;
+            const dr = 12 + dTR * 20;
+
+            // Kahverengi-siyah tahribat lekesi
+            const dmgGrad = ctx.createRadialGradient(dx,dy,0, dx,dy,dr);
+            dmgGrad.addColorStop(0, `rgba(40,15,5,${damageLevel*0.60})`);
+            dmgGrad.addColorStop(0.5,`rgba(60,20,5,${damageLevel*0.30})`);
+            dmgGrad.addColorStop(1,  'rgba(0,0,0,0)');
+            ctx.fillStyle = dmgGrad;
+            ctx.beginPath(); ctx.arc(dx,dy,dr,0,Math.PI*2); ctx.fill();
+
+            // Katman sınırı erime efekti (ileri evrede)
+            if (damageLevel > 0.4 && lIdx2 < LAYERS.length-1) {
+              const nextL = LAYERS[lIdx2+1];
+              const bleedY = layer2.y1 - 3 + rngD()*8;
+              const bleedGrad = ctx.createRadialGradient(dx,bleedY,0, dx,bleedY,dr*0.6);
+              bleedGrad.addColorStop(0, `rgba(30,10,5,${(damageLevel-0.4)*0.5})`);
+              bleedGrad.addColorStop(1, 'rgba(0,0,0,0)');
+              ctx.fillStyle = bleedGrad;
+              ctx.beginPath(); ctx.arc(dx,bleedY,dr*0.6,0,Math.PI*2); ctx.fill();
+            }
+          }
+        });
+      });
+
+      // ── ALT BAR ─────────────────────────────────────────────────────────────
+      ctx.fillStyle = 'rgba(0,0,0,0.55)';
+      ctx.fillRect(0, h-18, w, 18);
+      const tissueModel2 = (typeof BacteriaStore !== 'undefined' && BacteriaStore.tissueModels)
+        ? BacteriaStore.tissueModels.find(t => t.id === tissueId) : null;
+      const tLabel = tissueModel2 ? `${tissueModel2.icon||''} ${tissueModel2.name_tr}` : tissueId;
+      ctx.fillStyle = 'rgba(255,255,255,0.35)';
+      ctx.font = '8px Space Mono,monospace';
+      ctx.textAlign = 'left';
+      ctx.fillText(`${tLabel} · Üzerine gel → bilgi`, 8, h-6);
+      if (state) {
+        const maxT = state.inoculations[0]?.bacteria?.maxTime || 72;
+        ctx.textAlign = 'right';
+        ctx.fillStyle = 'rgba(0,229,160,0.7)';
+        ctx.fillText(`t=${((time/200)*maxT).toFixed(1)}h`, w-8, h-6);
+      }
+
+      initSideHover();
+    }
+
+    // ── DOKU DETAY ÇİZİM FONKSİYONLARI ──────────────────────────────────────
+    function _drawTissueExtras(ctx, tissueId, LAYERS, w, h, tRatio, state, hasAb) {
+      const rng = seededRandom(99);
+      if (tissueId === 'skin-wound') {
+        // Epitel: kıl folikülleri + ter bezi kanalları
+        const eL = LAYERS[0];
+        [0.15,0.35,0.55,0.75,0.90].forEach(fx => {
+          const cx = w*fx;
+          ctx.strokeStyle = 'rgba(80,40,20,0.32)'; ctx.lineWidth = 2;
+          ctx.beginPath(); ctx.moveTo(cx, eL.y0+2); ctx.lineTo(cx, eL.y1-2); ctx.stroke();
+          ctx.strokeStyle = 'rgba(60,30,10,0.15)'; ctx.lineWidth = 1;
+          ctx.beginPath();
+          for(let y=eL.y0+4;y<eL.y1;y+=3) ctx.lineTo(cx+3*Math.sin(y/4), y);
+          ctx.stroke();
+        });
+        // Dermis: kollajen dalgaları + kan damarları
+        const dL = LAYERS[1];
+        ctx.strokeStyle = 'rgba(255,220,180,0.09)'; ctx.lineWidth = 1;
+        for(let y=dL.y0+10;y<dL.y1;y+=14) {
+          ctx.beginPath();
+          for(let x=0;x<=w;x+=4) { const py=y+5*Math.sin((x/40)*Math.PI*2); x===0?ctx.moveTo(x,py):ctx.lineTo(x,py); }
+          ctx.stroke();
+        }
+        _drawVessels(ctx, dL, w, 6, 'rgba(200,50,50,0.35)');
+        // Kan damarı hover items ekle (aynı pozisyonlar)
+        { const vRng2 = seededRandom(dL.y0 * 7 + 13);
+          for(let vi=0;vi<6;vi++) {
+            const vx2=20+vRng2()*(w-40), vy2=dL.y0+8+vRng2()*(dL.layH-16);
+            const pkList2=(typeof BacteriaStore!=='undefined'&&BacteriaStore.antibioticPK)?BacteriaStore.antibioticPK:[];
+            const pkM2=hasAb&&state?pkList2.find(p=>p.id===state.antibiotic.drugId):null;
+            const pen2=pkM2?(pkM2.tissue_penetration[tissueId]||pkM2.tissue_penetration['skin-wound']||0.5):0;
+            _sideHoverItems.push({ x:vx2, y:vy2, r:16,
+              tip:`<b>🩸 Kan Damarı</b><br>Vaskülarite: ${(dL.vasc*100).toFixed(0)}%<br>Antibiyotik kaynağı: DERMİS<br>${hasAb?`<b>${state.antibiotic.drugName||''}</b> pen: ${(pen2*100).toFixed(0)}%`:'Antibiyotik yok'}<br>İmmün: Nötrofil, Makrofaj`
+            });
+          }
+        }
+        // Papilla sınırı
+        const papY = LAYERS[0].y1;
+        ctx.strokeStyle = 'rgba(140,80,40,0.25)'; ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        for(let x=0;x<=w;x+=2) { const y=papY+7*Math.sin((x/35)*Math.PI*2); x===0?ctx.moveTo(x,y):ctx.lineTo(x,y); }
+        ctx.stroke();
+      }
+      else if (tissueId === 'burn-wound') {
+        // Eskar: yanmış çatlak dokusu
+        const eL = LAYERS[0];
+        ctx.strokeStyle = 'rgba(255,200,100,0.12)'; ctx.lineWidth = 1;
+        for(let i=0;i<8;i++) {
+          const x1=rng()*w, y1=eL.y0+rng()*eL.layH;
+          ctx.beginPath(); ctx.moveTo(x1,y1);
+          ctx.lineTo(x1+(rng()-0.5)*60, y1+(rng()-0.5)*30); ctx.stroke();
+        }
+        // Eskar sınırı - sert koyu çizgi
+        ctx.strokeStyle = 'rgba(0,0,0,0.5)'; ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.moveTo(0, LAYERS[0].y1); ctx.lineTo(w, LAYERS[0].y1); ctx.stroke();
+        // Canlı doku damarları
+        _drawVessels(ctx, LAYERS[1], w, 5, 'rgba(220,60,60,0.35)');
+      }
+      else if (tissueId === 'chronic-wound') {
+        // Biyofilm: bal peteği dokusu
+        const bL = LAYERS[0];
+        ctx.strokeStyle = 'rgba(100,180,60,0.20)'; ctx.lineWidth = 1;
+        const hexSize = 10;
+        for(let col=0;col<Math.ceil(w/(hexSize*1.7))+1;col++) {
+          for(let row=0;row<Math.ceil(bL.layH/(hexSize*1.5))+1;row++) {
+            const hx=col*hexSize*1.7+(row%2)*hexSize*0.85;
+            const hy=bL.y0+row*hexSize*1.5;
+            ctx.beginPath();
+            for(let a=0;a<6;a++) ctx.lineTo(hx+hexSize*Math.cos(a*Math.PI/3), hy+hexSize*Math.sin(a*Math.PI/3));
+            ctx.closePath(); ctx.stroke();
+          }
+        }
+        // Granülasyon: yoğun damar
+        _drawVessels(ctx, LAYERS[1], w, 9, 'rgba(210,60,60,0.40)');
+      }
+      else if (tissueId === 'lung') {
+        // Alveol baloncukları
+        const aL = LAYERS[1];
+        const alvRng = seededRandom(55);
+        for(let i=0;i<16;i++) {
+          const ax=30+alvRng()*(w-60), ay=aL.y0+8+alvRng()*(aL.layH-16);
+          const ar=8+alvRng()*10;
+          ctx.strokeStyle='rgba(180,230,250,0.30)'; ctx.lineWidth=1;
+          ctx.beginPath(); ctx.arc(ax,ay,ar,0,Math.PI*2); ctx.stroke();
+          ctx.fillStyle='rgba(200,240,255,0.06)';
+          ctx.beginPath(); ctx.arc(ax,ay,ar,0,Math.PI*2); ctx.fill();
+        }
+        // Mukus dalgaları
+        const mL = LAYERS[0];
+        ctx.strokeStyle='rgba(100,160,200,0.25)'; ctx.lineWidth=1;
+        for(let y=mL.y0+4;y<mL.y1;y+=5) {
+          ctx.beginPath();
+          for(let x=0;x<=w;x+=3) { const py=y+3*Math.sin((x/25)*Math.PI*2); x===0?ctx.moveTo(x,py):ctx.lineTo(x,py); }
+          ctx.stroke();
+        }
+        // İnterstisyum damarları
+        _drawVessels(ctx, LAYERS[2], w, 8, 'rgba(180,60,60,0.35)');
+      }
+      else if (tissueId === 'gut') {
+        // Villuslar - parmak çıkıntıları
+        const epL = LAYERS[1];
+        ctx.fillStyle = 'rgba(220,130,60,0.30)';
+        const vCount = Math.floor(w / 22);
+        for(let i=0;i<vCount;i++) {
+          const vx = 11 + i*22;
+          const vH = 12 + Math.sin(i*1.3)*4;
+          ctx.beginPath();
+          ctx.moveTo(vx-5, epL.y0);
+          ctx.quadraticCurveTo(vx-5, epL.y0-vH, vx, epL.y0-vH-2);
+          ctx.quadraticCurveTo(vx+5, epL.y0-vH, vx+5, epL.y0);
+          ctx.closePath(); ctx.fill();
+        }
+        // Mukus dalgaları
+        const mL = LAYERS[0];
+        ctx.strokeStyle='rgba(210,180,80,0.20)'; ctx.lineWidth=1.5;
+        for(let y=mL.y0+4;y<mL.y1;y+=6) {
+          ctx.beginPath();
+          for(let x=0;x<=w;x+=3) { const py=y+4*Math.sin((x/30)*Math.PI*2); x===0?ctx.moveTo(x,py):ctx.lineTo(x,py); }
+          ctx.stroke();
+        }
+        // Lamina propria damarları
+        _drawVessels(ctx, LAYERS[2], w, 7, 'rgba(200,60,60,0.35)');
+      }
+      else if (tissueId === 'urinary') {
+        // Üroepitel: taş döşemesi (poligonal hücreler)
+        const uL = LAYERS[0];
+        const uRng = seededRandom(77);
+        ctx.strokeStyle = 'rgba(200,180,120,0.30)'; ctx.lineWidth = 1;
+        for(let i=0;i<12;i++) {
+          const ux=15+uRng()*(w-30), uy=uL.y0+5+uRng()*(uL.layH-10);
+          const us=8+uRng()*5;
+          ctx.beginPath(); ctx.rect(ux-us/2, uy-us/3, us, us*0.65); ctx.stroke();
+        }
+        // Lamina propria
+        _drawVessels(ctx, LAYERS[1], w, 5, 'rgba(190,60,60,0.30)');
+      }
+      else if (tissueId === 'bloodstream') {
+        // Eritrositler - küçük çift çukur diskler
+        const pL = LAYERS[0];
+        const bRng = seededRandom(33);
+        for(let i=0;i<35*(0.3+tRatio*0.7);i++) {
+          const ex=bRng()*w, ey=pL.y0+bRng()*pL.layH;
+          ctx.fillStyle='rgba(200,40,40,0.45)';
+          ctx.beginPath(); ctx.ellipse(ex,ey,6,4,bRng()*Math.PI,0,Math.PI*2); ctx.fill();
+          ctx.fillStyle='rgba(150,20,20,0.30)';
+          ctx.beginPath(); ctx.ellipse(ex,ey,3,2,0,0,Math.PI*2); ctx.fill();
+        }
+        // Endotel çizgisi
+        ctx.strokeStyle='rgba(120,30,30,0.50)'; ctx.lineWidth=2;
+        ctx.beginPath(); ctx.moveTo(0,LAYERS[0].y1); ctx.lineTo(w,LAYERS[0].y1); ctx.stroke();
+      }
+      else if (tissueId === 'bone') {
+        // Kortikal kemik: Havers kanalı (osteon) halkalar
+        const cL = LAYERS[1];
+        const bRng2 = seededRandom(11);
+        for(let i=0;i<6;i++) {
+          const ox=50+bRng2()*(w-100), oy=cL.y0+10+bRng2()*(cL.layH-20);
+          for(let r=5;r<=20;r+=5) {
+            ctx.strokeStyle=`rgba(200,190,140,${0.25-r*0.008})`; ctx.lineWidth=1;
+            ctx.beginPath(); ctx.arc(ox,oy,r,0,Math.PI*2); ctx.stroke();
+          }
+          // Havers kanalı merkezi
+          ctx.fillStyle='rgba(180,140,80,0.50)';
+          ctx.beginPath(); ctx.arc(ox,oy,3,0,Math.PI*2); ctx.fill();
+        }
+        // Periost ince çizgiler
+        const pL = LAYERS[0];
+        ctx.strokeStyle='rgba(220,210,170,0.20)'; ctx.lineWidth=1;
+        for(let y=pL.y0+3;y<pL.y1;y+=5) {
+          ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(w,y); ctx.stroke();
+        }
+        // Medulla yağ iliği noktaları
+        const mL2 = LAYERS[2];
+        const mRng = seededRandom(22);
+        for(let i=0;i<10;i++) {
+          const mx=20+mRng()*(w-40), my=mL2.y0+8+mRng()*(mL2.layH-16);
+          ctx.fillStyle='rgba(220,150,60,0.25)';
+          ctx.beginPath(); ctx.ellipse(mx,my,12+mRng()*8,8+mRng()*5,mRng()*0.5,0,Math.PI*2); ctx.fill();
+        }
+      }
+    }
+
+    // Kan damarı çizim yardımcısı
+    function _drawVessels(ctx, layer, w, count, glowColor) {
+      const vRng = seededRandom(layer.y0 * 7 + 13);
+      for(let i=0;i<count;i++) {
+        const vx=20+vRng()*(w-40), vy=layer.y0+8+vRng()*(layer.layH-16);
+        const g=ctx.createRadialGradient(vx,vy,0,vx,vy,14);
+        g.addColorStop(0,glowColor); g.addColorStop(1,'rgba(200,50,50,0)');
+        ctx.fillStyle=g; ctx.beginPath(); ctx.arc(vx,vy,14,0,Math.PI*2); ctx.fill();
+        ctx.fillStyle='#cc3333';
+        ctx.beginPath(); ctx.ellipse(vx,vy,6,4,0,0,Math.PI*2); ctx.fill();
+        ctx.fillStyle='#ff8888';
+        ctx.beginPath(); ctx.ellipse(vx-1,vy-1,2,1.5,0,0,Math.PI*2); ctx.fill();
+      }
+    }
+
+    // Antibiyotik gradient yön hesabı
+    function _drawAntibioticGradient(ctx, direction, LAYERS, entryLayer, alpha, w, h) {
+      let grad;
+      if (direction === 'top_down') {
+        grad = ctx.createLinearGradient(0, entryLayer.y0, 0, h);
+        grad.addColorStop(0, `rgba(0,229,160,${alpha})`);
+        grad.addColorStop(0.35, `rgba(0,229,160,${alpha*0.5})`);
+        grad.addColorStop(0.75, `rgba(0,229,160,${alpha*0.12})`);
+        grad.addColorStop(1, 'rgba(0,229,160,0)');
+        ctx.fillStyle=grad; ctx.fillRect(0,entryLayer.y0,w,h-entryLayer.y0);
+      } else if (direction === 'inside_out') {
+        // Derinden dışa
+        grad = ctx.createLinearGradient(0, entryLayer.mid, 0, LAYERS[0].y0);
+        grad.addColorStop(0, `rgba(0,229,160,${alpha})`);
+        grad.addColorStop(1, `rgba(0,229,160,${alpha*0.25})`);
+        ctx.fillStyle=grad; ctx.fillRect(0,LAYERS[0].y0,w,h-LAYERS[0].y0);
+        // Bariyer efekti ilk katmanda
+        ctx.fillStyle=`rgba(0,0,0,${alpha*0.6})`;
+        ctx.fillRect(0,LAYERS[0].y0,w,LAYERS[0].layH);
+      } else if (direction === 'center_out') {
+        const cy = entryLayer.mid;
+        grad = ctx.createLinearGradient(0,cy,0,0);
+        grad.addColorStop(0, `rgba(0,229,160,${alpha})`);
+        grad.addColorStop(1, `rgba(0,229,160,${alpha*0.2})`);
+        ctx.fillStyle=grad; ctx.fillRect(0,0,w,cy);
+        grad = ctx.createLinearGradient(0,cy,0,h);
+        grad.addColorStop(0, `rgba(0,229,160,${alpha})`);
+        grad.addColorStop(1, `rgba(0,229,160,${alpha*0.2})`);
+        ctx.fillStyle=grad; ctx.fillRect(0,cy,w,h-cy);
+      } else if (direction === 'uniform') {
+        ctx.fillStyle=`rgba(0,229,160,${alpha*0.8})`;
+        ctx.fillRect(0,LAYERS[0].y0,w,h-LAYERS[0].y0);
+      } else if (direction === 'outside_in_slow') {
+        grad = ctx.createLinearGradient(0, LAYERS[0].y0, 0, h);
+        grad.addColorStop(0, `rgba(0,229,160,${alpha})`);
+        grad.addColorStop(0.15, `rgba(0,229,160,${alpha*0.40})`);
+        grad.addColorStop(0.50, `rgba(0,229,160,${alpha*0.10})`);
+        grad.addColorStop(1, `rgba(0,229,160,${alpha*0.04})`);
+        ctx.fillStyle=grad; ctx.fillRect(0,LAYERS[0].y0,w,h-LAYERS[0].y0);
+      }
+    }
+
+
+    // ─── 2D LAYERS VIEW (Z-stack, dokuya özgü) ───
+    function render2DLayersView() {
+      const canvas = document.getElementById('v2dLayersCanvas');
+      if (!canvas) return;
+      const rect = canvas.parentElement.getBoundingClientRect();
+      canvas.width  = Math.max(rect.width,  400);
+      canvas.height = Math.max(rect.height, 300);
+      const ctx = canvas.getContext('2d');
+      const w = canvas.width, h = canvas.height;
+      ctx.clearRect(0,0,w,h);
+
+      const MARGIN=12, TOP=44, BOT=18;
+      const state    = getActiveDish();
+      const tissueId = (state && state.tissueType) ? state.tissueType : 'skin-wound';
+      const hasAb    = state && state.antibiotic && state.antibiotic.concentration > 0;
+      const tRatio   = Math.min(1, (state ? state.time : 0) / 200);
+
+      // Dokuya özgü Z-sütun tanımları
+      const LAYER_COLS = {
+        'skin-wound': [
+          {z:'Z=0',    sub:'Yüzey',      color:'#e8c9a8', pen:1.0,  note:'Stratum korneum'},
+          {z:'Z=100µm',sub:'Epidermis',  color:'#d4a87a', pen:0.65, note:'Keratinosit'},
+          {z:'Z=500µm',sub:'Dermis üst', color:'#b8734a', pen:0.40, note:'Kollajen ağı'},
+          {z:'Z=1.5mm',sub:'Dermis derin',color:'#8a5030',pen:0.18, note:'Derin kollajen'},
+          {z:'Z=2mm',  sub:'Vasküler',   color:'#6a2020', pen:0.08, note:'Kapiller ağ'}
+        ],
+        'burn-wound': [
+          {z:'Z=0',    sub:'Eskar yüzey',color:'#1a1008', pen:0.05, note:'Yanmış doku'},
+          {z:'Z=200µm',sub:'Eskar orta', color:'#2a1810', pen:0.08, note:'Nekrotik bölge'},
+          {z:'Z=500µm',sub:'Eskar-Diri', color:'#703020', pen:0.20, note:'Geçiş bölgesi'},
+          {z:'Z=1mm',  sub:'Canlı doku', color:'#c05040', pen:0.55, note:'Granülasyon'},
+          {z:'Z=2mm',  sub:'Sağlıklı',   color:'#b03020', pen:0.60, note:'Derin diri doku'}
+        ],
+        'chronic-wound': [
+          {z:'Z=0',    sub:'Biyofilm',   color:'#2d3b1a', pen:0.02, note:'Polisakkarit matriks'},
+          {z:'Z=50µm', sub:'Biyofilm iç',color:'#3a4a20', pen:0.05, note:'Bakteri yoğunluğu max'},
+          {z:'Z=100µm',sub:'Geçiş',      color:'#7a5030', pen:0.25, note:'Matriks-doku sınırı'},
+          {z:'Z=500µm',sub:'Granülasyon',color:'#c04040', pen:0.78, note:'Yeni damarlar'},
+          {z:'Z=1mm',  sub:'Sağlıklı',   color:'#903030', pen:0.85, note:'Normal doku'}
+        ],
+        'lung': [
+          {z:'Z=0',    sub:'Mukus yüzey',color:'#8ab8c8', pen:0.15, note:'Mukosilier'},
+          {z:'Z=50µm', sub:'Mukus derin',color:'#6a98a8', pen:0.30, note:'Surfaktan tabakası'},
+          {z:'Z=200µm',sub:'Alveol epitel',color:'#c8e8f0',pen:0.50, note:'Tip I/II pnömosit'},
+          {z:'Z=400µm',sub:'Alveol lümeni',color:'#a0c8d8',pen:0.70, note:'Hava boşluğu'},
+          {z:'Z=700µm',sub:'İnterstisyum',color:'#405870', pen:0.85, note:'Kapiller, bağ dokusu'}
+        ],
+        'gut': [
+          {z:'Z=0',    sub:'Mukus dış',  color:'#d4b870', pen:0.10, note:'H. pylori burada'},
+          {z:'Z=150µm',sub:'Mukus iç',   color:'#c4a850', pen:0.20, note:'Kommensal flora'},
+          {z:'Z=300µm',sub:'Villus ucu', color:'#e8a050', pen:0.45, note:'Emilim bölgesi'},
+          {z:'Z=500µm',sub:'Villus kök', color:'#c88030', pen:0.65, note:'Kript hücreleri'},
+          {z:'Z=900µm',sub:'Lamina propria',color:'#904820',pen:0.75, note:'İmmün hücreler'}
+        ],
+        'urinary': [
+          {z:'Z=0',    sub:'İdrar',      color:'#f0e080', pen:1.40, note:'Antibiyotik konsantre'},
+          {z:'Z=30µm', sub:'Üroepitel',  color:'#d8c8a0', pen:0.90, note:'Geçirgen epitel'},
+          {z:'Z=100µm',sub:'Üroepitel derin',color:'#c0a880',pen:0.65, note:'Biyofilm tutunma'},
+          {z:'Z=400µm',sub:'Lamina üst', color:'#a08060', pen:0.40, note:'Bağ dokusu'},
+          {z:'Z=800µm',sub:'Lamina derin',color:'#806040',pen:0.25, note:'Derin kas katmanı'}
+        ],
+        'bloodstream': [
+          {z:'Arter',  sub:'Yüksek basınç',color:'#c02020',pen:1.80, note:'Antibiyotik hızlı'},
+          {z:'Ven',    sub:'Düşük basınç', color:'#801010',pen:1.60, note:'Dönüş dolaşımı'},
+          {z:'Kapiller',sub:'Gaz değişimi',color:'#a01818',pen:1.90, note:'Doku-kan arayüzü'},
+          {z:'Plazma', sub:'Sıvı faz',     color:'#d04040',pen:1.80, note:'Protein bağlanması'},
+          {z:'Endotel',sub:'Damar çeperi', color:'#601010',pen:1.00, note:'Endotoksin hedefi'}
+        ],
+        'bone': [
+          {z:'Z=0',    sub:'Periost',     color:'#e8e0c0', pen:0.30, note:'Fibröz kılıf'},
+          {z:'Z=200µm',sub:'Kortikal dış',color:'#d4c890', pen:0.12, note:'Havers sistemi'},
+          {z:'Z=2mm',  sub:'Kortikal iç', color:'#c0b070', pen:0.08, note:'Osteon halkalar'},
+          {z:'Z=5mm',  sub:'Trabeküler',  color:'#b09060', pen:0.15, note:'Süngerimsi kemik'},
+          {z:'Z=10mm', sub:'Medulla',     color:'#d08040', pen:0.35, note:'Kemik iliği'}
+        ]
+      };
+
+      const cols = LAYER_COLS[tissueId] || LAYER_COLS['skin-wound'];
+      const cellW = (w - MARGIN*2) / cols.length;
+      const cellH = h - TOP - BOT;
+
+      // Antibiyotik PK
+      let abPen = 0, killConc = 0;
+      if (hasAb) {
+        const pkList = (typeof BacteriaStore !== 'undefined' && BacteriaStore.antibioticPK) ? BacteriaStore.antibioticPK : [];
+        const pkM    = pkList.find ? pkList.find(p => p.id === state.antibiotic.drugId) : null;
+        const tissueM = (typeof BacteriaStore !== 'undefined' && BacteriaStore.tissueModels)
+          ? BacteriaStore.tissueModels.find(t => t.id === tissueId) : null;
+        const penMod = tissueM ? (tissueM.antibiotic_penetration_modifier || 1.0) : 1.0;
+        abPen = pkM ? (pkM.tissue_penetration[tissueId] || 0.5) : 0.5;
+        abPen *= penMod;
+        killConc = state.antibiotic.concentration * abPen;
+      }
+
+      cols.forEach((cd, i) => {
+        const cx = MARGIN + i*cellW;
+        const cy = TOP;
+
+        // Zemin
+        const bg = ctx.createLinearGradient(0,cy,0,cy+cellH);
+        bg.addColorStop(0, cd.color);
+        bg.addColorStop(1, 'rgba(0,0,0,0.5)');
+        ctx.fillStyle=bg; ctx.fillRect(cx,cy,cellW-2,cellH);
+
+        // Derinlik karartma
+        ctx.fillStyle=`rgba(0,0,0,${0.05+(i/(cols.length-1))*0.30})`;
+        ctx.fillRect(cx,cy,cellW-2,cellH);
+
+        // Dokuya özgü iç detaylar
+        _drawLayerColDetail(ctx, tissueId, i, cx, cy, cellW, cellH, tRatio);
+
+        ctx.strokeStyle='rgba(0,0,0,0.20)'; ctx.lineWidth=1;
+        ctx.strokeRect(cx,cy,cellW-2,cellH);
+
+        // Başlık
+        ctx.fillStyle='rgba(0,0,0,0.65)';
+        ctx.fillRect(cx,cy-TOP,cellW-2,TOP);
+        ctx.fillStyle='rgba(255,255,255,0.88)';
+        ctx.font='bold 8px Space Mono,monospace'; ctx.textAlign='center';
+        ctx.fillText(cd.z, cx+(cellW-2)/2, cy-28);
+        ctx.fillStyle='rgba(255,255,255,0.55)';
+        ctx.font='7px Space Mono,monospace';
+        ctx.fillText(cd.sub, cx+(cellW-2)/2, cy-18);
+        ctx.fillStyle='rgba(255,255,255,0.30)';
+        ctx.fillText(cd.note, cx+(cellW-2)/2, cy-8);
+
+        // Penetrasyon bar
+        const bw=cellW-16;
+        ctx.fillStyle='rgba(255,255,255,0.08)'; ctx.fillRect(cx+7,cy-4,bw,3);
+        const barColor = cd.pen>1.0 ? 'rgba(100,220,255,0.7)' : `rgba(0,229,160,${0.4+cd.pen*0.4})`;
+        ctx.fillStyle=barColor; ctx.fillRect(cx+7,cy-4,bw*Math.min(1,cd.pen),3);
+
+        // Bakteri blobs
+        const dishes = window.activeDishes || [];
+        dishes.forEach(dish => {
+          if (!dish.inoculations) return;
+          const dTR = Math.min(1,(dish.time||0)/200);
+          dish.inoculations.forEach((inoc,iIdx) => {
+            const bac = inoc.bacteria;
+            if (!bac) return;
+
+            let depFactor;
+            if (bac.oxygenReq==='anaerobic')       depFactor=0.10+(i/(cols.length-1))*0.90;
+            else if (bac.oxygenReq==='aerobic')     depFactor=Math.pow(0.55,i);
+            else depFactor=0.65-(i/(cols.length-1))*0.30;
+
+            let killR=0;
+            if (hasAb && dish.id===state.id) {
+              const abL=(typeof BacteriaStore!=='undefined')?BacteriaStore.getAntibioticsFor(bac._id):[];
+              const abM=abL?abL.find(a=>a.name===state.antibiotic.drugId):null;
+              const mic=abM?(abM.mic||8):8;
+              const C=killConc*cd.pen;
+              killR=C/(mic+C);
+            }
+
+            const eff=depFactor*(1-killR*0.90);
+            const cnt=Math.max(0,Math.round(10*eff*(0.4+dTR*0.6)));
+            if(cnt===0) return;
+            const br=(5+dTR*3)*(1-i*0.05);
+            const rgb=hexToRgbArr(bac.hex||'#00e5a0');
+            const rng=seededRandom(i*100+(bac._id?bac._id.charCodeAt(0):42)+iIdx*13);
+            for(let j=0;j<cnt;j++){
+              const bx=cx+8+rng()*(cellW-18), by=cy+8+rng()*(cellH-18);
+              const brt=br*(0.5+rng()*0.6);
+              const al=(0.45+eff*0.45)*(1-killR*0.45);
+              ctx.fillStyle=`rgba(${rgb[0]},${rgb[1]},${rgb[2]},${al})`;
+              drawBlob(ctx,bx,by,brt,seededRandom(Math.round(bx*by*10+j)),false); ctx.fill();
+              ctx.fillStyle=`rgba(${rgb[0]},${rgb[1]},${rgb[2]},${al*0.10})`;
+              drawBlob(ctx,bx,by,brt*1.6,seededRandom(Math.round(bx*by*10+j+1)),false); ctx.fill();
+            }
+          });
+        });
+
+        // Antibiyotik wash
+        if(hasAb){
+          const wa=Math.min(0.28,(state.antibiotic.concentration/256)*abPen*cd.pen);
+          if(wa>0.004){
+            const wc=cd.pen>1.0?`rgba(100,220,255,${wa})`:`rgba(0,229,160,${wa})`;
+            ctx.fillStyle=wc; ctx.fillRect(cx+1,cy+1,cellW-4,cellH-2);
+          }
+        }
+
+        // Hover kayıt
+        if (!window._layersHoverItems) window._layersHoverItems = [];
+        if (i === 0) window._layersHoverItems.length = 0; // sıfırla
+        window._layersHoverItems.push({
+          x: cx + (cellW-2)/2, y: cy + cellH/2, r: Math.min(cellW, cellH) * 0.45,
+          tip: `<b>${cd.z}</b><br>${cd.sub}<br><i style="color:var(--text3)">${cd.note}</i><br><br>Penetrasyon: <b>${(cd.pen*100).toFixed(0)}%</b>${hasAb ? '<br>AB wash: ' + (Math.min(0.28,(state.antibiotic.concentration/256)*abPen*cd.pen)*100).toFixed(1) + '%' : ''}`
+        });
+      });
+
+      // Alt bar
+      const tissueM2=(typeof BacteriaStore!=='undefined'&&BacteriaStore.tissueModels)
+        ?BacteriaStore.tissueModels.find(t=>t.id===tissueId):null;
+      ctx.fillStyle='rgba(0,0,0,0.55)'; ctx.fillRect(0,h-BOT,w,BOT);
+      ctx.fillStyle='rgba(255,255,255,0.35)'; ctx.font='8px Space Mono,monospace'; ctx.textAlign='left';
+      const tL=tissueM2?`${tissueM2.icon||''} ${tissueM2.name_tr}`:tissueId;
+      ctx.fillText(`${tL} Z-Stack — aeroblar yüzeyde, anaeroblar derinlerde`, MARGIN, h-6);
+      if(hasAb){ ctx.textAlign='right'; ctx.fillStyle='rgba(0,229,160,0.65)';
+        ctx.fillText(`${state.antibiotic.drugName||'AB'} ${state.antibiotic.concentration}mg/L · pen ${(abPen*100).toFixed(0)}%`,w-MARGIN,h-6); }
+    }
+
+    // Sütun içi doku detayları
+    function _drawLayerColDetail(ctx, tissueId, colIdx, cx, cy, cellW, cellH, tRatio) {
+      const rng = seededRandom(colIdx * 37 + tissueId.charCodeAt(0));
+      if (tissueId === 'bloodstream') {
+        // Eritrositler
+        const cnt = 8 + Math.floor(rng()*6);
+        for(let i=0;i<cnt;i++){
+          const ex=cx+5+rng()*(cellW-12), ey=cy+5+rng()*(cellH-12);
+          ctx.fillStyle=`rgba(220,60,60,${0.30+rng()*0.20})`;
+          ctx.beginPath(); ctx.ellipse(ex,ey,5,3,rng()*Math.PI,0,Math.PI*2); ctx.fill();
+          ctx.fillStyle='rgba(160,20,20,0.25)';
+          ctx.beginPath(); ctx.arc(ex,ey,2,0,Math.PI*2); ctx.fill();
+        }
+      } else if (tissueId === 'bone' && colIdx >= 1 && colIdx <= 2) {
+        // Osteon halkalar
+        const ox=cx+cellW/2, oy=cy+cellH/2;
+        for(let r=4;r<=16;r+=4){
+          ctx.strokeStyle=`rgba(200,185,130,${0.30-r*0.010})`; ctx.lineWidth=1;
+          ctx.beginPath(); ctx.arc(ox,oy,r,0,Math.PI*2); ctx.stroke();
+        }
+        ctx.fillStyle='rgba(180,140,70,0.45)';
+        ctx.beginPath(); ctx.arc(ox,oy,3,0,Math.PI*2); ctx.fill();
+      } else if (tissueId === 'lung' && colIdx >= 2) {
+        // Alveol daireler
+        const cnt = 3 + Math.floor(rng()*3);
+        for(let i=0;i<cnt;i++){
+          const ax=cx+8+rng()*(cellW-18), ay=cy+8+rng()*(cellH-18);
+          const ar=6+rng()*6;
+          ctx.strokeStyle='rgba(180,230,250,0.25)'; ctx.lineWidth=1;
+          ctx.beginPath(); ctx.arc(ax,ay,ar,0,Math.PI*2); ctx.stroke();
+        }
+      } else if (tissueId === 'gut' && colIdx >= 2 && colIdx <= 3) {
+        // Villus kesitleri
+        const vCnt=Math.floor((cellW-10)/14);
+        for(let i=0;i<vCnt;i++){
+          const vx=cx+7+i*14;
+          ctx.fillStyle='rgba(220,130,50,0.20)';
+          ctx.beginPath(); ctx.ellipse(vx,cy+cellH*0.4,4,cellH*0.25,0,0,Math.PI*2); ctx.fill();
+        }
+      } else if (tissueId === 'chronic-wound' && colIdx <= 1) {
+        // Biyofilm bal peteği
+        const hs=8;
+        ctx.strokeStyle='rgba(100,180,60,0.18)'; ctx.lineWidth=1;
+        for(let col2=0;col2<Math.ceil(cellW/(hs*1.7))+1;col2++){
+          for(let row=0;row<Math.ceil(cellH/(hs*1.5))+1;row++){
+            const hx=cx+col2*hs*1.7+(row%2)*hs*0.85;
+            const hy=cy+row*hs*1.5;
+            ctx.beginPath();
+            for(let a=0;a<6;a++) ctx.lineTo(hx+hs*Math.cos(a*Math.PI/3),hy+hs*Math.sin(a*Math.PI/3));
+            ctx.closePath(); ctx.stroke();
+          }
+        }
+      }
+    }
+
+
+    // ─── INOCULATION ───
+    function inoculateNewDish(bacteria) {
+      if (!bacteria) {
+        if (typeof showFlash === 'function') showFlash('Önce bir bakteri türü seçin');
+        return;
+      }
+      const dishes = window.activeDishes || [];
+      const lastDish = dishes.length > 0 ? dishes[dishes.length - 1] : null;
+      let state = lastDish && lastDish.inoculations && lastDish.inoculations.length === 0 ? lastDish : null;
+      if (!state) {
+        if (typeof addDish !== 'function') {
+          if (typeof showFlash === 'function') showFlash('Simülasyon henüz hazır değil');
+          return;
+        }
+        addDish();
+        state = (window.activeDishes || [])[(window.activeDishes || []).length - 1];
+      }
+      if (!state) return;
+      if (typeof showFlash === 'function') showFlash('Ekim yapmak için petri kabının üzerine tıklayın');
+      window.isListModeForced = true;
+      if (typeof updatePanelMode === 'function') updatePanelMode(window.activeDishes, bacteria);
+      switchTo2D();
+    }
+
+    // 3D'ye Geç button (in 2D toolbar)
+    document.getElementById('backTo3DBtn').addEventListener('click', switchTo3D);
+
+    // Auto-show 2D view when a new dish is added with bacteria
+    let _lastInocCount = 0;
+    setInterval(() => {
+      const dishes = window.activeDishes || [];
+      let totalInoc = 0;
+      dishes.forEach(d => { if (d.inoculations) totalInoc += d.inoculations.length; });
+      if (totalInoc > _lastInocCount) {
+        _lastInocCount = totalInoc;
+        const view2d = document.getElementById('view2d');
+        if (view2d && view2d.style.display !== 'flex') {
+          switchTo2D();
+        }
+      }
+    }, 500);
+
+    // ─── 3D TISSUE EMBED ───
+    let tissueScene = null;
+
+    function init3D() {
+      if (typeof TissueScene3D === 'undefined' || !document.getElementById('tissue3d-container')) return false;
+
+      const container = document.getElementById('tissue3d-container');
+      const rect = container.getBoundingClientRect();
+
+      tissueScene = new TissueScene3D('tissue3d-container', {
+        width: Math.max(rect.width, 400),
+        height: Math.max(rect.height, 300),
+        backgroundColor: 0x0a0c0d
+      });
+
+      tissueScene.init();
+
+      // Camera presets
+      document.querySelectorAll('.cam-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.cam-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          if (tissueScene.setView) tissueScene.setView(btn.dataset.view);
+        });
+      });
+      return true;
+    }
+
+    // FPS counter
+    let frameCount = 0;
+    let lastTime = performance.now();
+    const fpsEl = document.getElementById('fpsValue');
+
+    function measureFPS() {
+      const now = performance.now();
+      frameCount++;
+      if (now - lastTime >= 1000) {
+        if (fpsEl) fpsEl.textContent = Math.round((frameCount * 1000) / (now - lastTime));
+        frameCount = 0;
+        lastTime = now;
+      }
+      requestAnimationFrame(measureFPS);
+    }
+    requestAnimationFrame(measureFPS);
+
+    // Resize
+    window.addEventListener('resize', () => {
+      if (tissueScene && tissueScene.renderer && tissueScene.camera) {
+        const container = document.getElementById('tissue3d-container');
+        if (container) {
+          const rect = container.getBoundingClientRect();
+          tissueScene.width = rect.width;
+          tissueScene.height = rect.height;
+          tissueScene.camera.aspect = rect.width / rect.height;
+          tissueScene.camera.updateProjectionMatrix();
+          tissueScene.renderer.setSize(rect.width, rect.height);
+        }
+      }
+    });
+
+    // ─── 3D SYNC via localStorage ───
+    let lastSyncState = null;
+
+    function pollSyncData() {
+      const dataStr = localStorage.getItem('bacterialab_sync');
+      if (!dataStr) return;
+      if (dataStr !== lastSyncState) {
+        lastSyncState = dataStr;
+        try {
+          const state = JSON.parse(dataStr);
+          if (tissueScene) {
+            if (state.bacteria && Array.isArray(state.bacteria) && tissueScene.updateBacteria) {
+              tissueScene.updateBacteria(state.bacteria);
+            }
+            if (state.drug && state.drug.concentration > 0) {
+              if (tissueScene.updateDrugConcentration) {
+                tissueScene.updateDrugConcentration(state.drug.concentration, state.time || 0, state.drug.id);
+              }
+            } else if (tissueScene.drugPlane) {
+              if (tissueScene.drugPlane.userData && tissueScene.drugPlane.userData._backPlane) {
+                tissueScene.scene.remove(tissueScene.drugPlane.userData._backPlane);
+              }
+              tissueScene.scene.remove(tissueScene.drugPlane);
+              tissueScene.drugPlane = null;
+            }
+          }
+        } catch(e) {
+          console.warn('[3D Sync] Parse error', e);
+        }
+      }
+    }
+
+    // Initialize 3D after a short delay to ensure DOM is ready
+    setTimeout(() => {
+      const ok = init3D();
+      if (ok) {
+        setInterval(pollSyncData, 500);
+        pollSyncData();
+      } else {
+        // Retry after DOM fully loaded
+        document.addEventListener('DOMContentLoaded', () => {
+          if (init3D()) {
+            setInterval(pollSyncData, 500);
+            pollSyncData();
+          }
+        });
+      }
+    }, 200);
+
+    // ─── OPTIMIZATION RESULT ───
+    window.showOptimizationResult = function(result) {
+      const panel = document.getElementById('optimizationResult');
+      panel.style.display = 'block';
+      document.getElementById('optDrugName').textContent = 'Önerilen: ' + result.optimalDrug;
+      document.getElementById('optConcentration').textContent = 'Konsantrasyon: ' + result.optimalConcentration.toFixed(2) + ' mg/L';
+      document.getElementById('optDurationResult').textContent = 'Süre: ' + result.optimalDuration + ' h';
+      document.getElementById('optFitness').textContent = 'Uygunluk: ' + (result.fitnessScore * 100).toFixed(1) + '%';
+      if (typeof renderConvergenceChart === 'function') {
+        renderConvergenceChart(result.convergenceHistory);
+      }
+    };
+
+    // ─── OPTIMIZATION DURATION LABEL ───
+    const optDurSlider = document.getElementById('optDuration');
+    const optDurLabel = document.getElementById('optDurationLabel');
+    if (optDurSlider && optDurLabel) {
+      optDurSlider.addEventListener('input', () => {
+        optDurLabel.textContent = optDurSlider.value;
+      });
+    }
+
+    // ─── KONTROL TAB — environment controls ───
+    function getActiveDish() {
+      const dishes = window.activeDishes || [];
+      return dishes.length > 0 ? dishes[dishes.length - 1] : null;
+    }
+
+    function updateEnvHistoryAtCurrentTime(state) {
+      if (!state || state.inoculations.length === 0) return;
+      const tIdx = Math.round(state.time);
+      let totalEnv = 0;
+      state.inoculations.forEach(cfu => {
+        const b = cfu.bacteria;
+        if (!b) return;
+        const phFac = calcPhFactor(state.ph, b.phMin || 5, b.phOptimum || 7, b.phMax || 9);
+        const tempFac = calcTempFactor(state.temp, b.tempMin || 20, b.tempOptimum || 37, b.tempMax || 40);
+        let oxyFac = 1.0;
+        if (b.oxygenReq !== 'facultative' && b.oxygenReq !== state.oxy) oxyFac = 0.25;
+        if (state.oxy === 'anaerobic' && b.oxygenReq === 'aerobic') oxyFac = 0.1;
+        const naclFac = calcNaClFactor(state.nacl || 0.5, b.naclMin || 0, b.naclOptimal || 0.5, b.naclMax || 5);
+        totalEnv += phFac * tempFac * oxyFac * naclFac;
+      });
+      state.envHistory[tIdx] = totalEnv / state.inoculations.length;
+      for (let i = tIdx + 1; i < state.envHistory.length; i++) delete state.envHistory[i];
+    }
+
+    function syncKCFromDish() {
+      const state = getActiveDish();
+      const kcTime = document.getElementById('kcTime');
+      const kcTemp = document.getElementById('kcTemp');
+      const kcPh = document.getElementById('kcPh');
+      const kcNaCl = document.getElementById('kcNaCl');
+      const kcTimeVal = document.getElementById('kcTimeVal');
+      const kcTempVal = document.getElementById('kcTempVal');
+      const kcPhVal = document.getElementById('kcPhVal');
+      const kcNaClVal = document.getElementById('kcNaClVal');
+      const kcPhaseBar = document.getElementById('kcPhaseBar');
+      const kcConc = document.getElementById('kcConc');
+      const kcConcVal = document.getElementById('kcConcVal');
+
+      if (!state) return;
+      kcTime.value = state.time;
+      kcTemp.value = state.temp;
+      kcPh.value = state.ph;
+      kcNaCl.value = state.nacl;
+
+      const maxTime = state.inoculations.length > 0 ? state.inoculations[0].bacteria.maxTime : 72;
+      const rawRatio = state.time / 200;
+      kcTimeVal.textContent = `${(rawRatio * maxTime).toFixed(2)} h`;
+      kcTempVal.textContent = `${state.temp.toFixed(2)} °C`;
+      kcPhVal.textContent = state.ph.toFixed(2);
+      kcNaClVal.textContent = `${state.nacl.toFixed(2)}%`;
+
+      if (kcPhaseBar) {
+        let phasePct = rawRatio * 100;
+        let pc = '#4ade80';
+        if (rawRatio > 0.85) pc = '#f87171';
+        else if (rawRatio > 0.65) pc = '#f59e0b';
+        kcPhaseBar.style.width = phasePct + '%';
+        kcPhaseBar.style.background = pc;
+      }
+
+      if (state.antibiotic && kcConc) {
+        kcConc.value = state.antibiotic.concentration || 0;
+        if (kcConcVal) kcConcVal.textContent = `${state.antibiotic.concentration || 0} mg/L`;
+      }
+
+      // O₂ buttons
+      document.querySelectorAll('.kc-oxy-btn').forEach(b => b.classList.toggle('active', b.dataset.oxy === state.oxy));
+
+      // Bacteria list
+      updateKCBacList(state);
+    }
+
+    function updateKCBacList(state) {
+      const list = document.getElementById('kcBacList');
+      if (!list) return;
+      if (!state || state.inoculations.length === 0) {
+        list.innerHTML = '<div class="kc-bac-empty">Henüz bakteri eklenmedi</div>';
+        return;
+      }
+      list.innerHTML = state.inoculations.map((inoc, i) => {
+        const bac = inoc.bacteria;
+        const color = bac.color || bac.hex || '#00e5a0';
+        const cfuCount = inoc.colonies ? inoc.colonies.length : '—';
+        return `<div class="kc-bac-item">
+          <span class="kc-bac-dot" style="background:${color}"></span>
+          <span class="kc-bac-name">${bac.name || 'Bilinmeyen'}</span>
+          <span class="kc-bac-cfu">CFU: ${cfuCount}</span>
+          <button class="kc-bac-remove" data-idx="${i}" title="Çıkar">&times;</button>
+        </div>`;
+      }).join('');
+
+      // Remove buttons
+      list.querySelectorAll('.kc-bac-remove').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const idx = +btn.dataset.idx;
+          const state2 = getActiveDish();
+          if (state2 && state2.inoculations[idx]) {
+            state2.inoculations.splice(idx, 1);
+            if (typeof redraw === 'function') redraw(state2);
+            syncKCFromDish();
+            if (typeof addLogEntry === 'function') addLogEntry(state2.dishNum, 'Bakteri Çıkarıldı', state2);
+          }
+        });
+      });
+    }
+
+    // ─── KONTROL: Environment sliders ───
+    function kcTimeDisplay(v, s) {
+      const maxT = s && s.inoculations.length > 0 ? s.inoculations[0].bacteria.maxTime : 72;
+      const hours = (v / 200) * maxT;
+      const el = document.getElementById('kcTimeVal');
+      if (el) el.textContent = `${hours.toFixed(2)} h`;
+      // Phase bar
+      const rawR = v / 200;
+      const pb = document.getElementById('kcPhaseBar');
+      if (pb) {
+        let pct = rawR * 100, pc = '#4ade80';
+        if (rawR > 0.85) pc = '#f87171';
+        else if (rawR > 0.65) pc = '#f59e0b';
+        pb.style.width = pct + '%'; pb.style.background = pc;
+      }
+      return hours;
+    }
+
+    function kcTimeEnvHistory(s) {
+      if (!s || s.inoculations.length === 0) return;
+      const tIdx = Math.round((s.time / 200) * (s.inoculations[0].bacteria.maxTime || 72));
+      let totalEnv = 0;
+      s.inoculations.forEach(cfu => {
+        const b = cfu.bacteria;
+        if (!b) return;
+        const phFac = calcPhFactor(s.ph, b.phMin || 5, b.phOptimum || 7, b.phMax || 9);
+        const tempFac = calcTempFactor(s.temp, b.tempMin || 20, b.tempOptimum || 37, b.tempMax || 40);
+        let oxyFac = 1.0;
+        if (b.oxygenReq !== 'facultative' && b.oxygenReq !== s.oxy) oxyFac = 0.25;
+        if (s.oxy === 'anaerobic' && b.oxygenReq === 'aerobic') oxyFac = 0.1;
+        const naclFac = calcNaClFactor(s.nacl || 0.5, b.naclMin || 0, b.naclOptimal || 0.5, b.naclMax || 5);
+        totalEnv += phFac * tempFac * oxyFac * naclFac;
+      });
+      if (s.envHistory[tIdx] === undefined) s.envHistory[tIdx] = totalEnv / s.inoculations.length;
+    }
+
+    const kcInputs = [
+      { id: 'kcTime', key: 'time', parse: parseFloat, updateVal: kcTimeDisplay },
+      { id: 'kcTemp', key: 'temp', parse: parseFloat, updateVal: (v) => { document.getElementById('kcTempVal').textContent = `${v.toFixed(2)} °C`; }},
+      { id: 'kcPh', key: 'ph', parse: parseFloat, updateVal: (v) => { document.getElementById('kcPhVal').textContent = v.toFixed(2); }},
+      { id: 'kcNaCl', key: 'nacl', parse: parseFloat, updateVal: (v) => { document.getElementById('kcNaClVal').textContent = `${v.toFixed(2)}%`; }},
+    ];
+
+    // input → real-time visual update only
+    kcInputs.forEach(({id, key, parse, updateVal}) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.addEventListener('input', () => {
+        const state = getActiveDish();
+        if (!state) return;
+        const val = parse(el.value);
+        state[key] = val;
+        updateVal(val, state);
+        if (key !== 'time') updateEnvHistoryAtCurrentTime(state);
+        if (typeof redraw === 'function') redraw(state);
+      });
+  
+        // 2D yan/katman görünümü güncelle
+        if (typeof render2DSideView   === 'function' && currentView2DTab === 'side')   render2DSideView();
+        if (typeof render2DLayersView === 'function' && currentView2DTab === 'layers') render2DLayersView();  });
+
+    // change → log entry only (mouse release)
+    const logLabels = { time: 'Zaman', temp: 'Sıcaklık', ph: 'pH', nacl: 'NaCl' };
+    kcInputs.forEach(({id, key}) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.addEventListener('change', () => {
+        const state = getActiveDish();
+        if (!state) return;
+        const label = logLabels[key] || key;
+        if (typeof addLogEntry === 'function') addLogEntry(state.dishNum, `${label} Değiştirildi`, state);
+      });
+    });
+
+    // Time also requires env calc on change
+    document.getElementById('kcTime').addEventListener('change', () => {
+      const state = getActiveDish();
+      if (state) kcTimeEnvHistory(state);
+    });
+
+    // O₂ buttons
+    document.querySelectorAll('.kc-oxy-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const state = getActiveDish();
+        if (!state) return;
+        document.querySelectorAll('.kc-oxy-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        state.oxy = btn.dataset.oxy;
+        updateEnvHistoryAtCurrentTime(state);
+        if (typeof redraw === 'function') redraw(state);
+        if (typeof addLogEntry === 'function') addLogEntry(state.dishNum, 'O₂ Değiştirildi', state);
+      });
+    });
+
+    // ─── KONTROL: Antibiyotik ───
+    function populateDrugDropdown() {
+      const sel = document.getElementById('kcDrug');
+      if (!sel || sel.options.length > 1) return;
+      const pkData = (typeof BacteriaStore !== 'undefined' && BacteriaStore.antibioticPK) ? BacteriaStore.antibioticPK : [];
+      // Collect unique drugs from all bacteria
+      const drugSet = {};
+      if (typeof BacteriaStore !== 'undefined' && BacteriaStore.antibiotics) {
+        Object.values(BacteriaStore.antibiotics).forEach(arr => {
+          (arr || []).forEach(d => { if (d.name) drugSet[d.name] = d; });
+        });
+      }
+      // Also add from antibioticPK
+      pkData.forEach(d => { if (d.id && !drugSet[d.id]) drugSet[d.id] = { drug: d.id }; });
+
+      Object.keys(drugSet).sort().forEach(drugId => {
+        const opt = document.createElement('option');
+        opt.value = drugId;
+        opt.textContent = drugId.charAt(0).toUpperCase() + drugId.slice(1).replace(/_/g, ' ');
+        sel.appendChild(opt);
+      });
+    }
+
+    document.getElementById('kcDrug').addEventListener('change', function() {
+      const state = getActiveDish();
+      if (!state) return;
+      const row = document.getElementById('kcDrugConcRow');
+      const concEl = document.getElementById('kcConc');
+      const concVal = document.getElementById('kcConcVal');
+      const micRef = document.getElementById('kcMicRef');
+
+      if (!this.value) {
+        row.style.display = 'none';
+        state.antibiotic = null;
+        micRef.textContent = '';
+        if (typeof redraw === 'function') redraw(state);
+        if (typeof syncWith3D === 'function') syncWith3D();
+        return;
+        // 2D yan/katman görünümü güncelle
+        if (typeof render2DSideView   === 'function' && currentView2DTab === 'side')   render2DSideView();
+        if (typeof render2DLayersView === 'function' && currentView2DTab === 'layers') render2DLayersView();
+      }
+
+      // Get MIC for this drug from first bacteria
+      let mic = 8;
+      if (state.inoculations.length > 0 && state.inoculations[0].bacteria) {
+        const bac = state.inoculations[0].bacteria;
+        const abData = typeof BacteriaStore !== 'undefined' && BacteriaStore.getAntibioticsFor
+          ? BacteriaStore.getAntibioticsFor(bac._id) : [];
+        const match = abData.find(a => a.name === this.value);
+        if (match) mic = match.mic || 8;
+      }
+      // Also check PK data for EC50
+      let ec50 = mic * 2;
+      const pkData = (typeof BacteriaStore !== 'undefined' && BacteriaStore.antibioticPK) ? BacteriaStore.antibioticPK : [];
+      const pkMatch = pkData.find(d => d.id === this.value);
+      if (pkMatch) ec50 = pkMatch.ec50_derived || pkMatch.ec50_factor * mic;
+
+      row.style.display = 'block';
+      state.antibiotic = { drugId: this.value, drugName: this.options[this.selectedIndex].textContent, concentration: 0 };
+      concEl.value = 0;
+      concVal.textContent = '0 mg/L';
+      // Antibiyotik seçim logu
+      if (typeof addLogEntry === 'function') {
+        addLogEntry(state.dishNum, `Antibiyotik Seçildi: ${state.antibiotic.drugName}`, state, null);
+      }
+      micRef.textContent = `MIC: ${mic} mg/L  |  EC50: ${ec50} mg/L`;
+
+      if (typeof redraw === 'function') redraw(state);
+      if (typeof syncWith3D === 'function') syncWith3D();
+    });
+
+    document.getElementById('kcConc').addEventListener('input', function() {
+      const state = getActiveDish();
+      if (!state || !state.antibiotic) return;
+      // Log scale: 0-100 maps to 0-1024 mg/L
+      const pct = +this.value / 100;
+      const conc = Math.round(pct * pct * 1024);
+      state.antibiotic.concentration = conc;
+      document.getElementById('kcConcVal').textContent = `${conc} mg/L`;
+      if (typeof redraw === 'function') redraw(state);
+
+        // Konsantrasyon değişim logu (her 10 birimde bir)
+        if (state.antibiotic && Math.round(state.antibiotic.concentration) % 10 === 0) {
+          if (typeof addLogEntry === 'function') {
+            addLogEntry(state.dishNum, `AB Konsantrasyon: ${state.antibiotic.concentration}mg/L`, state, null);
+          }
+        }
+
+        if (typeof render2DSideView   === 'function' && currentView2DTab === 'side')   render2DSideView();
+        if (typeof render2DLayersView === 'function' && currentView2DTab === 'layers') render2DLayersView();
+      if (typeof syncWith3D === 'function') syncWith3D();
+    });
+
+    // Auto-populate drug dropdown when store is ready
+    setTimeout(populateDrugDropdown, 500);
+
+    // Sync kontrol tab when dish changes
+    setInterval(syncKCFromDish, 300);
+    // ─── UYGULAMA YOLU (ROA) SEÇİCİ ─────────────────────────────────────────
+    const kcRouteRow     = document.getElementById('kcRouteRow');
+    const kcRouteSelect  = document.getElementById('kcRoute');
+    const kcRouteWarning = document.getElementById('kcRouteWarning');
+
+    const ROUTE_LABELS = {
+      iv:      '💉 IV (İntravenöz)',
+      oral:    '💊 Oral',
+      topical: '🩹 Topikal',
+      inhaled: '🫁 İnhale',
+      im:      '💉 İM (İntramusküler)'
+    };
+
+    function updateROASelector() {
+      const state   = getActiveDish();
+      const drugId  = kcRouteSelect ? document.getElementById('kcDrug')?.value : null;
+      if (!drugId || !kcRouteRow) return;
+
+      // PK verisinden uyumlu yolları al
+      const pkList = (typeof BacteriaStore !== 'undefined' && BacteriaStore.antibioticPK)
+        ? BacteriaStore.antibioticPK : [];
+      const pkData = pkList.find ? pkList.find(p => p.id === drugId) : null;
+
+      if (!pkData || !pkData.routes_of_administration) {
+        kcRouteRow.style.display = 'none';
+        return;
+      }
+
+      // Uyumlu yolları dropdown'a doldur
+      const compatRoutes = Object.entries(pkData.routes_of_administration)
+        .filter(([, ok]) => ok)
+        .map(([r]) => r);
+
+      if (kcRouteSelect) {
+        kcRouteSelect.innerHTML = compatRoutes.map(r =>
+          `<option value="${r}">${ROUTE_LABELS[r] || r}</option>`
+        ).join('');
+        // Primary route varsayılan
+        if (pkData.primary_route && compatRoutes.includes(pkData.primary_route)) {
+          kcRouteSelect.value = pkData.primary_route;
+        }
+      }
+
+      kcRouteRow.style.display = 'flex';
+
+      // Doku uyumu kontrolü
+      validateROAForTissue();
+    }
+
+    function validateROAForTissue() {
+      const state    = getActiveDish();
+      if (!state || !kcRouteWarning) return;
+
+      const tissueId = state.tissueType || 'skin-wound';
+      const route    = kcRouteSelect ? kcRouteSelect.value : 'iv';
+      const drugId   = document.getElementById('kcDrug')?.value;
+
+      if (!drugId) return;
+
+      const pkList = (typeof BacteriaStore !== 'undefined' && BacteriaStore.antibioticPK)
+        ? BacteriaStore.antibioticPK : [];
+      const pkData = pkList.find ? pkList.find(p => p.id === drugId) : null;
+
+      const tissueModel = (typeof BacteriaStore !== 'undefined' && BacteriaStore.tissueModels)
+        ? BacteriaStore.tissueModels.find(t => t.id === tissueId) : null;
+
+      let warning = '';
+
+      // Oral biyoyararlanım kontrolü
+      if (route === 'oral' && pkData) {
+        const bioavail = pkData.bioavailability_by_route?.oral || 0;
+        if (bioavail === 0) {
+          warning = `❌ ${pkData.id} oral biyoyararlanımı %0 — bu yol etkisiz!`;
+        } else if (bioavail < 0.40) {
+          warning = `⚠️ Oral biyoyararlanım düşük: %${(bioavail*100).toFixed(0)} — IV tercih edin`;
+        }
+      }
+
+      // Doku-yol uyumu
+      if (tissueModel && tissueModel.compatible_routes) {
+        if (!tissueModel.compatible_routes.includes(route)) {
+          warning = `⚠️ ${ROUTE_LABELS[route]||route} bu doku için önerilen yol değil. Önerilen: ${tissueModel.primary_route?.toUpperCase()}`;
+        }
+      }
+
+      if (kcRouteWarning) {
+        kcRouteWarning.textContent = warning;
+        kcRouteWarning.style.display = warning ? 'block' : 'none';
+      }
+
+      // State'e route kaydet
+      if (state && state.antibiotic) {
+        state.antibiotic.route = route;
+        // Biyoyararlanıma göre efektif konsantrasyon güncelle
+        const bioavail = pkData?.bioavailability_by_route?.[route] || 1.0;
+        state.antibiotic.bioavailability = bioavail;
+      }
+    }
+
+    // Drug seçince ROA güncelle
+    const kcDrugEl2 = document.getElementById('kcDrug');
+    if (kcDrugEl2) {
+      kcDrugEl2.addEventListener('change', () => {
+        setTimeout(updateROASelector, 50);
+      });
+    }
+
+    // Route değişince validate et
+    if (kcRouteSelect) {
+      kcRouteSelect.addEventListener('change', validateROAForTissue);
+    }
+
+    // Doku tipi değişince ROA'yı yeniden validate et
+    const _origUpdateTissue = updateTissueDescription;
+    updateTissueDescription = function() {
+      _origUpdateTissue();
+      setTimeout(validateROAForTissue, 100);
+    };
+
+    // ─── DOKU TİPİ SEÇİCİ ───────────────────────────────────────────────────
+    const kcTissueSelect = document.getElementById('kcTissueType');
+    const tissueDescBox  = document.getElementById('tissueDescBox');
+
+    const TISSUE_DESCRIPTIONS = {
+      'skin-wound':   '🩹 Akut cilt yaralanması. Epitel bariyer bozulmuş. S. aureus, P. aeruginosa en sık etkenler.',
+      'burn-wound':   '🔥 Termal hasar. Nekrotik eskar antibiyotiği engeller. Penetrasyon %60 düşük.',
+      'chronic-wound':'⏳ Biyofilm baskın enfeksiyon. Antibiyotik direnci çok yüksek (%35 penetrasyon).',
+      'lung':         '🫁 Pulmoner doku. M. tuberculosis, S. pneumoniae. Florokinolonlar en etkili.',
+      'gut':          '🧬 GI mukoza. Anaerobik ortam. H. pylori, Salmonella. Probiyotik-patojen rekabeti kritik.',
+      'urinary':      '💧 Üroepitel. Antibiyotik idrarda çok konsantre — %140 penetrasyon. E. coli dominant.',
+      'bloodstream':  '🩸 Septisemi. En yüksek mortalite. Gram negatif endotoksin şoku riski.',
+      'bone':         '🦴 Osteomiyelit. %20 penetrasyon — en zorlu tedavi. Rifampisin kombinasyon şart.'
+    };
+
+    function updateTissueDescription() {
+      const val = kcTissueSelect ? kcTissueSelect.value : 'skin-wound';
+      const desc = TISSUE_DESCRIPTIONS[val] || '';
+
+      // Bakteri-doku uyumu kontrolü
+      const state = getActiveDish();
+      let compatWarning = '';
+      if (state && state.inoculations && state.inoculations.length > 0) {
+        const tissueModel = (typeof BacteriaStore !== 'undefined' && BacteriaStore.tissueModels)
+          ? BacteriaStore.tissueModels.find(t => t.id === val) : null;
+        const compatPathogens = tissueModel ? (tissueModel.default_pathogens || []) : [];
+
+        const incompatible = state.inoculations.filter(inoc => {
+          const bid = inoc.bacteria._id;
+          // Bakteri bu doku için uygun değilse uyar
+          return compatPathogens.length > 0 && !compatPathogens.includes(bid);
+        });
+
+        if (incompatible.length > 0) {
+          const names = incompatible.map(i => i.bacteria.name).join(', ');
+          compatWarning = `⚠️ ${names} bu doku için tipik patojen değil`;
+        }
+      }
+
+      if (tissueDescBox) {
+        tissueDescBox.innerHTML = desc
+          + (compatWarning ? `<br><span style="color:#f87171;font-size:9px;">${compatWarning}</span>` : '');
+        tissueDescBox.style.display = desc ? 'block' : 'none';
+      }
+
+      // State'e tissue type kaydet
+      if (state) {
+        state.tissueType = val;
+        if (typeof render2DSideView   === 'function' && currentView2DTab === 'side')   render2DSideView();
+        if (typeof render2DLayersView === 'function' && currentView2DTab === 'layers') render2DLayersView();
+      }
+    }
+
+    if (kcTissueSelect) {
+      kcTissueSelect.addEventListener('change', updateTissueDescription);
+      // Başlangıçta açıklamayı göster
+      setTimeout(updateTissueDescription, 800);
+    }
+
+    // syncKCFromDish'e tissue type senkronizasyonu ekle
+    const _origSyncKC = syncKCFromDish;
+    syncKCFromDish = function() {
+      _origSyncKC();
+      const state = getActiveDish();
+      if (state && kcTissueSelect) {
+        const tv = state.tissueType || 'skin-wound';
+        if (kcTissueSelect.value !== tv) kcTissueSelect.value = tv;
+        updateTissueDescription();
+      }
+    };
+
+
+    // ─── TABS ───
+    document.querySelectorAll('.right-tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.right-tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        const tabPane = document.getElementById('tab' + btn.dataset.tab.charAt(0).toUpperCase() + btn.dataset.tab.slice(1));
+        if (tabPane) tabPane.classList.add('active');
+        // Trigger chart resize if switching to graphs
+        if (btn.dataset.tab === 'graphs' && window.ChartManager) {
+          window.dispatchEvent(new Event('resize'));
+        }
+      });
+    });
+  </script>
+  <script src="index-patch.js"></script>
+  <script>
+    // OrbitControls uyumluluk: THREE.OrbitControls → window.OrbitControls
+    window.addEventListener('load', function() {
+      if (typeof THREE !== 'undefined' && THREE.OrbitControls && !window.OrbitControls) {
+        window.OrbitControls = THREE.OrbitControls;
+      }
+    });
+  </script>
+</body>
+
+</html>

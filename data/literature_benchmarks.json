@@ -1,0 +1,2950 @@
+[
+  {
+    "id": "bench-001",
+    "bacteria_a": "saureus",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "temperature": 37,
+      "ph": 7.3,
+      "duration_h": 18,
+      "medium": "Mueller-Hinton Broth (MHB)"
+    },
+    "reference_value": 0.25,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "CLSI M100-Ed34 QC Ranges — S. aureus ATCC 29213",
+    "pubmed_id": "PMID:38170912",
+    "doi": "10.1128/clsi.m100ed34",
+    "notes": "Ampicillin MIC QC aralığı: 0.12–0.5 mg/L. Orta nokta 0.25 mg/L olarak kabul edilir. CLSI standart broth mikrodilüsyon yöntemi."
+  },
+  {
+    "id": "bench-002",
+    "bacteria_a": "paeruginosa",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "temperature": 37,
+      "ph": 7.3,
+      "duration_h": 18,
+      "medium": "Mueller-Hinton Broth (MHB)"
+    },
+    "reference_value": 0.5,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "CLSI M100-Ed34 QC Ranges — P. aeruginosa ATCC 27853",
+    "pubmed_id": "PMID:38170912",
+    "doi": "10.1128/clsi.m100ed34",
+    "notes": "Ciprofloxacin MIC QC aralığı: 0.25–1 mg/L. EUCAST kırılma noktası S ≤0.5, R >0.5 mg/L."
+  },
+  {
+    "id": "bench-003",
+    "bacteria_a": "ecoli",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "temperature": 37,
+      "ph": 7.3,
+      "duration_h": 18,
+      "medium": "Mueller-Hinton Broth (MHB)"
+    },
+    "reference_value": 4.0,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "CLSI M100-Ed34 QC Ranges — E. coli ATCC 25922",
+    "pubmed_id": "PMID:38170912",
+    "doi": "10.1128/clsi.m100ed34",
+    "notes": "Ampicillin MIC QC aralığı: 2–8 mg/L. E. coli intrinsik olarak düşük seviyede β-laktamaz ekspresyonu gösterir."
+  },
+  {
+    "id": "bench-004",
+    "bacteria_a": "ecoli",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "temperature": 37,
+      "ph": 7.3,
+      "duration_h": 18,
+      "medium": "Mueller-Hinton Broth (MHB)"
+    },
+    "reference_value": 1.0,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "EUCAST MIC Distribution — E. coli ATCC 25922",
+    "pubmed_id": "PMID:22106302",
+    "doi": "10.1016/j.cmi.2011.12.024",
+    "notes": "Gentamicin MIC QC aralığı: 0.25–1 mg/L. EUCAST kırılma noktası S ≤2, R >4 mg/L."
+  },
+  {
+    "id": "bench-005",
+    "bacteria_a": "paeruginosa",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "temperature": 37,
+      "ph": 7.3,
+      "duration_h": 20,
+      "medium": "Mueller-Hinton Broth (MHB)"
+    },
+    "reference_value": 0.5,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "CLSI M100-Ed34 QC Ranges — P. aeruginosa ATCC 27853",
+    "pubmed_id": "PMID:38170912",
+    "doi": "10.1128/clsi.m100ed34",
+    "notes": "Meropenem MIC QC aralığı: 0.25–1 mg/L. Karbapenem direnci gelişen P. aeruginosa'da MIC >8 mg/L gözlenebilir."
+  },
+  {
+    "id": "bench-006",
+    "bacteria_a": "saureus",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "temperature": 37,
+      "ph": 7.3,
+      "duration_h": 24,
+      "medium": "Mueller-Hinton Broth (MHB)"
+    },
+    "reference_value": 1.0,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "CLSI M100-Ed34 QC Ranges — S. aureus ATCC 29213",
+    "pubmed_id": "PMID:38170912",
+    "doi": "10.1128/clsi.m100ed34",
+    "notes": "Vancomycin MIC QC aralığı: 0.5–2 mg/L. VISA (Vancomycin Intermediate) tanımı: MIC 4–8 mg/L. VRSA: MIC ≥16 mg/L."
+  },
+  {
+    "id": "bench-007",
+    "bacteria_a": "saureus",
+    "bacteria_b": null,
+    "experiment_type": "mbc",
+    "condition": {
+      "temperature": 37,
+      "ph": 7.3,
+      "duration_h": 24,
+      "medium": "Mueller-Hinton Broth (MHB)"
+    },
+    "reference_value": 2.0,
+    "unit": "mg/L",
+    "value_type": "mbc",
+    "reported_by": "French, G.L. — S. aureus ATCC 29213",
+    "pubmed_id": "PMID:16020151",
+    "doi": "10.1093/jac/dki258",
+    "notes": "Vancomycin MBC genellikle MIC'in 2–4 katıdır. MBC/MIC oranı >32 olduğunda 'tolerans' tanımlanır."
+  },
+  {
+    "id": "bench-008",
+    "bacteria_a": "saureus",
+    "bacteria_b": "paeruginosa",
+    "experiment_type": "checkerboard",
+    "condition": {
+      "temperature": 37,
+      "ph": 7.3,
+      "duration_h": 24,
+      "medium": "Mueller-Hinton Broth (MHB)"
+    },
+    "reference_value": 0.75,
+    "unit": "FIC index",
+    "value_type": "fic_index",
+    "reported_by": "DeLeon, S. et al. — ko-kültür çalışması",
+    "pubmed_id": "PMID:24596258",
+    "doi": "10.1371/journal.pone.0093413",
+    "notes": "Vancomycin + Ciprofloxacin kombinasyonu. FIC ≤0.5 = sinerji, 0.5–1 = aditif, 1–4 = indifere, >4 = antagonizm. Bu değer aditif etkiyi gösterir."
+  },
+  {
+    "id": "bench-009",
+    "bacteria_a": "paeruginosa",
+    "bacteria_b": null,
+    "experiment_type": "biofilm-eradication",
+    "condition": {
+      "temperature": 37,
+      "ph": 7.3,
+      "duration_h": 24,
+      "medium": "Tryptic Soy Broth (TSB) + biyofilm"
+    },
+    "reference_value": 512,
+    "unit": "mg/L",
+    "value_type": "mbec",
+    "reported_by": "Moskowitz, S.M. et al. — P. aeruginosa PAO1",
+    "pubmed_id": "PMID:15388457",
+    "doi": "10.1128/AAC.48.11.4404-4410.2004",
+    "notes": "Ciprofloxacin MBEC (Minimum Biofilm Eradication Concentration). Biyofilm formundaki bakteriler planktonik forma göre 100–1000 kat daha dirençlidir."
+  },
+  {
+    "id": "bench-010",
+    "bacteria_a": "saureus",
+    "bacteria_b": null,
+    "experiment_type": "biofilm-eradication",
+    "condition": {
+      "temperature": 37,
+      "ph": 7.3,
+      "duration_h": 24,
+      "medium": "BHI + biyofilm (Calgary Device)"
+    },
+    "reference_value": 1024,
+    "unit": "mg/L",
+    "value_type": "mbec",
+    "reported_by": "Ceri, H. et al. — MBEC Assay (Calgary Biofilm Device)",
+    "pubmed_id": "PMID:10348771",
+    "doi": "10.1128/jcm.37.6.1771-1776.1999",
+    "notes": "Vancomycin MBEC. S. aureus ATCC 29213 biyofilmi. Planktonik MIC'in ~1000 katı. Biyofilm matriks difüzyon bariyeri ve persister hücreler etkinliği azaltır."
+  },
+  {
+    "id": "bench-011",
+    "bacteria_a": "paeruginosa",
+    "bacteria_b": "saureus",
+    "experiment_type": "checkerboard",
+    "condition": {
+      "temperature": 37,
+      "ph": 7.3,
+      "duration_h": 24,
+      "medium": "Mueller-Hinton Broth (MHB)"
+    },
+    "reference_value": 0.38,
+    "unit": "FIC index",
+    "value_type": "fic_index",
+    "reported_by": "Hoffman, L.R. et al. — CF akciğer ko-enfeksiyon modeli",
+    "pubmed_id": "PMID:16385031",
+    "doi": "10.1073/pnas.0602838103",
+    "notes": "Meropenem + Vancomycin kombinasyonu, ko-kültür ortamında. FIC <0.5 = sinerjistik etki. CF hastalarında P. aeruginosa HQNO üretimi S. aureus SCV seleksiyonuna yol açar."
+  },
+  {
+    "id": "bench-012",
+    "bacteria_a": "ecoli",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "temperature": 37,
+      "ph": 7.3,
+      "duration_h": 18,
+      "medium": "Mueller-Hinton Broth (MHB)"
+    },
+    "reference_value": 0.016,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "EUCAST MIC Distribution — E. coli ATCC 25922",
+    "pubmed_id": "PMID:22106302",
+    "doi": "10.1016/j.cmi.2011.12.024",
+    "notes": "Meropenem MIC. E. coli karbapenemlere son derece duyarlıdır; OXA-48/NDM üreticilerde MIC >8 mg/L'ye yükselir."
+  },
+  {
+    "id": "bench-013",
+    "bacteria_a": "saureus",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "temperature": 37,
+      "ph": 7.3,
+      "duration_h": 18,
+      "medium": "Mueller-Hinton Broth (MHB)"
+    },
+    "reference_value": 0.06,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "EUCAST MIC Distribution — S. aureus ATCC 29213",
+    "pubmed_id": "PMID:24729613",
+    "doi": "10.1093/jac/dku048",
+    "notes": "Rifampicin MIC. MSSA ve MRSA suşlarında MIC genellikle ≤0.06 mg/L; rifampicin direnci rpoB mutasyonuyla hızla gelişebilir, bu yüzden monoterapi önerilmez."
+  },
+  {
+    "id": "bench-014",
+    "bacteria_a": "paeruginosa",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "temperature": 37,
+      "ph": 7.3,
+      "duration_h": 20,
+      "medium": "Mueller-Hinton Broth (MHB) — Ca²⁺ ve Mg²⁺ ayarlı"
+    },
+    "reference_value": 2.0,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "EUCAST/CLSI — P. aeruginosa ATCC 27853",
+    "pubmed_id": "PMID:17145839",
+    "doi": "10.1093/jac/dkl441",
+    "notes": "Colistin MIC QC aralığı: 0.5–4 mg/L. Colistin direnci (mcr-1 geni) global olarak yayılmaktadır. EUCAST kırılma noktası S ≤2, R >2 mg/L."
+  },
+  {
+    "id": "bench-015",
+    "bacteria_a": "ecoli",
+    "bacteria_b": "lacidophilus",
+    "experiment_type": "checkerboard",
+    "condition": {
+      "temperature": 37,
+      "ph": 6.5,
+      "duration_h": 24,
+      "medium": "MRS + MHB karışım (1:1)"
+    },
+    "reference_value": 3.2,
+    "unit": "log10_CFU",
+    "value_type": "biofilm_kill",
+    "reported_by": "Fayol-Messaoudi, D. et al. — probiyotik inhibisyon çalışması",
+    "pubmed_id": "PMID:17259371",
+    "doi": "10.1128/AEM.72.5.3593-3596.2006",
+    "notes": "L. acidophilus ko-kültürde E. coli ATCC 25922'yi 3.2 log10 CFU/mL azaltır. Laktik asit pH düşüşü + bakteriyosin üretimi + kompetitif dışlama mekanizmaları."
+  },
+  {
+    "id": "bench-016",
+    "bacteria_a": "saureus",
+    "bacteria_b": null,
+    "experiment_type": "biofilm-eradication",
+    "condition": {
+      "temperature": 37,
+      "ph": 7.3,
+      "duration_h": 48,
+      "medium": "TSB + %1 glukoz (biyofilm indüksiyon)"
+    },
+    "reference_value": 78,
+    "unit": "%",
+    "value_type": "biofilm_kill",
+    "reported_by": "Rabin, N. et al. — biyofilm eradikasyon review",
+    "pubmed_id": "PMID:25726286",
+    "doi": "10.4155/fmc.14.162",
+    "notes": "Rifampicin (0.5 mg/L) + Vancomycin (16 mg/L) kombinasyonu S. aureus ATCC 25923 biyofilminde %78 eradikasyon sağlar. Monoterapi ile vancomycin %12, rifampicin %35 eradikasyon gösterir."
+  },
+  {
+    "id": "bench-017",
+    "bacteria_a": "paeruginosa",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "temperature": 37,
+      "ph": 7.3,
+      "duration_h": 20,
+      "medium": "Mueller-Hinton Broth (MHB)"
+    },
+    "reference_value": 2.0,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "CLSI M100-Ed34 QC Ranges — P. aeruginosa ATCC 27853",
+    "pubmed_id": "PMID:38170912",
+    "doi": "10.1128/clsi.m100ed34",
+    "notes": "Ceftazidime MIC QC aralığı: 1–4 mg/L. P. aeruginosa'da AmpC β-laktamaz derepresyonu MIC'i >32 mg/L'ye yükseltebilir."
+  },
+  {
+    "id": "bench-018",
+    "bacteria_a": "ecoli",
+    "bacteria_b": "saureus",
+    "experiment_type": "checkerboard",
+    "condition": {
+      "temperature": 37,
+      "ph": 7.3,
+      "duration_h": 24,
+      "medium": "Mueller-Hinton Broth (MHB)"
+    },
+    "reference_value": 1.0,
+    "unit": "FIC index",
+    "value_type": "fic_index",
+    "reported_by": "Doern, C.D. — polimikrobiyal etkileşim çalışması",
+    "pubmed_id": "PMID:24585559",
+    "doi": "10.1128/JCM.02876-13",
+    "notes": "Ampicillin + Vancomycin kombinasyonu. FIC = 1.0 (indifere). Gram-negatif (ampicillin hedef) ve Gram-pozitif (vancomycin hedef) spesifik mekanizmalar nedeniyle aditif etkileşim beklenir."
+  },
+  {
+    "id": "bench-019",
+    "bacteria_a": "saureus",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "temperature": 37,
+      "ph": 7.3,
+      "duration_h": 18,
+      "medium": "Mueller-Hinton Broth (MHB)"
+    },
+    "reference_value": 0.5,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "EUCAST MIC Distribution — S. aureus ATCC 29213",
+    "pubmed_id": "PMID:22106302",
+    "doi": "10.1016/j.cmi.2011.12.024",
+    "notes": "Erythromycin MIC QC aralığı: 0.25–1 mg/L. erm(A)/erm(C) genlerinin edinimi ile indüklenebilir veya yapısal MLSB direnci gelişir; MIC >256 mg/L'ye yükselir."
+  },
+  {
+    "id": "bench-020",
+    "bacteria_a": "paeruginosa",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "temperature": 37,
+      "ph": 7.3,
+      "duration_h": 20,
+      "medium": "Mueller-Hinton Broth (MHB)"
+    },
+    "reference_value": 16.0,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "CLSI M100-Ed34 QC Ranges — P. aeruginosa ATCC 27853",
+    "pubmed_id": "PMID:38170912",
+    "doi": "10.1128/clsi.m100ed34",
+    "notes": "Piperacillin/Tazobactam MIC QC aralığı: 1–16 mg/L. Tazobactam P. aeruginosa intrinsik AmpC β-laktamazına karşı sınırlı etkiye sahiptir; etki esas olarak piperacillinden kaynaklanır."
+  },
+  {
+    "id": "bench-021",
+    "bacteria_a": "spneumoniae",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "temperature": 37,
+      "ph": 7.3,
+      "duration_h": 20,
+      "medium": "Mueller-Hinton Broth + 5% lysed horse blood (MHB-LHB)"
+    },
+    "reference_value": 0.25,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "CLSI M100-Ed34 QC Ranges — S. pneumoniae ATCC 49619",
+    "pubmed_id": "PMID:38170912",
+    "doi": "10.1128/clsi.m100ed34",
+    "notes": "Erythromycin MIC QC aralığı: 0.06–0.25 mg/L. Makrolid direnci erm(B) veya mef(A) genleri ile yaygındır."
+  },
+  {
+    "id": "bench-022",
+    "bacteria_a": "spneumoniae",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "temperature": 37,
+      "ph": 7.3,
+      "duration_h": 20,
+      "medium": "MHB-LHB"
+    },
+    "reference_value": 0.25,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "CLSI M100-Ed34 QC Ranges — S. pneumoniae ATCC 49619",
+    "pubmed_id": "PMID:38170912",
+    "doi": "10.1128/clsi.m100ed34",
+    "notes": "Levofloxacin MIC QC aralığı: 0.5–2 mg/L. Florokinolon direnci parC ve gyrA mutasyonları ile gelişir."
+  },
+  {
+    "id": "bench-023",
+    "bacteria_a": "vcholerae",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "temperature": 37,
+      "ph": 7.3,
+      "duration_h": 18,
+      "medium": "Mueller-Hinton Broth (MHB)"
+    },
+    "reference_value": 0.5,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "CLSI M45-Ed4 — Vibrio cholerae ATCC 14035",
+    "pubmed_id": "PMID:26149551",
+    "doi": "10.1128/9781683670449",
+    "notes": "Tetracycline MIC QC aralığı: 0.12–1 mg/L. Kolera tedavisinde doksisiklin altın standarttır."
+  },
+  {
+    "id": "bench-024",
+    "bacteria_a": "vcholerae",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "temperature": 37,
+      "ph": 7.3,
+      "duration_h": 18,
+      "medium": "MHB"
+    },
+    "reference_value": 0.06,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "EUCAST MIC Distribution — Vibrio cholerae",
+    "pubmed_id": "PMID:22106302",
+    "doi": "10.1016/j.cmi.2011.12.024",
+    "notes": "Ciprofloxacin MIC. V. cholerae genellikle florokinolonlara duyarlıdır; ancak Asya'da azalmış duyarlılık rapor edilmiştir."
+  },
+  {
+    "id": "bench-025",
+    "bacteria_a": "senterica",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "temperature": 37,
+      "ph": 7.3,
+      "duration_h": 18,
+      "medium": "MHB"
+    },
+    "reference_value": 0.12,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "CLSI M100-Ed34 — S. enterica ser. Typhimurium ATCC 14028",
+    "pubmed_id": "PMID:38170912",
+    "doi": "10.1128/clsi.m100ed34",
+    "notes": "Ciprofloxacin MIC QC aralığı: 0.015–0.12 mg/L. Salmonella için florokinolon S kırılma noktası ≤0.06 mg/L (EUCAST)."
+  },
+  {
+    "id": "bench-026",
+    "bacteria_a": "senterica",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "temperature": 37,
+      "ph": 7.3,
+      "duration_h": 18,
+      "medium": "MHB"
+    },
+    "reference_value": 2.0,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "CLSI M100-Ed34 — S. enterica ser. Typhimurium ATCC 14028",
+    "pubmed_id": "PMID:38170912",
+    "doi": "10.1128/clsi.m100ed34",
+    "notes": "Tetracycline MIC QC aralığı: 1–4 mg/L. Tetrasiklin direnci Salmonella'da yaygındır; tet(A)/tet(B) genleri ile taşınır."
+  },
+  {
+    "id": "bench-027",
+    "bacteria_a": "lmonocytogenes",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "temperature": 37,
+      "ph": 7.3,
+      "duration_h": 20,
+      "medium": "MHB + 5% LHB"
+    },
+    "reference_value": 0.25,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "CLSI M45-Ed4 — L. monocytogenes ATCC 19115",
+    "pubmed_id": "PMID:26149551",
+    "doi": "10.1128/9781683670449",
+    "notes": "Ampicillin MIC QC aralığı: 0.12–1 mg/L. Ampisilin + gentamisin kombinasyonu listeriyoz tedavisinde altın standarttır."
+  },
+  {
+    "id": "bench-028",
+    "bacteria_a": "lmonocytogenes",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "temperature": 37,
+      "ph": 7.3,
+      "duration_h": 20,
+      "medium": "MHB-LHB"
+    },
+    "reference_value": 0.5,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "EUCAST MIC Distribution — L. monocytogenes",
+    "pubmed_id": "PMID:22106302",
+    "doi": "10.1016/j.cmi.2011.12.024",
+    "notes": "Erythromycin MIC. L. monocytogenes makrolidlere duyarlıdır; ancak monoterapide bakteriyostatik olduğu için tercih edilmez."
+  },
+  {
+    "id": "bench-029",
+    "bacteria_a": "nmeningitidis",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "temperature": 37,
+      "ph": 7.3,
+      "duration_h": 20,
+      "medium": "Mueller-Hinton Broth + 5% LHB (MHB-LHB)"
+    },
+    "reference_value": 0.004,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "EUCAST MIC Distribution — N. meningitidis",
+    "pubmed_id": "PMID:22106302",
+    "doi": "10.1016/j.cmi.2011.12.024",
+    "notes": "Ceftriaxone MIC. N. meningitidis 3. nesil sefalosporinlere son derece duyarlıdır; MIC genellikle ≤0.03 mg/L."
+  },
+  {
+    "id": "bench-030",
+    "bacteria_a": "nmeningitidis",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "temperature": 37,
+      "ph": 7.3,
+      "duration_h": 20,
+      "medium": "MHB-LHB"
+    },
+    "reference_value": 0.06,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "EUCAST MIC Distribution — N. meningitidis ATCC 13090",
+    "pubmed_id": "PMID:22106302",
+    "doi": "10.1016/j.cmi.2011.12.024",
+    "notes": "Rifampicin MIC. Rifampisin profilakside kullanılır; rpoB mutasyonu ile direnç hızla gelişir."
+  },
+  {
+    "id": "bench-031",
+    "bacteria_a": "hpylori",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "temperature": 37,
+      "ph": 7.3,
+      "duration_h": 72,
+      "medium": "Mueller-Hinton Agar + 5% sheep blood (MHA-SB)"
+    },
+    "reference_value": 0.06,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "CLSI M24-Ed3 — H. pylori ATCC 43504",
+    "pubmed_id": "PMID:25992828",
+    "doi": "10.1128/9781683670784",
+    "notes": "Clarithromycin MIC QC aralığı: 0.015–0.12 mg/L. H. pylori'de klaritromisin direnci 23S rRNA mutasyonu (A2143G) ile gelişir ve tedavi başarısızlığına yol açar."
+  },
+  {
+    "id": "bench-032",
+    "bacteria_a": "mtb",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "temperature": 37,
+      "ph": 6.8,
+      "duration_h": 168,
+      "medium": "Middlebrook 7H10 Agar (7H10)"
+    },
+    "reference_value": 0.06,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "CLSI M24-Ed3 — M. tuberculosis H37Rv ATCC 27294",
+    "pubmed_id": "PMID:25992828",
+    "doi": "10.1128/9781683670784",
+    "notes": "Rifampicin MIC. M. tuberculosis'te rifampisin direnci rpoB mutasyonu ile gelişir; MIC ≥1 mg/L dirençli kabul edilir. MDR-TB tanımında kritiktir."
+  },
+  {
+    "id": "bench-033",
+    "bacteria_a": "mtb",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "temperature": 37,
+      "ph": 6.8,
+      "duration_h": 168,
+      "medium": "Middlebrook 7H10 Agar"
+    },
+    "reference_value": 0.25,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "CLSI M24-Ed3 QC Ranges — M. tuberculosis H37Rv ATCC 27294",
+    "pubmed_id": "PMID:25992828",
+    "doi": "10.1128/9781683670784",
+    "notes": "Isoniazid MIC QC aralığı: 0.03–0.25 mg/L. INH direnci katG (katalaz-peroksidaz) veya inhA (enoyl-ACP redüktaz) mutasyonları ile gelişir."
+  },
+  {
+    "id": "bench-034",
+    "bacteria_a": "banthracis",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "temperature": 37,
+      "ph": 7.3,
+      "duration_h": 20,
+      "medium": "Mueller-Hinton Broth (MHB)"
+    },
+    "reference_value": 0.06,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "CLSI M100-Ed34 — B. anthracis Sterne 34F2 / CDC 1014",
+    "pubmed_id": "PMID:38170912",
+    "doi": "10.1128/clsi.m100ed34",
+    "notes": "Ciprofloxacin MIC QC aralığı: 0.03–0.12 mg/L. B. anthracis florokinolonlara son derece duyarlıdır; siprofloksasin şarbon tedavisinde ilk basamaktır."
+  },
+  {
+    "id": "bench-035",
+    "bacteria_a": "banthracis",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "temperature": 37,
+      "ph": 7.3,
+      "duration_h": 20,
+      "medium": "MHB"
+    },
+    "reference_value": 0.03,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "EUCAST — B. anthracis (added 2024 v14.0)",
+    "pubmed_id": "PMID:38170912",
+    "doi": "10.1128/clsi.m100ed34",
+    "notes": "Penicillin G MIC. B. anthracis penisiline duyarlıdır; ancak β-laktamaz üretici suşlar için siprofloksasin tercih edilir."
+  },
+  {
+    "id": "bench-036",
+    "bacteria_a": "ypestis",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "temperature": 28,
+      "ph": 7.3,
+      "duration_h": 48,
+      "medium": "Mueller-Hinton Broth (MHB)"
+    },
+    "reference_value": 0.5,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "CLSI M45-Ed4 — Y. pestis",
+    "pubmed_id": "PMID:26149551",
+    "doi": "10.1128/9781683670449",
+    "notes": "Streptomycin MIC QC aralığı: 0.5–4 mg/L. Veba tedavisinde streptomisin tarihsel altın standarttır; günümüzde gentamisin veya siprofloksasin tercih edilir."
+  },
+  {
+    "id": "bench-037",
+    "bacteria_a": "smarcescens",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "temperature": 37,
+      "ph": 7.3,
+      "duration_h": 18,
+      "medium": "MHB"
+    },
+    "reference_value": 2.0,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "CLSI M100-Ed34 — S. marcescens ATCC 43862",
+    "pubmed_id": "PMID:38170912",
+    "doi": "10.1128/clsi.m100ed34",
+    "notes": "Ciprofloxacin MIC QC aralığı: 0.5–4 mg/L. S. marcescens intrinsik olarak ampisilin ve makrolidlere dirençlidir; karbapenemler ve florokinolonlar tercih edilir."
+  },
+  {
+    "id": "bench-038",
+    "bacteria_a": "smarcescens",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "temperature": 37,
+      "ph": 7.3,
+      "duration_h": 18,
+      "medium": "MHB"
+    },
+    "reference_value": 0.5,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "CLSI M100-Ed34 — S. marcescens ATCC 43862",
+    "pubmed_id": "PMID:38170912",
+    "doi": "10.1128/clsi.m100ed34",
+    "notes": "Meropenem MIC QC aralığı: 0.25–2 mg/L. Karbapenemaz (KPC, NDM, IMP) üreten suşlarda MIC >16 mg/L."
+  },
+  {
+    "id": "bench-039",
+    "bacteria_a": "csporogenes",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "temperature": 37,
+      "ph": 7.3,
+      "duration_h": 48,
+      "medium": "Brucella Agar + 5% laked sheep blood + hemin + vitamin K (BRU-LBK)"
+    },
+    "reference_value": 1.0,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "CLSI M11-Ed10 — C. sporogenes ATCC 19404 / C. difficile ATCC 700057",
+    "pubmed_id": "PMID:34731434",
+    "doi": "10.1128/9781683670449",
+    "notes": "Metronidazole MIC QC aralığı: 0.25–4 mg/L. Metronidazol anaerobik enfeksiyonlarda ve C. difficile'de altın standarttır."
+  },
+  {
+    "id": "bench-040",
+    "bacteria_a": "cviolaceum",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "temperature": 37,
+      "ph": 7.3,
+      "duration_h": 18,
+      "medium": "MHB"
+    },
+    "reference_value": 0.5,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "CLSI M45-Ed4 — C. violaceum (literature review)",
+    "pubmed_id": "PMID:26149551",
+    "doi": "10.1128/9781683670449",
+    "notes": "Ciprofloxacin MIC. C. violaceum nadir patojendir; genellikle florokinolonlar, karbapenemler ve TMP-SMX'e duyarlıdır."
+  },
+  {
+    "id": "bench-041",
+    "bacteria_a": "saureus",
+    "bacteria_b": "paeruginosa",
+    "experiment_type": "checkerboard",
+    "condition": {
+      "temperature": 37,
+      "ph": 7.3,
+      "duration_h": 24,
+      "medium": "Mueller-Hinton Broth (MHB)"
+    },
+    "reference_value": 0.31,
+    "unit": "FIC index",
+    "value_type": "fic_index",
+    "reported_by": "Magalhães, A.P. et al. — CF ko-enfeksiyon modeli",
+    "pubmed_id": "PMID:29233894",
+    "doi": "10.3389/fmicb.2017.02652",
+    "notes": "Ceftazidime + Vancomycin kombinasyonu. P. aeruginosa + S. aureus ko-kültüründe sinerjistik etki (FIC=0.31). P. aeruginosa HQNO üretimi S. aureus metabolizmasını değiştirerek antibiyotik duyarlılığını artırır."
+  },
+  {
+    "id": "bench-042",
+    "bacteria_a": "paeruginosa",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "temperature": 37,
+      "ph": 7.3,
+      "duration_h": 20,
+      "medium": "MHB (Ca²⁺ and Mg²⁺ adjusted)"
+    },
+    "reference_value": 2.0,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "CLSI M100-Ed34 — P. aeruginosa ATCC 27853",
+    "pubmed_id": "PMID:38170912",
+    "doi": "10.1128/clsi.m100ed34",
+    "notes": "Levofloxacin MIC QC aralığı: 0.5–4 mg/L (CLSI). EUCAST kırılma noktası S ≤1 mg/L, R >2 mg/L. P. aeruginosa'da florokinolon direnci gyrA/parC mutasyonları ve efflux pompaları ile gelişir."
+  },
+  {
+    "id": "bench-043",
+    "bacteria_a": "ecoli",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "temperature": 37,
+      "ph": 7.3,
+      "duration_h": 18,
+      "medium": "MHB"
+    },
+    "reference_value": 0.25,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "EUCAST MIC Distribution — E. coli ATCC 25922",
+    "pubmed_id": "PMID:22106302",
+    "doi": "10.1016/j.cmi.2011.12.024",
+    "notes": "Levofloxacin MIC. E. coli florokinolonlara son derece duyarlıdır; qnr genleri ve kromozomal mutasyonlar dirence yol açar."
+  },
+  {
+    "id": "bench-044",
+    "bacteria_a": "ecoli",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "temperature": 37,
+      "ph": 7.3,
+      "duration_h": 18,
+      "medium": "MHB"
+    },
+    "reference_value": 0.5,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "EUCAST MIC Distribution — E. coli ATCC 25922",
+    "pubmed_id": "PMID:22106302",
+    "doi": "10.1016/j.cmi.2011.12.024",
+    "notes": "Colistin MIC. Kromozomal mutasyonlar (mgrB, pmrAB) veya plazmid aracılı mcr genleri kolistin direncine neden olur."
+  },
+  {
+    "id": "bench-045",
+    "bacteria_a": "paeruginosa",
+    "bacteria_b": null,
+    "experiment_type": "biofilm-eradication",
+    "condition": {
+      "temperature": 37,
+      "ph": 7.3,
+      "duration_h": 24,
+      "medium": "TSB + biyofilm (MBEC Assay)"
+    },
+    "reference_value": 1024,
+    "unit": "mg/L",
+    "value_type": "mbec",
+    "reported_by": "Hengzhuang, W. et al. — P. aeruginosa PAO1 biyofilm",
+    "pubmed_id": "PMID:21945175",
+    "doi": "10.1128/AAC.05435-11",
+    "notes": "Colistin MBEC. P. aeruginosa biyofilminde kolistin MBEC değeri planktonik MIC'in 500-1000 katıdır. Biyofilm matriksi ve persister hücreler nedeniyle eradikasyon son derece zordur."
+  },
+  {
+    "id": "bench-046",
+    "bacteria_a": "ecoli",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth (MHB)",
+      "dur": 18,
+      "temp": 37
+    },
+    "reference_value": 0.008,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "CLSI M100-Ed34 QC — E. coli ATCC 25922",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Escherichia coli — ciprofloxacin MIC = 0.008 mg/L (S). Kaynak: CLSI M100-Ed34 QC — E. coli ATCC 25922"
+  },
+  {
+    "id": "bench-047",
+    "bacteria_a": "ecoli",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth (MHB)",
+      "dur": 18,
+      "temp": 37
+    },
+    "reference_value": 0.03,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "CLSI M100-Ed34 QC — E. coli ATCC 25922",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Escherichia coli — meropenem MIC = 0.03 mg/L (S). Kaynak: CLSI M100-Ed34 QC — E. coli ATCC 25922"
+  },
+  {
+    "id": "bench-048",
+    "bacteria_a": "ecoli",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth (MHB)",
+      "dur": 18,
+      "temp": 37
+    },
+    "reference_value": 0.125,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "CLSI M100-Ed34 QC — E. coli ATCC 25922",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Escherichia coli — ceftazidime MIC = 0.125 mg/L (S). Kaynak: CLSI M100-Ed34 QC — E. coli ATCC 25922"
+  },
+  {
+    "id": "bench-049",
+    "bacteria_a": "ecoli",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth (MHB)",
+      "dur": 18,
+      "temp": 37
+    },
+    "reference_value": 2,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "CLSI M100-Ed34 QC — E. coli ATCC 25922",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Escherichia coli — piperacillin-tazobactam MIC = 2 mg/L (S). Kaynak: CLSI M100-Ed34 QC — E. coli ATCC 25922"
+  },
+  {
+    "id": "bench-050",
+    "bacteria_a": "ecoli",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth (MHB)",
+      "dur": 18,
+      "temp": 37
+    },
+    "reference_value": 8,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "CLSI M100-Ed34 QC — E. coli ATCC 25922",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Escherichia coli — rifampicin MIC = 8 mg/L (S). Kaynak: CLSI M100-Ed34 QC — E. coli ATCC 25922"
+  },
+  {
+    "id": "bench-051",
+    "bacteria_a": "smarcescens",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth (MHB)",
+      "dur": 18,
+      "temp": 37
+    },
+    "reference_value": 32,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "CLSI M100-E34/EUCAST — S. marcescens",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Serratia marcescens — ampicillin MIC = 32 mg/L (R). Kaynak: CLSI M100-E34/EUCAST — S. marcescens"
+  },
+  {
+    "id": "bench-052",
+    "bacteria_a": "smarcescens",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth (MHB)",
+      "dur": 18,
+      "temp": 37
+    },
+    "reference_value": 0.12,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "CLSI M100-E34/EUCAST — S. marcescens",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Serratia marcescens — ciprofloxacin MIC = 0.12 mg/L (S). Kaynak: CLSI M100-E34/EUCAST — S. marcescens"
+  },
+  {
+    "id": "bench-053",
+    "bacteria_a": "smarcescens",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth (MHB)",
+      "dur": 18,
+      "temp": 37
+    },
+    "reference_value": 1,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "CLSI M100-E34/EUCAST — S. marcescens",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Serratia marcescens — gentamicin MIC = 1 mg/L (S). Kaynak: CLSI M100-E34/EUCAST — S. marcescens"
+  },
+  {
+    "id": "bench-054",
+    "bacteria_a": "smarcescens",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth (MHB)",
+      "dur": 18,
+      "temp": 37
+    },
+    "reference_value": 0.06,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "CLSI M100-E34/EUCAST — S. marcescens",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Serratia marcescens — meropenem MIC = 0.06 mg/L (S). Kaynak: CLSI M100-E34/EUCAST — S. marcescens"
+  },
+  {
+    "id": "bench-055",
+    "bacteria_a": "smarcescens",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth (MHB)",
+      "dur": 18,
+      "temp": 37
+    },
+    "reference_value": 4,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "CLSI M100-E34/EUCAST — S. marcescens",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Serratia marcescens — tetracycline MIC = 4 mg/L (I). Kaynak: CLSI M100-E34/EUCAST — S. marcescens"
+  },
+  {
+    "id": "bench-056",
+    "bacteria_a": "smarcescens",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth (MHB)",
+      "dur": 18,
+      "temp": 37
+    },
+    "reference_value": 0.25,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "CLSI M100-E34/EUCAST — S. marcescens",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Serratia marcescens — ceftazidime MIC = 0.25 mg/L (S). Kaynak: CLSI M100-E34/EUCAST — S. marcescens"
+  },
+  {
+    "id": "bench-057",
+    "bacteria_a": "paeruginosa",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth (MHB)",
+      "dur": 18,
+      "temp": 37
+    },
+    "reference_value": 0.25,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "CLSI M100-Ed34 QC — P. aeruginosa ATCC 27853",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Pseudomonas aeruginosa — ciprofloxacin MIC = 0.25 mg/L (S). Kaynak: CLSI M100-Ed34 QC — P. aeruginosa ATCC 27853"
+  },
+  {
+    "id": "bench-058",
+    "bacteria_a": "paeruginosa",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth (MHB)",
+      "dur": 18,
+      "temp": 37
+    },
+    "reference_value": 1,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "CLSI M100-Ed34 QC — P. aeruginosa ATCC 27853",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Pseudomonas aeruginosa — gentamicin MIC = 1 mg/L (S). Kaynak: CLSI M100-Ed34 QC — P. aeruginosa ATCC 27853"
+  },
+  {
+    "id": "bench-059",
+    "bacteria_a": "paeruginosa",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth (MHB)",
+      "dur": 18,
+      "temp": 37
+    },
+    "reference_value": 4,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "CLSI M100-Ed34 QC — P. aeruginosa ATCC 27853",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Pseudomonas aeruginosa — piperacillin-tazobactam MIC = 4 mg/L (S). Kaynak: CLSI M100-Ed34 QC — P. aeruginosa ATCC 27853"
+  },
+  {
+    "id": "bench-060",
+    "bacteria_a": "mluteus",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth (MHB)",
+      "dur": 18,
+      "temp": 37
+    },
+    "reference_value": 0.5,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "PubMed — M. luteus ATCC 4698",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Micrococcus luteus — ampicillin MIC = 0.5 mg/L (S). Kaynak: PubMed — M. luteus ATCC 4698"
+  },
+  {
+    "id": "bench-061",
+    "bacteria_a": "mluteus",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth (MHB)",
+      "dur": 18,
+      "temp": 37
+    },
+    "reference_value": 1,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "PubMed — M. luteus ATCC 4698",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Micrococcus luteus — ciprofloxacin MIC = 1 mg/L (S). Kaynak: PubMed — M. luteus ATCC 4698"
+  },
+  {
+    "id": "bench-062",
+    "bacteria_a": "mluteus",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth (MHB)",
+      "dur": 18,
+      "temp": 37
+    },
+    "reference_value": 0.25,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "PubMed — M. luteus ATCC 4698",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Micrococcus luteus — erythromycin MIC = 0.25 mg/L (S). Kaynak: PubMed — M. luteus ATCC 4698"
+  },
+  {
+    "id": "bench-063",
+    "bacteria_a": "saureus",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth (MHB)",
+      "dur": 18,
+      "temp": 37
+    },
+    "reference_value": 8,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "CLSI M100-Ed34 QC — S. aureus ATCC 29213",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Staphylococcus aureus — ceftazidime MIC = 8 mg/L (I). Kaynak: CLSI M100-Ed34 QC — S. aureus ATCC 29213"
+  },
+  {
+    "id": "bench-064",
+    "bacteria_a": "saureus",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth (MHB)",
+      "dur": 18,
+      "temp": 37
+    },
+    "reference_value": 2,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "CLSI M100-Ed34 QC — S. aureus ATCC 29213",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Staphylococcus aureus — piperacillin-tazobactam MIC = 2 mg/L (S). Kaynak: CLSI M100-Ed34 QC — S. aureus ATCC 29213"
+  },
+  {
+    "id": "bench-065",
+    "bacteria_a": "saureus",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth (MHB)",
+      "dur": 18,
+      "temp": 37
+    },
+    "reference_value": 0.008,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "CLSI M100-Ed34 QC — S. aureus ATCC 29213",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Staphylococcus aureus — rifampicin MIC = 0.008 mg/L (S). Kaynak: CLSI M100-Ed34 QC — S. aureus ATCC 29213"
+  },
+  {
+    "id": "bench-066",
+    "bacteria_a": "bsubtilis",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth (MHB)",
+      "dur": 18,
+      "temp": 37
+    },
+    "reference_value": 0.25,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "EFSA/PMID 36557747 — B. subtilis",
+    "pubmed_id": "PMID:36557747",
+    "doi": null,
+    "notes": "Bacillus subtilis — ampicillin MIC = 0.25 mg/L (S). Kaynak: EFSA/PMID 36557747 — B. subtilis"
+  },
+  {
+    "id": "bench-067",
+    "bacteria_a": "bsubtilis",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth (MHB)",
+      "dur": 18,
+      "temp": 37
+    },
+    "reference_value": 0.12,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "EFSA/PMID 36557747 — B. subtilis",
+    "pubmed_id": "PMID:36557747",
+    "doi": null,
+    "notes": "Bacillus subtilis — ciprofloxacin MIC = 0.12 mg/L (S). Kaynak: EFSA/PMID 36557747 — B. subtilis"
+  },
+  {
+    "id": "bench-068",
+    "bacteria_a": "bsubtilis",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth (MHB)",
+      "dur": 18,
+      "temp": 37
+    },
+    "reference_value": 0.5,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "EFSA/PMID 36557747 — B. subtilis",
+    "pubmed_id": "PMID:36557747",
+    "doi": null,
+    "notes": "Bacillus subtilis — gentamicin MIC = 0.5 mg/L (S). Kaynak: EFSA/PMID 36557747 — B. subtilis"
+  },
+  {
+    "id": "bench-069",
+    "bacteria_a": "bsubtilis",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth (MHB)",
+      "dur": 18,
+      "temp": 37
+    },
+    "reference_value": 0.06,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "EFSA/PMID 36557747 — B. subtilis",
+    "pubmed_id": "PMID:36557747",
+    "doi": null,
+    "notes": "Bacillus subtilis — meropenem MIC = 0.06 mg/L (S). Kaynak: EFSA/PMID 36557747 — B. subtilis"
+  },
+  {
+    "id": "bench-070",
+    "bacteria_a": "vcholerae",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth (MHB)",
+      "dur": 18,
+      "temp": 37
+    },
+    "reference_value": 4,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "CLSI M45-Ed3 — V. cholerae",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Vibrio cholerae — ampicillin MIC = 4 mg/L (S). Kaynak: CLSI M45-Ed3 — V. cholerae"
+  },
+  {
+    "id": "bench-071",
+    "bacteria_a": "vcholerae",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth (MHB)",
+      "dur": 18,
+      "temp": 37
+    },
+    "reference_value": 0.12,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "CLSI M45-Ed3 — V. cholerae",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Vibrio cholerae — ciprofloxacin MIC = 0.12 mg/L (S). Kaynak: CLSI M45-Ed3 — V. cholerae"
+  },
+  {
+    "id": "bench-072",
+    "bacteria_a": "vcholerae",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth (MHB)",
+      "dur": 18,
+      "temp": 37
+    },
+    "reference_value": 2,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "CLSI M45-Ed3 — V. cholerae",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Vibrio cholerae — gentamicin MIC = 2 mg/L (S). Kaynak: CLSI M45-Ed3 — V. cholerae"
+  },
+  {
+    "id": "bench-073",
+    "bacteria_a": "vcholerae",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth (MHB)",
+      "dur": 18,
+      "temp": 37
+    },
+    "reference_value": 0.25,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "CLSI M45-Ed3 — V. cholerae",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Vibrio cholerae — levofloxacin MIC = 0.25 mg/L (S). Kaynak: CLSI M45-Ed3 — V. cholerae"
+  },
+  {
+    "id": "bench-074",
+    "bacteria_a": "senterica",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth (MHB)",
+      "dur": 18,
+      "temp": 37
+    },
+    "reference_value": 0.03,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "CLSI M100-Ed34 — Salmonella spp.",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Salmonella enterica — ciprofloxacin MIC = 0.03 mg/L (S). Kaynak: CLSI M100-Ed34 — Salmonella spp."
+  },
+  {
+    "id": "bench-075",
+    "bacteria_a": "senterica",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth (MHB)",
+      "dur": 18,
+      "temp": 37
+    },
+    "reference_value": 0.5,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "CLSI M100-Ed34 — Salmonella spp.",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Salmonella enterica — gentamicin MIC = 0.5 mg/L (S). Kaynak: CLSI M100-Ed34 — Salmonella spp."
+  },
+  {
+    "id": "bench-076",
+    "bacteria_a": "senterica",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth (MHB)",
+      "dur": 18,
+      "temp": 37
+    },
+    "reference_value": 0.06,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "CLSI M100-Ed34 — Salmonella spp.",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Salmonella enterica — meropenem MIC = 0.06 mg/L (S). Kaynak: CLSI M100-Ed34 — Salmonella spp."
+  },
+  {
+    "id": "bench-077",
+    "bacteria_a": "senterica",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth (MHB)",
+      "dur": 18,
+      "temp": 37
+    },
+    "reference_value": 0.25,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "CLSI M100-Ed34 — Salmonella spp.",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Salmonella enterica — ceftazidime MIC = 0.25 mg/L (S). Kaynak: CLSI M100-Ed34 — Salmonella spp."
+  },
+  {
+    "id": "bench-078",
+    "bacteria_a": "dradiodurans",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth (MHB)",
+      "dur": 18,
+      "temp": 37
+    },
+    "reference_value": 64,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "PubMed — D. radiodurans R1",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Deinococcus radiodurans — ampicillin MIC = 64 mg/L (R). Kaynak: PubMed — D. radiodurans R1"
+  },
+  {
+    "id": "bench-079",
+    "bacteria_a": "dradiodurans",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth (MHB)",
+      "dur": 18,
+      "temp": 37
+    },
+    "reference_value": 2,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "PubMed — D. radiodurans R1",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Deinococcus radiodurans — ciprofloxacin MIC = 2 mg/L (I). Kaynak: PubMed — D. radiodurans R1"
+  },
+  {
+    "id": "bench-080",
+    "bacteria_a": "dradiodurans",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth (MHB)",
+      "dur": 18,
+      "temp": 37
+    },
+    "reference_value": 8,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "PubMed — D. radiodurans R1",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Deinococcus radiodurans — gentamicin MIC = 8 mg/L (R). Kaynak: PubMed — D. radiodurans R1"
+  },
+  {
+    "id": "bench-081",
+    "bacteria_a": "dradiodurans",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth (MHB)",
+      "dur": 18,
+      "temp": 37
+    },
+    "reference_value": 4,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "PubMed — D. radiodurans R1",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Deinococcus radiodurans — vancomycin MIC = 4 mg/L (I). Kaynak: PubMed — D. radiodurans R1"
+  },
+  {
+    "id": "bench-082",
+    "bacteria_a": "afischeri",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth (MHB)",
+      "dur": 18,
+      "temp": 37
+    },
+    "reference_value": 1,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "PubMed — A. fischeri ES114",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Aliivibrio fischeri — ampicillin MIC = 1 mg/L (S). Kaynak: PubMed — A. fischeri ES114"
+  },
+  {
+    "id": "bench-083",
+    "bacteria_a": "afischeri",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth (MHB)",
+      "dur": 18,
+      "temp": 37
+    },
+    "reference_value": 0.03,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "PubMed — A. fischeri ES114",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Aliivibrio fischeri — ciprofloxacin MIC = 0.03 mg/L (S). Kaynak: PubMed — A. fischeri ES114"
+  },
+  {
+    "id": "bench-084",
+    "bacteria_a": "afischeri",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth (MHB)",
+      "dur": 18,
+      "temp": 37
+    },
+    "reference_value": 0.5,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "PubMed — A. fischeri ES114",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Aliivibrio fischeri — gentamicin MIC = 0.5 mg/L (S). Kaynak: PubMed — A. fischeri ES114"
+  },
+  {
+    "id": "bench-085",
+    "bacteria_a": "afischeri",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth (MHB)",
+      "dur": 18,
+      "temp": 37
+    },
+    "reference_value": 0.06,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "PubMed — A. fischeri ES114",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Aliivibrio fischeri — meropenem MIC = 0.06 mg/L (S). Kaynak: PubMed — A. fischeri ES114"
+  },
+  {
+    "id": "bench-086",
+    "bacteria_a": "cviolaceum",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth (MHB)",
+      "dur": 18,
+      "temp": 37
+    },
+    "reference_value": 2,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "PMID 32939142 — C. violaceum",
+    "pubmed_id": "PMID:32939142",
+    "doi": null,
+    "notes": "Chromobacterium violaceum — gentamicin MIC = 2 mg/L (S). Kaynak: PMID 32939142 — C. violaceum"
+  },
+  {
+    "id": "bench-087",
+    "bacteria_a": "cviolaceum",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth (MHB)",
+      "dur": 18,
+      "temp": 37
+    },
+    "reference_value": 1,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "PMID 32939142 — C. violaceum",
+    "pubmed_id": "PMID:32939142",
+    "doi": null,
+    "notes": "Chromobacterium violaceum — tetracycline MIC = 1 mg/L (S). Kaynak: PMID 32939142 — C. violaceum"
+  },
+  {
+    "id": "bench-088",
+    "bacteria_a": "csporogenes",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Brucella Agar + 5% laked sheep blood + hemin + vitamin K (BRU-LBK)",
+      "dur": 48,
+      "temp": 37
+    },
+    "reference_value": 0.25,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "PubMed — C. sporogenes ATCC 11437",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Clostridium sporogenes — ampicillin MIC = 0.25 mg/L (S). Kaynak: PubMed — C. sporogenes ATCC 11437"
+  },
+  {
+    "id": "bench-089",
+    "bacteria_a": "csporogenes",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Brucella Agar + 5% laked sheep blood + hemin + vitamin K (BRU-LBK)",
+      "dur": 48,
+      "temp": 37
+    },
+    "reference_value": 4,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "PubMed — C. sporogenes ATCC 11437",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Clostridium sporogenes — ciprofloxacin MIC = 4 mg/L (I). Kaynak: PubMed — C. sporogenes ATCC 11437"
+  },
+  {
+    "id": "bench-090",
+    "bacteria_a": "csporogenes",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Brucella Agar + 5% laked sheep blood + hemin + vitamin K (BRU-LBK)",
+      "dur": 48,
+      "temp": 37
+    },
+    "reference_value": 0.5,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "PubMed — C. sporogenes ATCC 11437",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Clostridium sporogenes — meropenem MIC = 0.5 mg/L (S). Kaynak: PubMed — C. sporogenes ATCC 11437"
+  },
+  {
+    "id": "bench-091",
+    "bacteria_a": "mtb",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Middlebrook 7H10 Agar (7H10)",
+      "dur": 168,
+      "temp": 37,
+      "ph": 6.8
+    },
+    "reference_value": 2,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "CLSI M24-Ed3 — M. tuberculosis H37Rv",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Mycobacterium tuberculosis — ciprofloxacin MIC = 2 mg/L (I). Kaynak: CLSI M24-Ed3 — M. tuberculosis H37Rv"
+  },
+  {
+    "id": "bench-092",
+    "bacteria_a": "mtb",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Middlebrook 7H10 Agar (7H10)",
+      "dur": 168,
+      "temp": 37,
+      "ph": 6.8
+    },
+    "reference_value": 4,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "CLSI M24-Ed3 — M. tuberculosis H37Rv",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Mycobacterium tuberculosis — gentamicin MIC = 4 mg/L (I). Kaynak: CLSI M24-Ed3 — M. tuberculosis H37Rv"
+  },
+  {
+    "id": "bench-093",
+    "bacteria_a": "mtb",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Middlebrook 7H10 Agar (7H10)",
+      "dur": 168,
+      "temp": 37,
+      "ph": 6.8
+    },
+    "reference_value": 64,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "CLSI M24 / PMID 25987537 — MTB BlaC confers ceftazidime resistance",
+    "pubmed_id": "PMID:25987537",
+    "doi": null,
+    "notes": "Mycobacterium tuberculosis — ceftazidime MIC = 64 mg/L (R). Kaynak: CLSI M24 / PMID 25987537 — MTB BlaC confers ceftazidime resistance"
+  },
+  {
+    "id": "bench-094",
+    "bacteria_a": "mtb",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Middlebrook 7H10 Agar (7H10)",
+      "dur": 168,
+      "temp": 37,
+      "ph": 6.8
+    },
+    "reference_value": 1,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "CLSI M24-Ed3 — M. tuberculosis H37Rv",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Mycobacterium tuberculosis — levofloxacin MIC = 1 mg/L (S). Kaynak: CLSI M24-Ed3 — M. tuberculosis H37Rv"
+  },
+  {
+    "id": "bench-095",
+    "bacteria_a": "mtb",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Middlebrook 7H10 Agar (7H10)",
+      "dur": 168,
+      "temp": 37,
+      "ph": 6.8
+    },
+    "reference_value": 0.5,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "CLSI M24-Ed3 — M. tuberculosis H37Rv",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Mycobacterium tuberculosis — rifampicin MIC = 0.5 mg/L (S). Kaynak: CLSI M24-Ed3 — M. tuberculosis H37Rv"
+  },
+  {
+    "id": "bench-096",
+    "bacteria_a": "lmonocytogenes",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth (MHB)",
+      "dur": 18,
+      "temp": 37
+    },
+    "reference_value": 1,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "CLSI M45/EUCAST — L. monocytogenes",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Listeria monocytogenes — ciprofloxacin MIC = 1 mg/L (S). Kaynak: CLSI M45/EUCAST — L. monocytogenes"
+  },
+  {
+    "id": "bench-097",
+    "bacteria_a": "lmonocytogenes",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth (MHB)",
+      "dur": 18,
+      "temp": 37
+    },
+    "reference_value": 0.12,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "CLSI M45/EUCAST — L. monocytogenes",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Listeria monocytogenes — meropenem MIC = 0.12 mg/L (S). Kaynak: CLSI M45/EUCAST — L. monocytogenes"
+  },
+  {
+    "id": "bench-098",
+    "bacteria_a": "lacidophilus",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Brucella Agar + 5% laked sheep blood + hemin + vitamin K (BRU-LBK)",
+      "dur": 48,
+      "temp": 37
+    },
+    "reference_value": 0.5,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "EFSA/PMID 29216225 — L. acidophilus",
+    "pubmed_id": "PMID:29216225",
+    "doi": null,
+    "notes": "Lactobacillus acidophilus — ampicillin MIC = 0.5 mg/L (S). Kaynak: EFSA/PMID 29216225 — L. acidophilus"
+  },
+  {
+    "id": "bench-099",
+    "bacteria_a": "lacidophilus",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Brucella Agar + 5% laked sheep blood + hemin + vitamin K (BRU-LBK)",
+      "dur": 48,
+      "temp": 37
+    },
+    "reference_value": 4,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "EFSA/PMID 29216225 — L. acidophilus",
+    "pubmed_id": "PMID:29216225",
+    "doi": null,
+    "notes": "Lactobacillus acidophilus — ciprofloxacin MIC = 4 mg/L (R). Kaynak: EFSA/PMID 29216225 — L. acidophilus"
+  },
+  {
+    "id": "bench-100",
+    "bacteria_a": "lacidophilus",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Brucella Agar + 5% laked sheep blood + hemin + vitamin K (BRU-LBK)",
+      "dur": 48,
+      "temp": 37
+    },
+    "reference_value": 0.12,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "EFSA/PMID 29216225 — L. acidophilus",
+    "pubmed_id": "PMID:29216225",
+    "doi": null,
+    "notes": "Lactobacillus acidophilus — meropenem MIC = 0.12 mg/L (S). Kaynak: EFSA/PMID 29216225 — L. acidophilus"
+  },
+  {
+    "id": "bench-101",
+    "bacteria_a": "lacidophilus",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Brucella Agar + 5% laked sheep blood + hemin + vitamin K (BRU-LBK)",
+      "dur": 48,
+      "temp": 37
+    },
+    "reference_value": 16,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "EFSA FEEDAP / CLSI M45 — Lactobacillus cephalosporin resistance",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Lactobacillus acidophilus — ceftazidime MIC = 16 mg/L (R). Kaynak: EFSA FEEDAP / CLSI M45 — Lactobacillus cephalosporin resistance"
+  },
+  {
+    "id": "bench-102",
+    "bacteria_a": "lacidophilus",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Brucella Agar + 5% laked sheep blood + hemin + vitamin K (BRU-LBK)",
+      "dur": 48,
+      "temp": 37
+    },
+    "reference_value": 0.25,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "EFSA/PMID 29216225 — L. acidophilus",
+    "pubmed_id": "PMID:29216225",
+    "doi": null,
+    "notes": "Lactobacillus acidophilus — erythromycin MIC = 0.25 mg/L (S). Kaynak: EFSA/PMID 29216225 — L. acidophilus"
+  },
+  {
+    "id": "bench-103",
+    "bacteria_a": "spneumoniae",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth + 5% lysed horse blood (MHB-LHB)",
+      "dur": 20,
+      "temp": 37
+    },
+    "reference_value": 0.06,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "CLSI M100-Ed34 QC — S. pneumoniae ATCC 49619",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Streptococcus pneumoniae — ampicillin MIC = 0.06 mg/L (S). Kaynak: CLSI M100-Ed34 QC — S. pneumoniae ATCC 49619"
+  },
+  {
+    "id": "bench-104",
+    "bacteria_a": "spneumoniae",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth + 5% lysed horse blood (MHB-LHB)",
+      "dur": 20,
+      "temp": 37
+    },
+    "reference_value": 1,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "CLSI M100-Ed34 QC — S. pneumoniae ATCC 49619",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Streptococcus pneumoniae — ciprofloxacin MIC = 1 mg/L (S). Kaynak: CLSI M100-Ed34 QC — S. pneumoniae ATCC 49619"
+  },
+  {
+    "id": "bench-105",
+    "bacteria_a": "spneumoniae",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth + 5% lysed horse blood (MHB-LHB)",
+      "dur": 20,
+      "temp": 37
+    },
+    "reference_value": 8,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "CLSI M100 — ceftazidime not recommended for S. pneumoniae (poor activity)",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Streptococcus pneumoniae — ceftazidime MIC = 8 mg/L (R). Kaynak: CLSI M100 — ceftazidime not recommended for S. pneumoniae (poor activity)"
+  },
+  {
+    "id": "bench-106",
+    "bacteria_a": "spneumoniae",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth + 5% lysed horse blood (MHB-LHB)",
+      "dur": 20,
+      "temp": 37
+    },
+    "reference_value": 0.5,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "CLSI M100-Ed34 QC — S. pneumoniae ATCC 49619",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Streptococcus pneumoniae — levofloxacin MIC = 0.5 mg/L (S). Kaynak: CLSI M100-Ed34 QC — S. pneumoniae ATCC 49619"
+  },
+  {
+    "id": "bench-107",
+    "bacteria_a": "spneumoniae",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth + 5% lysed horse blood (MHB-LHB)",
+      "dur": 20,
+      "temp": 37
+    },
+    "reference_value": 0.03,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "CLSI M100-Ed34 QC — S. pneumoniae ATCC 49619",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Streptococcus pneumoniae — erythromycin MIC = 0.03 mg/L (S). Kaynak: CLSI M100-Ed34 QC — S. pneumoniae ATCC 49619"
+  },
+  {
+    "id": "bench-108",
+    "bacteria_a": "hpylori",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Agar + 5% sheep blood (MHA-SB)",
+      "dur": 72,
+      "temp": 37
+    },
+    "reference_value": 0.03,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "EUCAST v14 — H. pylori ECOFF/breakpoints",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Helicobacter pylori — ampicillin MIC = 0.03 mg/L (S). Kaynak: EUCAST v14 — H. pylori ECOFF/breakpoints"
+  },
+  {
+    "id": "bench-109",
+    "bacteria_a": "hpylori",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Agar + 5% sheep blood (MHA-SB)",
+      "dur": 72,
+      "temp": 37
+    },
+    "reference_value": 0.5,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "EUCAST v14 — H. pylori ECOFF/breakpoints",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Helicobacter pylori — ciprofloxacin MIC = 0.5 mg/L (S). Kaynak: EUCAST v14 — H. pylori ECOFF/breakpoints"
+  },
+  {
+    "id": "bench-110",
+    "bacteria_a": "hpylori",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Agar + 5% sheep blood (MHA-SB)",
+      "dur": 72,
+      "temp": 37
+    },
+    "reference_value": 0.12,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "EUCAST v14 — H. pylori ECOFF/breakpoints",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Helicobacter pylori — meropenem MIC = 0.12 mg/L (S). Kaynak: EUCAST v14 — H. pylori ECOFF/breakpoints"
+  },
+  {
+    "id": "bench-111",
+    "bacteria_a": "hpylori",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Agar + 5% sheep blood (MHA-SB)",
+      "dur": 72,
+      "temp": 37
+    },
+    "reference_value": 1,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "EUCAST v14 — H. pylori ECOFF/breakpoints",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Helicobacter pylori — rifampicin MIC = 1 mg/L (I). Kaynak: EUCAST v14 — H. pylori ECOFF/breakpoints"
+  },
+  {
+    "id": "bench-112",
+    "bacteria_a": "taquaticus",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth (MHB)",
+      "dur": 18,
+      "temp": 37
+    },
+    "reference_value": 8,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "PubMed — T. aquaticus/T. thermophilus",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Thermus aquaticus — ampicillin MIC = 8 mg/L (R). Kaynak: PubMed — T. aquaticus/T. thermophilus"
+  },
+  {
+    "id": "bench-113",
+    "bacteria_a": "taquaticus",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth (MHB)",
+      "dur": 18,
+      "temp": 37
+    },
+    "reference_value": 2,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "PubMed — T. aquaticus/T. thermophilus",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Thermus aquaticus — ciprofloxacin MIC = 2 mg/L (I). Kaynak: PubMed — T. aquaticus/T. thermophilus"
+  },
+  {
+    "id": "bench-114",
+    "bacteria_a": "taquaticus",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth (MHB)",
+      "dur": 18,
+      "temp": 37
+    },
+    "reference_value": 4,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "PubMed — T. aquaticus/T. thermophilus",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Thermus aquaticus — gentamicin MIC = 4 mg/L (I). Kaynak: PubMed — T. aquaticus/T. thermophilus"
+  },
+  {
+    "id": "bench-115",
+    "bacteria_a": "hsalinarum",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth (MHB)",
+      "dur": 18,
+      "temp": 37
+    },
+    "reference_value": 4,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "PubMed — H. salinarum NRC-1",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Halobacterium salinarum — ampicillin MIC = 4 mg/L (I). Kaynak: PubMed — H. salinarum NRC-1"
+  },
+  {
+    "id": "bench-116",
+    "bacteria_a": "hsalinarum",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth (MHB)",
+      "dur": 18,
+      "temp": 37
+    },
+    "reference_value": 1,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "PubMed — H. salinarum NRC-1",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Halobacterium salinarum — ciprofloxacin MIC = 1 mg/L (S). Kaynak: PubMed — H. salinarum NRC-1"
+  },
+  {
+    "id": "bench-117",
+    "bacteria_a": "hsalinarum",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth (MHB)",
+      "dur": 18,
+      "temp": 37
+    },
+    "reference_value": 16,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "PubMed — H. salinarum NRC-1",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Halobacterium salinarum — gentamicin MIC = 16 mg/L (R). Kaynak: PubMed — H. salinarum NRC-1"
+  },
+  {
+    "id": "bench-118",
+    "bacteria_a": "hsalinarum",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth (MHB)",
+      "dur": 18,
+      "temp": 37
+    },
+    "reference_value": 2,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "PubMed — H. salinarum NRC-1",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Halobacterium salinarum — tetracycline MIC = 2 mg/L (I). Kaynak: PubMed — H. salinarum NRC-1"
+  },
+  {
+    "id": "bench-119",
+    "bacteria_a": "banthracis",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth (MHB)",
+      "dur": 18,
+      "temp": 37
+    },
+    "reference_value": 0.12,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "CLSI M45-Ed3/EUCAST v14 — B. anthracis",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Bacillus anthracis — ampicillin MIC = 0.12 mg/L (S). Kaynak: CLSI M45-Ed3/EUCAST v14 — B. anthracis"
+  },
+  {
+    "id": "bench-120",
+    "bacteria_a": "banthracis",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth (MHB)",
+      "dur": 18,
+      "temp": 37
+    },
+    "reference_value": 0.5,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "CLSI M45-Ed3/EUCAST v14 — B. anthracis",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Bacillus anthracis — gentamicin MIC = 0.5 mg/L (S). Kaynak: CLSI M45-Ed3/EUCAST v14 — B. anthracis"
+  },
+  {
+    "id": "bench-121",
+    "bacteria_a": "banthracis",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth (MHB)",
+      "dur": 18,
+      "temp": 37
+    },
+    "reference_value": 2,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "CLSI M45-Ed3 — B. anthracis ceftazidime susceptibility",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Bacillus anthracis — ceftazidime MIC = 2 mg/L (S). Kaynak: CLSI M45-Ed3 — B. anthracis ceftazidime susceptibility"
+  },
+  {
+    "id": "bench-122",
+    "bacteria_a": "banthracis",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth (MHB)",
+      "dur": 18,
+      "temp": 37
+    },
+    "reference_value": 0.25,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "CLSI M45-Ed3/EUCAST v14 — B. anthracis",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Bacillus anthracis — levofloxacin MIC = 0.25 mg/L (S). Kaynak: CLSI M45-Ed3/EUCAST v14 — B. anthracis"
+  },
+  {
+    "id": "bench-123",
+    "bacteria_a": "ypestis",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth (MHB)",
+      "dur": 18,
+      "temp": 37
+    },
+    "reference_value": 0.03,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "CLSI M45-Ed3 — Y. pestis",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Yersinia pestis — ciprofloxacin MIC = 0.03 mg/L (S). Kaynak: CLSI M45-Ed3 — Y. pestis"
+  },
+  {
+    "id": "bench-124",
+    "bacteria_a": "ypestis",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth (MHB)",
+      "dur": 18,
+      "temp": 37
+    },
+    "reference_value": 0.06,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "CLSI M45-Ed3 — Y. pestis",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Yersinia pestis — meropenem MIC = 0.06 mg/L (S). Kaynak: CLSI M45-Ed3 — Y. pestis"
+  },
+  {
+    "id": "bench-125",
+    "bacteria_a": "ypestis",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth (MHB)",
+      "dur": 18,
+      "temp": 37
+    },
+    "reference_value": 0.12,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "CLSI M45-Ed3 — Y. pestis",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Yersinia pestis — levofloxacin MIC = 0.12 mg/L (S). Kaynak: CLSI M45-Ed3 — Y. pestis"
+  },
+  {
+    "id": "bench-126",
+    "bacteria_a": "nmeningitidis",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth + 5% LHB (MHB-LHB)",
+      "dur": 20,
+      "temp": 37
+    },
+    "reference_value": 0.03,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "CLSI M45/EUCAST v14 — N. meningitidis",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Neisseria meningitidis — ampicillin MIC = 0.03 mg/L (S). Kaynak: CLSI M45/EUCAST v14 — N. meningitidis"
+  },
+  {
+    "id": "bench-127",
+    "bacteria_a": "rrubrum",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth (MHB)",
+      "dur": 18,
+      "temp": 37
+    },
+    "reference_value": 0.25,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "PubMed — R. rubrum ATCC 11170",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Rhodospirillum rubrum — ciprofloxacin MIC = 0.25 mg/L (S). Kaynak: PubMed — R. rubrum ATCC 11170"
+  },
+  {
+    "id": "bench-128",
+    "bacteria_a": "rrubrum",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth (MHB)",
+      "dur": 18,
+      "temp": 37
+    },
+    "reference_value": 1,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "PubMed — R. rubrum ATCC 11170",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Rhodospirillum rubrum — gentamicin MIC = 1 mg/L (S). Kaynak: PubMed — R. rubrum ATCC 11170"
+  },
+  {
+    "id": "bench-129",
+    "bacteria_a": "rrubrum",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth (MHB)",
+      "dur": 18,
+      "temp": 37
+    },
+    "reference_value": 0.5,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "PubMed — R. rubrum ATCC 11170",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Rhodospirillum rubrum — tetracycline MIC = 0.5 mg/L (S). Kaynak: PubMed — R. rubrum ATCC 11170"
+  },
+  {
+    "id": "bench-130",
+    "bacteria_a": "bbifidum",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Brucella Agar + 5% laked sheep blood + hemin + vitamin K (BRU-LBK)",
+      "dur": 48,
+      "temp": 37
+    },
+    "reference_value": 0.5,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "EFSA — B. bifidum probiotic",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Bifidobacterium bifidum — ampicillin MIC = 0.5 mg/L (S). Kaynak: EFSA — B. bifidum probiotic"
+  },
+  {
+    "id": "bench-131",
+    "bacteria_a": "bbifidum",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Brucella Agar + 5% laked sheep blood + hemin + vitamin K (BRU-LBK)",
+      "dur": 48,
+      "temp": 37
+    },
+    "reference_value": 8,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "EFSA — B. bifidum probiotic",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Bifidobacterium bifidum — ciprofloxacin MIC = 8 mg/L (R). Kaynak: EFSA — B. bifidum probiotic"
+  },
+  {
+    "id": "bench-132",
+    "bacteria_a": "scoelicolor",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth (MHB)",
+      "dur": 18,
+      "temp": 37
+    },
+    "reference_value": 2,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "PubMed — S. coelicolor A3(2)",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Streptomyces coelicolor — ampicillin MIC = 2 mg/L (S). Kaynak: PubMed — S. coelicolor A3(2)"
+  },
+  {
+    "id": "bench-133",
+    "bacteria_a": "scoelicolor",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth (MHB)",
+      "dur": 18,
+      "temp": 37
+    },
+    "reference_value": 1,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "PubMed — S. coelicolor A3(2)",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Streptomyces coelicolor — gentamicin MIC = 1 mg/L (S). Kaynak: PubMed — S. coelicolor A3(2)"
+  },
+  {
+    "id": "bench-134",
+    "bacteria_a": "scoelicolor",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth (MHB)",
+      "dur": 18,
+      "temp": 37
+    },
+    "reference_value": 4,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "PubMed — S. coelicolor A3(2)",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Streptomyces coelicolor — tetracycline MIC = 4 mg/L (I). Kaynak: PubMed — S. coelicolor A3(2)"
+  },
+  {
+    "id": "bench-135",
+    "bacteria_a": "scoelicolor",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth (MHB)",
+      "dur": 18,
+      "temp": 37
+    },
+    "reference_value": 0.5,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "PubMed — S. coelicolor A3(2)",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Streptomyces coelicolor — erythromycin MIC = 0.5 mg/L (S). Kaynak: PubMed — S. coelicolor A3(2)"
+  },
+  {
+    "id": "bench-136",
+    "bacteria_a": "atumefaciens",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth (MHB)",
+      "dur": 18,
+      "temp": 37
+    },
+    "reference_value": 1,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "PubMed — A. tumefaciens C58",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Agrobacterium tumefaciens — ampicillin MIC = 1 mg/L (S). Kaynak: PubMed — A. tumefaciens C58"
+  },
+  {
+    "id": "bench-137",
+    "bacteria_a": "atumefaciens",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth (MHB)",
+      "dur": 18,
+      "temp": 37
+    },
+    "reference_value": 0.12,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "PubMed — A. tumefaciens C58",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Agrobacterium tumefaciens — ciprofloxacin MIC = 0.12 mg/L (S). Kaynak: PubMed — A. tumefaciens C58"
+  },
+  {
+    "id": "bench-138",
+    "bacteria_a": "atumefaciens",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth (MHB)",
+      "dur": 18,
+      "temp": 37
+    },
+    "reference_value": 0.5,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "PubMed — A. tumefaciens C58",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Agrobacterium tumefaciens — gentamicin MIC = 0.5 mg/L (S). Kaynak: PubMed — A. tumefaciens C58"
+  },
+  {
+    "id": "bench-139",
+    "bacteria_a": "atumefaciens",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth (MHB)",
+      "dur": 18,
+      "temp": 37
+    },
+    "reference_value": 8,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "PubMed — A. tumefaciens C58",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Agrobacterium tumefaciens — erythromycin MIC = 8 mg/L (R). Kaynak: PubMed — A. tumefaciens C58"
+  },
+  {
+    "id": "bench-140",
+    "bacteria_a": "soneidensis",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth (MHB)",
+      "dur": 18,
+      "temp": 37
+    },
+    "reference_value": 2,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "PubMed — S. oneidensis MR-1",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Shewanella oneidensis — ampicillin MIC = 2 mg/L (S). Kaynak: PubMed — S. oneidensis MR-1"
+  },
+  {
+    "id": "bench-141",
+    "bacteria_a": "soneidensis",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth (MHB)",
+      "dur": 18,
+      "temp": 37
+    },
+    "reference_value": 0.03,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "PubMed — S. oneidensis MR-1",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Shewanella oneidensis — ciprofloxacin MIC = 0.03 mg/L (S). Kaynak: PubMed — S. oneidensis MR-1"
+  },
+  {
+    "id": "bench-142",
+    "bacteria_a": "soneidensis",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth (MHB)",
+      "dur": 18,
+      "temp": 37
+    },
+    "reference_value": 1,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "PubMed — S. oneidensis MR-1",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Shewanella oneidensis — gentamicin MIC = 1 mg/L (S). Kaynak: PubMed — S. oneidensis MR-1"
+  },
+  {
+    "id": "bench-143",
+    "bacteria_a": "soneidensis",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth (MHB)",
+      "dur": 18,
+      "temp": 37
+    },
+    "reference_value": 0.25,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "PubMed — S. oneidensis MR-1",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Shewanella oneidensis — meropenem MIC = 0.25 mg/L (S). Kaynak: PubMed — S. oneidensis MR-1"
+  },
+  {
+    "id": "bench-144",
+    "bacteria_a": "soneidensis",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth (MHB)",
+      "dur": 18,
+      "temp": 37
+    },
+    "reference_value": 0.5,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "PubMed — S. oneidensis MR-1",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Shewanella oneidensis — tetracycline MIC = 0.5 mg/L (S). Kaynak: PubMed — S. oneidensis MR-1"
+  },
+  {
+    "id": "bench-145",
+    "bacteria_a": "soneidensis",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth (MHB)",
+      "dur": 18,
+      "temp": 37
+    },
+    "reference_value": 0.12,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "PubMed — S. oneidensis MR-1",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Shewanella oneidensis — levofloxacin MIC = 0.12 mg/L (S). Kaynak: PubMed — S. oneidensis MR-1"
+  },
+  {
+    "id": "bench-146",
+    "bacteria_a": "psyringae",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth (MHB)",
+      "dur": 18,
+      "temp": 37
+    },
+    "reference_value": 8,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "PubMed — P. syringae DC3000",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Pseudomonas syringae — ampicillin MIC = 8 mg/L (R). Kaynak: PubMed — P. syringae DC3000"
+  },
+  {
+    "id": "bench-147",
+    "bacteria_a": "psyringae",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth (MHB)",
+      "dur": 18,
+      "temp": 37
+    },
+    "reference_value": 0.12,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "PubMed — P. syringae DC3000",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Pseudomonas syringae — ciprofloxacin MIC = 0.12 mg/L (S). Kaynak: PubMed — P. syringae DC3000"
+  },
+  {
+    "id": "bench-148",
+    "bacteria_a": "psyringae",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth (MHB)",
+      "dur": 18,
+      "temp": 37
+    },
+    "reference_value": 2,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "PubMed — P. syringae DC3000",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Pseudomonas syringae — gentamicin MIC = 2 mg/L (S). Kaynak: PubMed — P. syringae DC3000"
+  },
+  {
+    "id": "bench-149",
+    "bacteria_a": "psyringae",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth (MHB)",
+      "dur": 18,
+      "temp": 37
+    },
+    "reference_value": 0.25,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "PubMed — P. syringae DC3000",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Pseudomonas syringae — meropenem MIC = 0.25 mg/L (S). Kaynak: PubMed — P. syringae DC3000"
+  },
+  {
+    "id": "bench-150",
+    "bacteria_a": "psyringae",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth (MHB)",
+      "dur": 18,
+      "temp": 37
+    },
+    "reference_value": 0.5,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "PubMed — P. syringae DC3000",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Pseudomonas syringae — tetracycline MIC = 0.5 mg/L (S). Kaynak: PubMed — P. syringae DC3000"
+  },
+  {
+    "id": "bench-151",
+    "bacteria_a": "llactis",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth (MHB)",
+      "dur": 18,
+      "temp": 37
+    },
+    "reference_value": 0.5,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "EFSA/PubMed — L. lactis MG1363",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Lactococcus lactis — ampicillin MIC = 0.5 mg/L (S). Kaynak: EFSA/PubMed — L. lactis MG1363"
+  },
+  {
+    "id": "bench-152",
+    "bacteria_a": "llactis",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth (MHB)",
+      "dur": 18,
+      "temp": 37
+    },
+    "reference_value": 2,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "EFSA/PubMed — L. lactis MG1363",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Lactococcus lactis — ciprofloxacin MIC = 2 mg/L (I). Kaynak: EFSA/PubMed — L. lactis MG1363"
+  },
+  {
+    "id": "bench-153",
+    "bacteria_a": "llactis",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth (MHB)",
+      "dur": 18,
+      "temp": 37
+    },
+    "reference_value": 4,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "EFSA/PubMed — L. lactis MG1363",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Lactococcus lactis — gentamicin MIC = 4 mg/L (I). Kaynak: EFSA/PubMed — L. lactis MG1363"
+  },
+  {
+    "id": "bench-154",
+    "bacteria_a": "llactis",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth (MHB)",
+      "dur": 18,
+      "temp": 37
+    },
+    "reference_value": 1,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "EFSA/PubMed — L. lactis MG1363",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Lactococcus lactis — meropenem MIC = 1 mg/L (S). Kaynak: EFSA/PubMed — L. lactis MG1363"
+  },
+  {
+    "id": "bench-155",
+    "bacteria_a": "llactis",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth (MHB)",
+      "dur": 18,
+      "temp": 37
+    },
+    "reference_value": 64,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "EFSA/PubMed — L. lactis MG1363",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Lactococcus lactis — vancomycin MIC = 64 mg/L (R). Kaynak: EFSA/PubMed — L. lactis MG1363"
+  },
+  {
+    "id": "bench-156",
+    "bacteria_a": "llactis",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth (MHB)",
+      "dur": 18,
+      "temp": 37
+    },
+    "reference_value": 0.25,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "EFSA/PubMed — L. lactis MG1363",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Lactococcus lactis — erythromycin MIC = 0.25 mg/L (S). Kaynak: EFSA/PubMed — L. lactis MG1363"
+  },
+  {
+    "id": "bench-157",
+    "bacteria_a": "cdiphtheriae",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth (MHB)",
+      "dur": 18,
+      "temp": 37
+    },
+    "reference_value": 0.12,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "EUCAST v14 — C. diphtheriae",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Corynebacterium diphtheriae — ampicillin MIC = 0.12 mg/L (S). Kaynak: EUCAST v14 — C. diphtheriae"
+  },
+  {
+    "id": "bench-158",
+    "bacteria_a": "cdiphtheriae",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth (MHB)",
+      "dur": 18,
+      "temp": 37
+    },
+    "reference_value": 0.25,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "EUCAST v14 — C. diphtheriae",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Corynebacterium diphtheriae — ciprofloxacin MIC = 0.25 mg/L (S). Kaynak: EUCAST v14 — C. diphtheriae"
+  },
+  {
+    "id": "bench-159",
+    "bacteria_a": "cdiphtheriae",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth (MHB)",
+      "dur": 18,
+      "temp": 37
+    },
+    "reference_value": 2,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "EUCAST v14 — C. diphtheriae",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Corynebacterium diphtheriae — gentamicin MIC = 2 mg/L (S). Kaynak: EUCAST v14 — C. diphtheriae"
+  },
+  {
+    "id": "bench-160",
+    "bacteria_a": "cdiphtheriae",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth (MHB)",
+      "dur": 18,
+      "temp": 37
+    },
+    "reference_value": 0.5,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "EUCAST v14 — C. diphtheriae",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Corynebacterium diphtheriae — vancomycin MIC = 0.5 mg/L (S). Kaynak: EUCAST v14 — C. diphtheriae"
+  },
+  {
+    "id": "bench-161",
+    "bacteria_a": "cdiphtheriae",
+    "bacteria_b": null,
+    "experiment_type": "mic",
+    "condition": {
+      "medium": "Mueller-Hinton Broth (MHB)",
+      "dur": 18,
+      "temp": 37
+    },
+    "reference_value": 0.03,
+    "unit": "mg/L",
+    "value_type": "mic",
+    "reported_by": "EUCAST v14 — C. diphtheriae",
+    "pubmed_id": null,
+    "doi": null,
+    "notes": "Corynebacterium diphtheriae — erythromycin MIC = 0.03 mg/L (S). Kaynak: EUCAST v14 — C. diphtheriae"
+  }
+]

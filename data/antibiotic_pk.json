@@ -1,0 +1,766 @@
+[
+  {
+    "id": "ampicillin",
+    "class": "beta-laktam (aminopenisilin)",
+    "molecular_weight_gmol": 349.4,
+    "cmax_mgL": 40.0,
+    "t_half_h": 1.2,
+    "volume_distribution_Lkg": 0.28,
+    "protein_binding_pct": 20,
+    "bioavailability_pct": 45,
+    "tissue_penetration": {
+      "skin-wound": 0.55,
+      "burn-wound": 0.3,
+      "chronic-wound": 0.2,
+      "lung": 0.4,
+      "gut": 0.45,
+      "urinary": 0.85,
+      "bloodstream": 1.0,
+      "bone": 0.1
+    },
+    "hill_coefficient_n": 1.0,
+    "post_antibiotic_effect_h": 1.5,
+    "concentration_dependent": false,
+    "references": [
+      "PMID:6337816",
+      "PMID:3307546",
+      "Goodman & Gilman's 14th ed. Ch.57"
+    ],
+    "diffusion_coefficient": {
+      "skin-wound": 3.5,
+      "burn-wound": 8.0,
+      "chronic-wound": 2.5
+    },
+    "ec50_factor": 2.0,
+    "ec50_derived": 10.0,
+    "mbc_mic_ratio": 2,
+    "mbc_derived_mgL": 8.0,
+    "toxicity": {
+      "nephrotoxicity": 0,
+      "hepatotoxicity": 0,
+      "neurotoxicity": 1,
+      "ototoxicity": 0
+    },
+    "fic_synergy": [
+      {
+        "with_class": "aminoglikozid",
+        "type": "aditif"
+      },
+      {
+        "with_class": "makrolid",
+        "type": "antagonizm"
+      }
+    ],
+    "routes_of_administration": {
+      "topical": false,
+      "oral": true,
+      "iv": true,
+      "inhaled": false,
+      "im": true
+    },
+    "primary_route": "iv",
+    "bioavailability_by_route": {
+      "oral": 0.45,
+      "iv": 1.0,
+      "im": 0.9
+    }
+  },
+  {
+    "id": "ciprofloxacin",
+    "class": "florokinolon (2. nesil)",
+    "molecular_weight_gmol": 331.3,
+    "cmax_mgL": 4.3,
+    "t_half_h": 4.0,
+    "volume_distribution_Lkg": 2.5,
+    "protein_binding_pct": 30,
+    "bioavailability_pct": 75,
+    "tissue_penetration": {
+      "skin-wound": 0.85,
+      "burn-wound": 0.6,
+      "chronic-wound": 0.55,
+      "lung": 0.9,
+      "gut": 0.75,
+      "urinary": 1.2,
+      "bloodstream": 1.0,
+      "bone": 0.55
+    },
+    "hill_coefficient_n": 1.5,
+    "post_antibiotic_effect_h": 3.0,
+    "concentration_dependent": true,
+    "references": [
+      "PMID:3032090",
+      "PMID:9210859",
+      "Katzung Basic & Clinical Pharmacology 15th ed."
+    ],
+    "diffusion_coefficient": {
+      "skin-wound": 3.5,
+      "burn-wound": 8.0,
+      "chronic-wound": 2.5
+    },
+    "ec50_factor": 1.0,
+    "ec50_derived": 8.6,
+    "mbc_mic_ratio": 2,
+    "mbc_derived_mgL": 1.0,
+    "toxicity": {
+      "nephrotoxicity": 1,
+      "hepatotoxicity": 1,
+      "neurotoxicity": 1,
+      "ototoxicity": 0
+    },
+    "fic_synergy": [
+      {
+        "with_class": "aminoglikozid",
+        "type": "sinerji"
+      }
+    ],
+    "routes_of_administration": {
+      "topical": true,
+      "oral": true,
+      "iv": true,
+      "inhaled": false,
+      "im": false
+    },
+    "primary_route": "oral",
+    "bioavailability_by_route": {
+      "oral": 0.75,
+      "iv": 1.0,
+      "topical": 0.05
+    }
+  },
+  {
+    "id": "gentamicin",
+    "class": "aminoglikozid",
+    "molecular_weight_gmol": 477.6,
+    "cmax_mgL": 20.0,
+    "t_half_h": 2.5,
+    "volume_distribution_Lkg": 0.25,
+    "protein_binding_pct": 5,
+    "bioavailability_pct": 0,
+    "tissue_penetration": {
+      "skin-wound": 0.4,
+      "burn-wound": 0.25,
+      "chronic-wound": 0.15,
+      "lung": 0.35,
+      "gut": 0.2,
+      "urinary": 0.95,
+      "bloodstream": 1.0,
+      "bone": 0.15
+    },
+    "hill_coefficient_n": 2.0,
+    "post_antibiotic_effect_h": 5.0,
+    "concentration_dependent": true,
+    "references": [
+      "PMID:6326992",
+      "PMID:11709319",
+      "EUCAST PK/PD Breakpoint Tables v14.0"
+    ],
+    "diffusion_coefficient": {
+      "skin-wound": 3.5,
+      "burn-wound": 8.0,
+      "chronic-wound": 2.5
+    },
+    "ec50_factor": 0.5,
+    "ec50_derived": 10.0,
+    "mbc_mic_ratio": 2,
+    "mbc_derived_mgL": 4.0,
+    "toxicity": {
+      "nephrotoxicity": 3,
+      "hepatotoxicity": 0,
+      "neurotoxicity": 1,
+      "ototoxicity": 3
+    },
+    "fic_synergy": [],
+    "routes_of_administration": {
+      "topical": true,
+      "oral": false,
+      "iv": true,
+      "inhaled": true,
+      "im": true
+    },
+    "primary_route": "iv",
+    "bioavailability_by_route": {
+      "oral": 0.0,
+      "iv": 1.0,
+      "im": 0.9,
+      "inhaled": 0.1,
+      "topical": 0.02
+    }
+  },
+  {
+    "id": "meropenem",
+    "class": "beta-laktam (karbapenem)",
+    "molecular_weight_gmol": 383.5,
+    "cmax_mgL": 49.0,
+    "t_half_h": 1.0,
+    "volume_distribution_Lkg": 0.3,
+    "protein_binding_pct": 2,
+    "bioavailability_pct": 0,
+    "tissue_penetration": {
+      "skin-wound": 0.65,
+      "burn-wound": 0.4,
+      "chronic-wound": 0.3,
+      "lung": 0.55,
+      "gut": 0.5,
+      "urinary": 0.75,
+      "bloodstream": 1.0,
+      "bone": 0.2
+    },
+    "hill_coefficient_n": 1.2,
+    "post_antibiotic_effect_h": 1.5,
+    "concentration_dependent": false,
+    "references": [
+      "PMID:7811502",
+      "PMID:16048927",
+      "Mandell's Principles & Practice of Infectious Diseases 9th ed."
+    ],
+    "diffusion_coefficient": {
+      "skin-wound": 3.5,
+      "burn-wound": 8.0,
+      "chronic-wound": 2.5
+    },
+    "ec50_factor": 1.0,
+    "ec50_derived": 98.0,
+    "mbc_mic_ratio": 2,
+    "mbc_derived_mgL": 1.0,
+    "toxicity": {
+      "nephrotoxicity": 0,
+      "hepatotoxicity": 1,
+      "neurotoxicity": 1,
+      "ototoxicity": 0
+    },
+    "fic_synergy": [
+      {
+        "with_class": "florokinolon",
+        "type": "sinerji"
+      },
+      {
+        "with_class": "aminoglikozid",
+        "type": "aditif"
+      },
+      {
+        "with_class": "makrolid",
+        "type": "antagonizm"
+      }
+    ],
+    "routes_of_administration": {
+      "topical": false,
+      "oral": false,
+      "iv": true,
+      "inhaled": false,
+      "im": false
+    },
+    "primary_route": "iv",
+    "bioavailability_by_route": {
+      "oral": 0.0,
+      "iv": 1.0
+    }
+  },
+  {
+    "id": "vancomycin",
+    "class": "glikopeptid",
+    "molecular_weight_gmol": 1449.3,
+    "cmax_mgL": 35.0,
+    "t_half_h": 5.0,
+    "volume_distribution_Lkg": 0.6,
+    "protein_binding_pct": 50,
+    "bioavailability_pct": 0,
+    "tissue_penetration": {
+      "skin-wound": 0.35,
+      "burn-wound": 0.2,
+      "chronic-wound": 0.15,
+      "lung": 0.3,
+      "gut": 0.15,
+      "urinary": 0.6,
+      "bloodstream": 1.0,
+      "bone": 0.12
+    },
+    "hill_coefficient_n": 1.0,
+    "post_antibiotic_effect_h": 2.0,
+    "concentration_dependent": false,
+    "references": [
+      "PMID:19106348",
+      "PMID:31550832",
+      "IDSA Vancomycin Therapeutic Monitoring Guideline 2020"
+    ],
+    "diffusion_coefficient": {
+      "skin-wound": 3.5,
+      "burn-wound": 8.0,
+      "chronic-wound": 2.5
+    },
+    "ec50_factor": 2.0,
+    "ec50_derived": 35.0,
+    "mbc_mic_ratio": 2,
+    "mbc_derived_mgL": 2.0,
+    "toxicity": {
+      "nephrotoxicity": 2,
+      "hepatotoxicity": 0,
+      "neurotoxicity": 0,
+      "ototoxicity": 1
+    },
+    "fic_synergy": [
+      {
+        "with_class": "aminoglikozid",
+        "type": "sinerji"
+      }
+    ],
+    "routes_of_administration": {
+      "topical": false,
+      "oral": true,
+      "iv": true,
+      "inhaled": false,
+      "im": false
+    },
+    "primary_route": "iv",
+    "bioavailability_by_route": {
+      "oral": 0.05,
+      "iv": 1.0
+    }
+  },
+  {
+    "id": "tetracycline",
+    "class": "tetrasiklin",
+    "molecular_weight_gmol": 444.4,
+    "cmax_mgL": 4.0,
+    "t_half_h": 8.5,
+    "volume_distribution_Lkg": 1.5,
+    "protein_binding_pct": 65,
+    "bioavailability_pct": 75,
+    "tissue_penetration": {
+      "skin-wound": 0.7,
+      "burn-wound": 0.45,
+      "chronic-wound": 0.35,
+      "lung": 0.8,
+      "gut": 0.7,
+      "urinary": 0.55,
+      "bloodstream": 1.0,
+      "bone": 0.45
+    },
+    "hill_coefficient_n": 1.0,
+    "post_antibiotic_effect_h": 3.0,
+    "concentration_dependent": false,
+    "references": [
+      "PMID:4587679",
+      "PMID:12648025",
+      "Goodman & Gilman's 14th ed. Ch.58"
+    ],
+    "diffusion_coefficient": {
+      "skin-wound": 3.5,
+      "burn-wound": 8.0,
+      "chronic-wound": 2.5
+    },
+    "ec50_factor": 3.0,
+    "ec50_derived": 1.0,
+    "mbc_mic_ratio": 16,
+    "mbc_derived_mgL": 64.0,
+    "toxicity": {
+      "nephrotoxicity": 0,
+      "hepatotoxicity": 2,
+      "neurotoxicity": 0,
+      "ototoxicity": 0
+    },
+    "fic_synergy": [
+      {
+        "with_class": "beta-laktam",
+        "type": "indifere"
+      }
+    ],
+    "routes_of_administration": {
+      "topical": true,
+      "oral": true,
+      "iv": true,
+      "inhaled": false,
+      "im": false
+    },
+    "primary_route": "oral",
+    "bioavailability_by_route": {
+      "oral": 0.75,
+      "iv": 1.0,
+      "topical": 0.08
+    }
+  },
+  {
+    "id": "ceftazidime",
+    "class": "beta-laktam (3. nesil sefalosporin)",
+    "molecular_weight_gmol": 546.6,
+    "cmax_mgL": 69.0,
+    "t_half_h": 1.8,
+    "volume_distribution_Lkg": 0.24,
+    "protein_binding_pct": 14,
+    "bioavailability_pct": 0,
+    "tissue_penetration": {
+      "skin-wound": 0.6,
+      "burn-wound": 0.35,
+      "chronic-wound": 0.25,
+      "lung": 0.5,
+      "gut": 0.4,
+      "urinary": 0.9,
+      "bloodstream": 1.0,
+      "bone": 0.18
+    },
+    "hill_coefficient_n": 1.0,
+    "post_antibiotic_effect_h": 0.5,
+    "concentration_dependent": false,
+    "references": [
+      "PMID:6329106",
+      "PMID:10722472",
+      "EUCAST PK/PD Breakpoint Tables v14.0"
+    ],
+    "diffusion_coefficient": {
+      "skin-wound": 3.5,
+      "burn-wound": 8.0,
+      "chronic-wound": 2.5
+    },
+    "ec50_factor": 1.5,
+    "ec50_derived": 17.25,
+    "mbc_mic_ratio": 4,
+    "mbc_derived_mgL": 16.0,
+    "toxicity": {
+      "nephrotoxicity": 0,
+      "hepatotoxicity": 0,
+      "neurotoxicity": 1,
+      "ototoxicity": 0
+    },
+    "fic_synergy": [
+      {
+        "with_class": "aminoglikozid",
+        "type": "aditif"
+      },
+      {
+        "with_class": "makrolid",
+        "type": "antagonizm"
+      }
+    ],
+    "routes_of_administration": {
+      "topical": false,
+      "oral": false,
+      "iv": true,
+      "inhaled": true,
+      "im": true
+    },
+    "primary_route": "iv",
+    "bioavailability_by_route": {
+      "oral": 0.0,
+      "iv": 1.0,
+      "im": 0.9,
+      "inhaled": 0.15
+    }
+  },
+  {
+    "id": "piperacillin-tazobactam",
+    "class": "beta-laktam (üreidopenisilin + BLI)",
+    "molecular_weight_gmol": 539.5,
+    "cmax_mgL": 242.0,
+    "t_half_h": 1.0,
+    "volume_distribution_Lkg": 0.24,
+    "protein_binding_pct": 26,
+    "bioavailability_pct": 0,
+    "tissue_penetration": {
+      "skin-wound": 0.55,
+      "burn-wound": 0.35,
+      "chronic-wound": 0.25,
+      "lung": 0.45,
+      "gut": 0.4,
+      "urinary": 0.8,
+      "bloodstream": 1.0,
+      "bone": 0.12
+    },
+    "hill_coefficient_n": 1.0,
+    "post_antibiotic_effect_h": 0.5,
+    "concentration_dependent": false,
+    "references": [
+      "PMID:9431946",
+      "PMID:17283186",
+      "Sanford Guide to Antimicrobial Therapy 2024"
+    ],
+    "diffusion_coefficient": {
+      "skin-wound": 3.5,
+      "burn-wound": 8.0,
+      "chronic-wound": 2.5
+    },
+    "ec50_factor": 2.0,
+    "ec50_derived": 60.5,
+    "mbc_mic_ratio": 2,
+    "mbc_derived_mgL": 8.0,
+    "toxicity": {
+      "nephrotoxicity": 0,
+      "hepatotoxicity": 1,
+      "neurotoxicity": 1,
+      "ototoxicity": 0
+    },
+    "fic_synergy": [
+      {
+        "with_class": "aminoglikozid",
+        "type": "aditif"
+      },
+      {
+        "with_class": "makrolid",
+        "type": "antagonizm"
+      }
+    ],
+    "routes_of_administration": {
+      "topical": false,
+      "oral": false,
+      "iv": true,
+      "inhaled": false,
+      "im": false
+    },
+    "primary_route": "iv",
+    "bioavailability_by_route": {
+      "oral": 0.0,
+      "iv": 1.0
+    }
+  },
+  {
+    "id": "levofloxacin",
+    "class": "florokinolon (3. nesil)",
+    "molecular_weight_gmol": 361.4,
+    "cmax_mgL": 8.6,
+    "t_half_h": 7.0,
+    "volume_distribution_Lkg": 1.27,
+    "protein_binding_pct": 31,
+    "bioavailability_pct": 99,
+    "tissue_penetration": {
+      "skin-wound": 0.9,
+      "burn-wound": 0.65,
+      "chronic-wound": 0.6,
+      "lung": 1.1,
+      "gut": 0.8,
+      "urinary": 1.3,
+      "bloodstream": 1.0,
+      "bone": 0.7
+    },
+    "hill_coefficient_n": 1.5,
+    "post_antibiotic_effect_h": 3.5,
+    "concentration_dependent": true,
+    "references": [
+      "PMID:8726003",
+      "PMID:15673739",
+      "EUCAST PK/PD Breakpoint Tables v14.0"
+    ],
+    "diffusion_coefficient": {
+      "skin-wound": 3.5,
+      "burn-wound": 8.0,
+      "chronic-wound": 2.5
+    },
+    "ec50_factor": 1.0,
+    "ec50_derived": 8.6,
+    "mbc_mic_ratio": 2,
+    "mbc_derived_mgL": 2.0,
+    "toxicity": {
+      "nephrotoxicity": 1,
+      "hepatotoxicity": 1,
+      "neurotoxicity": 1,
+      "ototoxicity": 0
+    },
+    "fic_synergy": [
+      {
+        "with_class": "aminoglikozid",
+        "type": "sinerji"
+      }
+    ],
+    "routes_of_administration": {
+      "topical": true,
+      "oral": true,
+      "iv": true,
+      "inhaled": false,
+      "im": false
+    },
+    "primary_route": "oral",
+    "bioavailability_by_route": {
+      "oral": 0.99,
+      "iv": 1.0,
+      "topical": 0.06
+    }
+  },
+  {
+    "id": "erythromycin",
+    "class": "makrolid",
+    "molecular_weight_gmol": 733.9,
+    "cmax_mgL": 3.5,
+    "t_half_h": 1.8,
+    "volume_distribution_Lkg": 0.64,
+    "protein_binding_pct": 77,
+    "bioavailability_pct": 35,
+    "tissue_penetration": {
+      "skin-wound": 0.5,
+      "burn-wound": 0.3,
+      "chronic-wound": 0.25,
+      "lung": 0.7,
+      "gut": 0.55,
+      "urinary": 0.25,
+      "bloodstream": 1.0,
+      "bone": 0.2
+    },
+    "hill_coefficient_n": 1.0,
+    "post_antibiotic_effect_h": 2.5,
+    "concentration_dependent": false,
+    "references": [
+      "PMID:3032396",
+      "PMID:17569866",
+      "Goodman & Gilman's 14th ed. Ch.58"
+    ],
+    "diffusion_coefficient": {
+      "skin-wound": 3.5,
+      "burn-wound": 8.0,
+      "chronic-wound": 2.5
+    },
+    "ec50_factor": 4.0,
+    "ec50_derived": 0.875,
+    "mbc_mic_ratio": 8,
+    "mbc_derived_mgL": 32.0,
+    "toxicity": {
+      "nephrotoxicity": 0,
+      "hepatotoxicity": 2,
+      "neurotoxicity": 0,
+      "ototoxicity": 1
+    },
+    "fic_synergy": [
+      {
+        "with_class": "beta-laktam",
+        "type": "indifere"
+      },
+      {
+        "with_class": "glikopeptid",
+        "type": "antagonizm"
+      }
+    ],
+    "routes_of_administration": {
+      "topical": true,
+      "oral": true,
+      "iv": true,
+      "inhaled": false,
+      "im": false
+    },
+    "primary_route": "oral",
+    "bioavailability_by_route": {
+      "oral": 0.35,
+      "iv": 1.0,
+      "topical": 0.04
+    }
+  },
+  {
+    "id": "rifampicin",
+    "class": "ansamisin (rifamisin)",
+    "molecular_weight_gmol": 822.9,
+    "cmax_mgL": 12.0,
+    "t_half_h": 3.5,
+    "volume_distribution_Lkg": 0.8,
+    "protein_binding_pct": 80,
+    "bioavailability_pct": 93,
+    "tissue_penetration": {
+      "skin-wound": 0.8,
+      "burn-wound": 0.6,
+      "chronic-wound": 0.5,
+      "lung": 0.95,
+      "gut": 0.65,
+      "urinary": 0.4,
+      "bloodstream": 1.0,
+      "bone": 0.85
+    },
+    "hill_coefficient_n": 1.5,
+    "post_antibiotic_effect_h": 4.0,
+    "concentration_dependent": true,
+    "references": [
+      "PMID:6326017",
+      "PMID:24729613",
+      "WHO Model Prescribing Information: Drugs used in Mycobacterial Diseases"
+    ],
+    "diffusion_coefficient": {
+      "skin-wound": 3.5,
+      "burn-wound": 8.0,
+      "chronic-wound": 2.5
+    },
+    "ec50_factor": 0.5,
+    "ec50_derived": 6.0,
+    "mbc_mic_ratio": 2,
+    "mbc_derived_mgL": 4.0,
+    "toxicity": {
+      "nephrotoxicity": 0,
+      "hepatotoxicity": 3,
+      "neurotoxicity": 0,
+      "ototoxicity": 0
+    },
+    "fic_synergy": [
+      {
+        "with_class": "florokinolon",
+        "type": "aditif"
+      }
+    ],
+    "routes_of_administration": {
+      "topical": false,
+      "oral": true,
+      "iv": true,
+      "inhaled": true,
+      "im": false
+    },
+    "primary_route": "oral",
+    "bioavailability_by_route": {
+      "oral": 0.93,
+      "iv": 1.0,
+      "inhaled": 0.7
+    }
+  },
+  {
+    "id": "colistin",
+    "class": "polimiksin (polimiksin E)",
+    "molecular_weight_gmol": 1155.4,
+    "cmax_mgL": 5.0,
+    "t_half_h": 2.5,
+    "volume_distribution_Lkg": 0.19,
+    "protein_binding_pct": 50,
+    "bioavailability_pct": 0,
+    "tissue_penetration": {
+      "skin-wound": 0.3,
+      "burn-wound": 0.2,
+      "chronic-wound": 0.1,
+      "lung": 0.25,
+      "gut": 0.1,
+      "urinary": 0.6,
+      "bloodstream": 1.0,
+      "bone": 0.08
+    },
+    "hill_coefficient_n": 3.0,
+    "post_antibiotic_effect_h": 2.5,
+    "concentration_dependent": true,
+    "references": [
+      "PMID:17145839",
+      "PMID:28264841",
+      "EUCAST PK/PD Breakpoint Tables v14.0"
+    ],
+    "diffusion_coefficient": {
+      "skin-wound": 3.5,
+      "burn-wound": 8.0,
+      "chronic-wound": 2.5
+    },
+    "ec50_factor": 1.0,
+    "ec50_derived": 2.5,
+    "mbc_mic_ratio": 4,
+    "mbc_derived_mgL": 8.0,
+    "toxicity": {
+      "nephrotoxicity": 3,
+      "hepatotoxicity": 0,
+      "neurotoxicity": 2,
+      "ototoxicity": 1
+    },
+    "fic_synergy": [
+      {
+        "with_class": "karbapenem",
+        "type": "sinerji"
+      }
+    ],
+    "routes_of_administration": {
+      "topical": true,
+      "oral": false,
+      "iv": true,
+      "inhaled": true,
+      "im": false
+    },
+    "primary_route": "iv",
+    "bioavailability_by_route": {
+      "oral": 0.0,
+      "iv": 1.0,
+      "inhaled": 0.3,
+      "topical": 0.03
+    }
+  }
+]

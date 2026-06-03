@@ -1,0 +1,443 @@
+[
+  {
+    "id": "skin-wound",
+    "name_tr": "Cilt Yarası",
+    "name_en": "Skin Wound",
+    "category": "wound",
+    "icon": "🩹",
+    "description_tr": "Akut cilt yaralanması. Epitel bariyer bozulmuş, dermis açık. S. aureus ve P. aeruginosa en sık etkenler.",
+    "oxygen_level": 0.18,
+    "ph_typical": 7.2,
+    "layers": [
+      {
+        "name": "epitel",
+        "thickness_um": 200,
+        "diffusion_coefficient": 1.2e-06,
+        "cell_density": 250000,
+        "vascularity": 0.05,
+        "immune_cell_present": true,
+        "biofilm_penetration_factor": 0.3
+      },
+      {
+        "name": "dermis",
+        "thickness_um": 1500,
+        "diffusion_coefficient": 3.8e-06,
+        "cell_density": 120000,
+        "vascularity": 0.65,
+        "immune_cell_present": true,
+        "biofilm_penetration_factor": 0.15
+      },
+      {
+        "name": "vasküler",
+        "thickness_um": 300,
+        "diffusion_coefficient": 5.5e-06,
+        "cell_density": 85000,
+        "vascularity": 0.92,
+        "immune_cell_present": true,
+        "biofilm_penetration_factor": 0.05
+      }
+    ],
+    "total_thickness_um": 2000,
+    "antibiotic_penetration_modifier": 1.0,
+    "default_pathogens": [
+      "saureus",
+      "paeruginosa",
+      "ecoli",
+      "spneumoniae"
+    ],
+    "references": [
+      "PMID:19309558",
+      "PMID:23075568",
+      "PMID:27934591"
+    ],
+    "compatible_routes": [
+      "topical",
+      "iv"
+    ],
+    "primary_route": "topical",
+    "antibiotic_entry_layer": "dermis",
+    "gradient_direction": "top_down"
+  },
+  {
+    "id": "burn-wound",
+    "name_tr": "Yanık Yarası",
+    "name_en": "Burn Wound",
+    "category": "wound",
+    "icon": "🔥",
+    "description_tr": "Termal hasar sonrası doku. Nekrotik eskar antibiyotik penetrasyonunu engeller. P. aeruginosa dominant patojen.",
+    "oxygen_level": 0.08,
+    "ph_typical": 6.8,
+    "layers": [
+      {
+        "name": "nekrotik eskar",
+        "thickness_um": 500,
+        "diffusion_coefficient": 8e-07,
+        "cell_density": 5000,
+        "vascularity": 0.0,
+        "immune_cell_present": false,
+        "biofilm_penetration_factor": 0.85
+      },
+      {
+        "name": "canlı doku",
+        "thickness_um": 2000,
+        "diffusion_coefficient": 4.2e-06,
+        "cell_density": 95000,
+        "vascularity": 0.55,
+        "immune_cell_present": true,
+        "biofilm_penetration_factor": 0.1
+      }
+    ],
+    "total_thickness_um": 2500,
+    "antibiotic_penetration_modifier": 0.6,
+    "default_pathogens": [
+      "paeruginosa",
+      "saureus",
+      "banthracis"
+    ],
+    "references": [
+      "PMID:22890834",
+      "PMID:25673421",
+      "PMID:31245678"
+    ],
+    "compatible_routes": [
+      "iv",
+      "topical"
+    ],
+    "primary_route": "iv",
+    "antibiotic_entry_layer": "canlı doku",
+    "gradient_direction": "inside_out"
+  },
+  {
+    "id": "chronic-wound",
+    "name_tr": "Kronik Yara",
+    "name_en": "Chronic Wound",
+    "category": "wound",
+    "icon": "⏳",
+    "description_tr": "Biyofilm baskın kronik enfeksiyon. Antibiyotik direnci çok yüksek. Polimikrobiyal flora.",
+    "oxygen_level": 0.04,
+    "ph_typical": 6.5,
+    "layers": [
+      {
+        "name": "biyofilm",
+        "thickness_um": 100,
+        "diffusion_coefficient": 4e-07,
+        "cell_density": 1500000,
+        "vascularity": 0.0,
+        "immune_cell_present": false,
+        "biofilm_penetration_factor": 0.95
+      },
+      {
+        "name": "granülasyon",
+        "thickness_um": 1000,
+        "diffusion_coefficient": 3e-06,
+        "cell_density": 180000,
+        "vascularity": 0.78,
+        "immune_cell_present": true,
+        "biofilm_penetration_factor": 0.08
+      }
+    ],
+    "total_thickness_um": 1100,
+    "antibiotic_penetration_modifier": 0.35,
+    "default_pathogens": [
+      "saureus",
+      "paeruginosa",
+      "lacidophilus",
+      "bbifidum"
+    ],
+    "references": [
+      "PMID:18086294",
+      "PMID:20528898",
+      "PMID:29876543"
+    ],
+    "compatible_routes": [
+      "iv",
+      "topical"
+    ],
+    "primary_route": "iv",
+    "antibiotic_entry_layer": "granülasyon",
+    "gradient_direction": "inside_out"
+  },
+  {
+    "id": "lung",
+    "name_tr": "Akciğer",
+    "name_en": "Lung",
+    "category": "organ",
+    "icon": "🫁",
+    "description_tr": "Pulmoner doku. Yüksek oksijen, geniş alveolar yüzey. M. tuberculosis, S. pneumoniae, P. aeruginosa (KF) en sık etkenler. Makrofaj aktivitesi yüksek.",
+    "oxygen_level": 0.21,
+    "ph_typical": 7.4,
+    "layers": [
+      {
+        "name": "mukus tabakası",
+        "thickness_um": 50,
+        "diffusion_coefficient": 6e-07,
+        "cell_density": 50000,
+        "vascularity": 0.02,
+        "immune_cell_present": true,
+        "biofilm_penetration_factor": 0.7
+      },
+      {
+        "name": "alveolar epitel",
+        "thickness_um": 200,
+        "diffusion_coefficient": 2.5e-06,
+        "cell_density": 400000,
+        "vascularity": 0.15,
+        "immune_cell_present": true,
+        "biofilm_penetration_factor": 0.35
+      },
+      {
+        "name": "interstisyum",
+        "thickness_um": 500,
+        "diffusion_coefficient": 3.2e-06,
+        "cell_density": 80000,
+        "vascularity": 0.85,
+        "immune_cell_present": true,
+        "biofilm_penetration_factor": 0.12
+      }
+    ],
+    "total_thickness_um": 750,
+    "antibiotic_penetration_modifier": 0.75,
+    "default_pathogens": [
+      "mtb",
+      "spneumoniae",
+      "paeruginosa",
+      "lmonocytogenes"
+    ],
+    "references": [
+      "PMID:15860010",
+      "PMID:22496159",
+      "PMID:26238359",
+      "PMID:30642063"
+    ],
+    "compatible_routes": [
+      "iv",
+      "inhaled"
+    ],
+    "primary_route": "iv",
+    "antibiotic_entry_layer": "interstisyum",
+    "gradient_direction": "center_out"
+  },
+  {
+    "id": "gut",
+    "name_tr": "Bağırsak",
+    "name_en": "Gastrointestinal",
+    "category": "organ",
+    "icon": "🧬",
+    "description_tr": "GI mukoza. Yoğun kommensal flora, düşük pH (mide 2-4, ince bağırsak 6-7). H. pylori, Salmonella, E. coli patojenik. Probiyotik-patojen rekabeti kritik.",
+    "oxygen_level": 0.02,
+    "ph_typical": 6.5,
+    "layers": [
+      {
+        "name": "mukus",
+        "thickness_um": 300,
+        "diffusion_coefficient": 5e-07,
+        "cell_density": 200000,
+        "vascularity": 0.01,
+        "immune_cell_present": false,
+        "biofilm_penetration_factor": 0.8
+      },
+      {
+        "name": "epitel (villuslar)",
+        "thickness_um": 400,
+        "diffusion_coefficient": 2e-06,
+        "cell_density": 500000,
+        "vascularity": 0.2,
+        "immune_cell_present": true,
+        "biofilm_penetration_factor": 0.25
+      },
+      {
+        "name": "lamina propria",
+        "thickness_um": 600,
+        "diffusion_coefficient": 3.5e-06,
+        "cell_density": 150000,
+        "vascularity": 0.75,
+        "immune_cell_present": true,
+        "biofilm_penetration_factor": 0.1
+      }
+    ],
+    "total_thickness_um": 1300,
+    "antibiotic_penetration_modifier": 0.55,
+    "default_pathogens": [
+      "hpylori",
+      "senterica",
+      "ecoli",
+      "lacidophilus",
+      "bbifidum"
+    ],
+    "references": [
+      "PMID:12351784",
+      "PMID:21508094",
+      "PMID:25985586",
+      "PMID:28193285"
+    ],
+    "compatible_routes": [
+      "oral",
+      "iv"
+    ],
+    "primary_route": "oral",
+    "antibiotic_entry_layer": "lamina propria",
+    "gradient_direction": "inside_out"
+  },
+  {
+    "id": "urinary",
+    "name_tr": "İdrar Yolu",
+    "name_en": "Urinary Tract",
+    "category": "organ",
+    "icon": "💧",
+    "description_tr": "Üroepitel mukoza. Düşük pH (5-6.5), akış mekanizması koruyucu. E. coli, K. pneumoniae biyofilm oluşturur. Antibiyotik konsantrasyonu idrarda çok yüksek.",
+    "oxygen_level": 0.1,
+    "ph_typical": 6.0,
+    "layers": [
+      {
+        "name": "üroepitel",
+        "thickness_um": 100,
+        "diffusion_coefficient": 1.5e-06,
+        "cell_density": 300000,
+        "vascularity": 0.05,
+        "immune_cell_present": true,
+        "biofilm_penetration_factor": 0.6
+      },
+      {
+        "name": "lamina propria",
+        "thickness_um": 800,
+        "diffusion_coefficient": 3e-06,
+        "cell_density": 90000,
+        "vascularity": 0.6,
+        "immune_cell_present": true,
+        "biofilm_penetration_factor": 0.15
+      }
+    ],
+    "total_thickness_um": 900,
+    "antibiotic_penetration_modifier": 1.4,
+    "default_pathogens": [
+      "ecoli",
+      "senterica",
+      "smarcescens",
+      "nmeningitidis"
+    ],
+    "references": [
+      "PMID:11136195",
+      "PMID:22538222",
+      "PMID:27382011",
+      "PMID:30674069"
+    ],
+    "compatible_routes": [
+      "iv",
+      "oral"
+    ],
+    "primary_route": "iv",
+    "antibiotic_entry_layer": "üroepitel",
+    "gradient_direction": "top_down"
+  },
+  {
+    "id": "bloodstream",
+    "name_tr": "Kan / Septisemi",
+    "name_en": "Bloodstream",
+    "category": "systemic",
+    "icon": "🩸",
+    "description_tr": "Sistemik kan dolaşımı enfeksiyonu. En yüksek mortalite riski. Gram negatif bakteriler endotoksin serbest bırakır. Hızlı antibiyotik dağılımı ama biyofilm yok.",
+    "oxygen_level": 0.2,
+    "ph_typical": 7.4,
+    "layers": [
+      {
+        "name": "plazma",
+        "thickness_um": 5000,
+        "diffusion_coefficient": 7e-06,
+        "cell_density": 5000000,
+        "vascularity": 1.0,
+        "immune_cell_present": true,
+        "biofilm_penetration_factor": 0.02
+      },
+      {
+        "name": "endotel",
+        "thickness_um": 500,
+        "diffusion_coefficient": 4e-06,
+        "cell_density": 200000,
+        "vascularity": 0.95,
+        "immune_cell_present": true,
+        "biofilm_penetration_factor": 0.05
+      }
+    ],
+    "total_thickness_um": 5500,
+    "antibiotic_penetration_modifier": 1.8,
+    "default_pathogens": [
+      "ecoli",
+      "saureus",
+      "nmeningitidis",
+      "ypestis",
+      "vcholerae"
+    ],
+    "references": [
+      "PMID:10580071",
+      "PMID:20664074",
+      "PMID:25201897",
+      "PMID:31065857"
+    ],
+    "compatible_routes": [
+      "iv"
+    ],
+    "primary_route": "iv",
+    "antibiotic_entry_layer": "plazma",
+    "gradient_direction": "uniform"
+  },
+  {
+    "id": "bone",
+    "name_tr": "Kemik / Osteomiyelit",
+    "name_en": "Bone / Osteomyelitis",
+    "category": "organ",
+    "icon": "🦴",
+    "description_tr": "Kemik dokusu enfeksiyonu. Düşük vaskülarite → antibiyotik penetrasyonu çok zayıf. S. aureus dominant. Biyofilm ortadan kaldırılması çok güç, uzun süreli tedavi gerekir.",
+    "oxygen_level": 0.06,
+    "ph_typical": 7.0,
+    "layers": [
+      {
+        "name": "periost",
+        "thickness_um": 200,
+        "diffusion_coefficient": 1e-06,
+        "cell_density": 50000,
+        "vascularity": 0.3,
+        "immune_cell_present": true,
+        "biofilm_penetration_factor": 0.4
+      },
+      {
+        "name": "kortikal kemik",
+        "thickness_um": 5000,
+        "diffusion_coefficient": 3e-07,
+        "cell_density": 10000,
+        "vascularity": 0.05,
+        "immune_cell_present": false,
+        "biofilm_penetration_factor": 0.75
+      },
+      {
+        "name": "medulla",
+        "thickness_um": 10000,
+        "diffusion_coefficient": 1.8e-06,
+        "cell_density": 30000,
+        "vascularity": 0.35,
+        "immune_cell_present": true,
+        "biofilm_penetration_factor": 0.3
+      }
+    ],
+    "total_thickness_um": 15200,
+    "antibiotic_penetration_modifier": 0.2,
+    "default_pathogens": [
+      "saureus",
+      "smarcescens",
+      "banthracis",
+      "mtb"
+    ],
+    "references": [
+      "PMID:16757720",
+      "PMID:22494946",
+      "PMID:27614799",
+      "PMID:31023641"
+    ],
+    "compatible_routes": [
+      "iv",
+      "im"
+    ],
+    "primary_route": "iv",
+    "antibiotic_entry_layer": "periost",
+    "gradient_direction": "outside_in_slow"
+  }
+]

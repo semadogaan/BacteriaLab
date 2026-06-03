@@ -1,0 +1,113 @@
+<!-- 
+  morphology-panel.html
+  Mevcut BacteriaLab projenizin MORPHOLOGY & MICROSCOPY paneline eklenecek snippet.
+  bacteria-images.js ile birlikte kullanın.
+-->
+
+<!-- 1. HTML: Panel içine bu yapıyı koyun -->
+<div class="morphology-image-wrapper">
+  <!-- Yüklenirken spinner -->
+  <div class="morphology-placeholder" id="morph-placeholder">
+    <div class="morph-spinner"></div>
+  </div>
+  <!-- Görsel -->
+  <img 
+    id="morph-img" 
+    class="morphology-img"
+    alt=""
+    style="display:none"
+  />
+  <!-- Lisans etiketi -->
+  <span class="morph-license" id="morph-license"></span>
+</div>
+
+<style>
+  .morphology-image-wrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4/3;
+    background: #111;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 12px;
+  }
+
+  .morphology-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .morphology-placeholder {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #111;
+    flex-direction: column;
+    gap: 8px;
+    color: #555;
+    font-size: 12px;
+  }
+
+  .morph-spinner {
+    width: 24px;
+    height: 24px;
+    border: 2px solid #333;
+    border-top-color: #6ECB70;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .morph-license {
+    position: absolute;
+    bottom: 6px;
+    right: 6px;
+    background: rgba(0,0,0,0.6);
+    color: #aaa;
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    backdrop-filter: blur(4px);
+  }
+</style>
+
+<script type="module">
+  // 2. bacteria-images.js dosyasını import edin
+  import { getBacteriaImage, loadBacteriaImage } from './bacteria-images.js';
+
+  const morphImg = document.getElementById('morph-img');
+  const morphPlaceholder = document.getElementById('morph-placeholder');
+  const morphLicense = document.getElementById('morph-license');
+
+  // 3. Bu fonksiyonu bakteri seçildiğinde çağırın
+  window.updateMorphologyImage = async function(bacteriaName) {
+    // Sıfırla
+    morphImg.style.display = 'none';
+    morphPlaceholder.style.display = 'flex';
+    morphLicense.textContent = '';
+    morphImg.alt = bacteriaName;
+
+    // Görseli yükle
+    const data = getBacteriaImage(bacteriaName);
+    if (data) {
+      morphLicense.textContent = data.license;
+      await loadBacteriaImage(bacteriaName, morphImg, morphPlaceholder);
+    } else {
+      morphPlaceholder.innerHTML = '<span style="font-size:28px">🔬</span><span>Görsel bulunamadı</span>';
+    }
+  };
+
+  // 4. Mevcut bakteri seçim event'inize ekleyin:
+  // Örnek — strain listesinde bir öğeye tıklandığında:
+  document.querySelectorAll('.strain-item').forEach(item => {
+    item.addEventListener('click', () => {
+      const name = item.dataset.name; // veya item.querySelector('.name').textContent
+      updateMorphologyImage(name);
+    });
+  });
+</script>

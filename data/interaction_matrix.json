@@ -1,0 +1,520 @@
+[
+  {
+    "bacteria_a": "ecoli",
+    "bacteria_b": "paeruginosa",
+    "competition_alpha": 0.75,
+    "synergy_alpha": 0,
+    "mechanism": "Piyosiyanin toksisitesi & siderophore rekabeti",
+    "biofilm_effect": "P. aeruginosa biyofilmi E. coli'yi baskılar",
+    "literature_mic_shift": 0.5,
+    "references": [
+      "PMID:19880720",
+      "PMID:25261790"
+    ]
+  },
+  {
+    "bacteria_a": "ecoli",
+    "bacteria_b": "saureus",
+    "competition_alpha": 0.6,
+    "synergy_alpha": 0,
+    "mechanism": "Besin rekabeti & kolisin üretimi",
+    "biofilm_effect": "Karma biyofilm oluşabilir",
+    "literature_mic_shift": 0.7,
+    "references": [
+      "PMID:22357955",
+      "PMID:28724665"
+    ]
+  },
+  {
+    "bacteria_a": "ecoli",
+    "bacteria_b": "lacidophilus",
+    "competition_alpha": 0.65,
+    "synergy_alpha": 0,
+    "mechanism": "Laktik asit pH düşüşü E. coli'yi inhibe eder",
+    "biofilm_effect": "L. acidophilus bağırsak biyofilminde baskın",
+    "literature_mic_shift": 0.4,
+    "references": [
+      "PMID:23462059",
+      "PMID:30042389"
+    ]
+  },
+  {
+    "bacteria_a": "ecoli",
+    "bacteria_b": "senterica",
+    "competition_alpha": 0.55,
+    "synergy_alpha": 0,
+    "mechanism": "Benzer niş rekabeti (Enterobacteriaceae)",
+    "biofilm_effect": "Kolonizasyon direnci (competitive exclusion)",
+    "literature_mic_shift": 0.8,
+    "references": [
+      "PMID:15602021",
+      "PMID:26150490"
+    ]
+  },
+  {
+    "bacteria_a": "paeruginosa",
+    "bacteria_b": "saureus",
+    "competition_alpha": 0.85,
+    "synergy_alpha": 0,
+    "mechanism": "HQNO + piyosiyanin → S. aureus SCV seleksiyonu",
+    "biofilm_effect": "Kistik fibroz akciğerinde ko-enfeksiyon (paradoks sinerjizm)",
+    "literature_mic_shift": 2.5,
+    "references": [
+      "PMID:16385031",
+      "PMID:22038590",
+      "PMID:29233894"
+    ]
+  },
+  {
+    "bacteria_a": "paeruginosa",
+    "bacteria_b": "bsubtilis",
+    "competition_alpha": 0.7,
+    "synergy_alpha": 0,
+    "mechanism": "Siderophore rekabeti & anti-mikrobiyel peptidler",
+    "biofilm_effect": "B. subtilis surfaktin P. aeruginosa biyofilmini bozar",
+    "literature_mic_shift": 1.8,
+    "references": [
+      "PMID:23459802",
+      "PMID:27573825"
+    ]
+  },
+  {
+    "bacteria_a": "saureus",
+    "bacteria_b": "spneumoniae",
+    "competition_alpha": 0.6,
+    "synergy_alpha": 0,
+    "mechanism": "Nazofarinks kolonizasyon rekabeti",
+    "biofilm_effect": "S. pneumoniae H₂O₂ ile S. aureus'u inhibe eder",
+    "literature_mic_shift": 1.2,
+    "references": [
+      "PMID:15557634",
+      "PMID:24567308"
+    ]
+  },
+  {
+    "bacteria_a": "saureus",
+    "bacteria_b": "cdiphtheriae",
+    "competition_alpha": 0.2,
+    "synergy_alpha": 0,
+    "mechanism": "Farklı niş tercihi (deri vs üst solunum yolu)",
+    "biofilm_effect": "Minimal etkileşim",
+    "literature_mic_shift": 1.0,
+    "references": [
+      "PMID:21390205"
+    ]
+  },
+  {
+    "bacteria_a": "lacidophilus",
+    "bacteria_b": "bbifidum",
+    "competition_alpha": 0,
+    "synergy_alpha": 0.8,
+    "mechanism": "Cross-feeding (çapraz besleme) + pH düzenleme",
+    "biofilm_effect": "Birlikte mukozal biyofilm oluşturur",
+    "literature_mic_shift": 0.3,
+    "references": [
+      "PMID:23969540",
+      "PMID:28367547"
+    ]
+  },
+  {
+    "bacteria_a": "lacidophilus",
+    "bacteria_b": "llactis",
+    "competition_alpha": 0,
+    "synergy_alpha": 0.7,
+    "mechanism": "Homolaktat fermantasyon sinerjisi",
+    "biofilm_effect": "Fermente gıdalarda birlikte çalışır",
+    "literature_mic_shift": 0.5,
+    "references": [
+      "PMID:20613843",
+      "PMID:25694518"
+    ]
+  },
+  {
+    "bacteria_a": "lacidophilus",
+    "bacteria_b": "senterica",
+    "competition_alpha": 0.75,
+    "synergy_alpha": 0,
+    "mechanism": "Organik asitler + bakteriyosin + kompetitif dışlama",
+    "biofilm_effect": "L. acidophilus Salmonella adezyonunu azaltır",
+    "literature_mic_shift": 0.25,
+    "references": [
+      "PMID:17259371",
+      "PMID:22430502"
+    ]
+  },
+  {
+    "bacteria_a": "vcholerae",
+    "bacteria_b": "ecoli",
+    "competition_alpha": 0.65,
+    "synergy_alpha": 0,
+    "mechanism": "T6SS (Tip 6 Sekresyon Sistemi) saldırısı",
+    "biofilm_effect": "V. cholerae T6SS ile komşu bakterileri öldürür",
+    "literature_mic_shift": 1.5,
+    "references": [
+      "PMID:19855398",
+      "PMID:24509506"
+    ]
+  },
+  {
+    "bacteria_a": "bsubtilis",
+    "bacteria_b": "scoelicolor",
+    "competition_alpha": 0.55,
+    "synergy_alpha": 0,
+    "mechanism": "Antimikrobiyel metabolit rekabeti",
+    "biofilm_effect": "Her ikisi de toprakta biyofilm oluşturur",
+    "literature_mic_shift": 1.3,
+    "references": [
+      "PMID:18556790",
+      "PMID:26242612"
+    ]
+  },
+  {
+    "bacteria_a": "bsubtilis",
+    "bacteria_b": "atumefaciens",
+    "competition_alpha": 0.6,
+    "synergy_alpha": 0,
+    "mechanism": "B. subtilis lipopeptidleri (surfaktin, iturin)",
+    "biofilm_effect": "B. subtilis bitki rizosferi koruyucu biyofilm",
+    "literature_mic_shift": 2.0,
+    "references": [
+      "PMID:15590781",
+      "PMID:23459802"
+    ]
+  },
+  {
+    "bacteria_a": "afischeri",
+    "bacteria_b": "cviolaceum",
+    "competition_alpha": 0,
+    "synergy_alpha": 0.45,
+    "mechanism": "Çapraz quorum sensing (AHL sinyalleri)",
+    "biofilm_effect": "AHL sinyalleri tür arası iletişim sağlar",
+    "literature_mic_shift": 1.0,
+    "references": [
+      "PMID:11544353",
+      "PMID:18296538"
+    ]
+  },
+  {
+    "bacteria_a": "afischeri",
+    "bacteria_b": "vcholerae",
+    "competition_alpha": 0.5,
+    "synergy_alpha": 0,
+    "mechanism": "Deniz ortamı niş rekabeti",
+    "biofilm_effect": "Farklı biyofilm stratejileri",
+    "literature_mic_shift": 1.0,
+    "references": [
+      "PMID:16267315",
+      "PMID:21764754"
+    ]
+  },
+  {
+    "bacteria_a": "dradiodurans",
+    "bacteria_b": "taquaticus",
+    "competition_alpha": 0.1,
+    "synergy_alpha": 0,
+    "mechanism": "Farklı ekstrem ortamlar (radyasyon vs sıcaklık)",
+    "biofilm_effect": "Minimal",
+    "literature_mic_shift": 1.0,
+    "references": [
+      "PMID:11742065"
+    ]
+  },
+  {
+    "bacteria_a": "ypestis",
+    "bacteria_b": "ecoli",
+    "competition_alpha": 0.5,
+    "synergy_alpha": 0,
+    "mechanism": "Yersiniabactin siderophore üstünlüğü",
+    "biofilm_effect": "Y. pestis pire bağırsağında biyofilm oluşturur",
+    "literature_mic_shift": 1.4,
+    "references": [
+      "PMID:16585772",
+      "PMID:23231492"
+    ]
+  },
+  {
+    "bacteria_a": "nmeningitidis",
+    "bacteria_b": "spneumoniae",
+    "competition_alpha": 0.7,
+    "synergy_alpha": 0,
+    "mechanism": "Nazofarinks kolonizasyon rekabeti + H₂O₂ üretimi",
+    "biofilm_effect": "S. pneumoniae H₂O₂ ile N. meningitidis'i inhibe eder",
+    "literature_mic_shift": 1.6,
+    "references": [
+      "PMID:17553065",
+      "PMID:25422264"
+    ]
+  },
+  {
+    "bacteria_a": "hpylori",
+    "bacteria_b": "lacidophilus",
+    "competition_alpha": 0.7,
+    "synergy_alpha": 0,
+    "mechanism": "Laktik asit + bakteriyosin → H. pylori inhibisyonu",
+    "biofilm_effect": "L. acidophilus H. pylori adezyonunu azaltır",
+    "literature_mic_shift": 0.35,
+    "references": [
+      "PMID:19220890",
+      "PMID:24820399",
+      "PMID:28710836"
+    ]
+  },
+  {
+    "bacteria_a": "llactis",
+    "bacteria_b": "saureus",
+    "competition_alpha": 0.75,
+    "synergy_alpha": 0,
+    "mechanism": "Nisin bakteriyosin üretimi",
+    "biofilm_effect": "Nisin S. aureus hücre duvarını hedefler",
+    "literature_mic_shift": 0.15,
+    "references": [
+      "PMID:9603875",
+      "PMID:23027182"
+    ]
+  },
+  {
+    "bacteria_a": "llactis",
+    "bacteria_b": "lmonocytogenes",
+    "competition_alpha": 0.8,
+    "synergy_alpha": 0,
+    "mechanism": "Nisin + laktik asit çift etki",
+    "biofilm_effect": "Gıda koruma: nisin + düşük pH",
+    "literature_mic_shift": 0.1,
+    "references": [
+      "PMID:10543753",
+      "PMID:19878678"
+    ]
+  },
+  {
+    "bacteria_a": "soneidensis",
+    "bacteria_b": "paeruginosa",
+    "competition_alpha": 0,
+    "synergy_alpha": 0.55,
+    "mechanism": "Elektron transfer zinciri ortaklığı",
+    "biofilm_effect": "Elektroden biyofilmde ko-kültür",
+    "literature_mic_shift": 1.0,
+    "references": [
+      "PMID:18234670",
+      "PMID:27186901"
+    ]
+  },
+  {
+    "bacteria_a": "soneidensis",
+    "bacteria_b": "ecoli",
+    "competition_alpha": 0,
+    "synergy_alpha": 0.4,
+    "mechanism": "Shewanella'nın ürettiği elektronlar E. coli'ye fayda sağlar",
+    "biofilm_effect": "Karma biyofilm elektron transferi",
+    "literature_mic_shift": 1.0,
+    "references": [
+      "PMID:21946260",
+      "PMID:28232598"
+    ]
+  },
+  {
+    "bacteria_a": "atumefaciens",
+    "bacteria_b": "psyringae",
+    "competition_alpha": 0.45,
+    "synergy_alpha": 0,
+    "mechanism": "Bitki yüzeyi / rizosfer niş rekabeti",
+    "biofilm_effect": "Farklı bitki doku tercihleri",
+    "literature_mic_shift": 1.1,
+    "references": [
+      "PMID:11520220",
+      "PMID:22375069"
+    ]
+  },
+  {
+    "bacteria_a": "mtb",
+    "bacteria_b": "saureus",
+    "competition_alpha": 0.15,
+    "synergy_alpha": 0,
+    "mechanism": "M. tuberculosis intraselüler yaşam döngüsü",
+    "biofilm_effect": "Minimal (farklı enfeksiyon bölgeleri)",
+    "literature_mic_shift": 1.0,
+    "references": [
+      "PMID:18162586"
+    ]
+  },
+  {
+    "bacteria_a": "csporogenes",
+    "bacteria_b": "ecoli",
+    "competition_alpha": 0,
+    "synergy_alpha": 0.4,
+    "mechanism": "Fermentasyon ürünleri cross-feeding",
+    "biofilm_effect": "Anaerobik ortamda bağırsak etkileşimi",
+    "literature_mic_shift": 1.0,
+    "references": [
+      "PMID:24309174",
+      "PMID:29311619"
+    ]
+  },
+  {
+    "bacteria_a": "cdiphtheriae",
+    "bacteria_b": "spneumoniae",
+    "competition_alpha": 0.45,
+    "synergy_alpha": 0,
+    "mechanism": "Üst solunum yolu kolonizasyon rekabeti",
+    "biofilm_effect": "Farklı virülans faktörleri",
+    "literature_mic_shift": 1.2,
+    "references": [
+      "PMID:22006325",
+      "PMID:25073953"
+    ]
+  },
+  {
+    "bacteria_a": "rrubrum",
+    "bacteria_b": "ecoli",
+    "competition_alpha": 0.15,
+    "synergy_alpha": 0,
+    "mechanism": "Tamamen farklı metabolik stratejiler",
+    "biofilm_effect": "Minimal",
+    "literature_mic_shift": 1.0,
+    "references": [
+      "PMID:17189365"
+    ]
+  },
+  {
+    "bacteria_a": "hsalinarum",
+    "bacteria_b": "ecoli",
+    "competition_alpha": 0.9,
+    "synergy_alpha": 0,
+    "mechanism": "Yüksek tuz konsantrasyonu E. coli'yi öldürür",
+    "biofilm_effect": "E. coli >5% NaCl'de yaşayamaz",
+    "literature_mic_shift": 0.01,
+    "references": [
+      "PMID:16547044",
+      "PMID:20482832"
+    ]
+  },
+  {
+    "bacteria_a": "smarcescens",
+    "bacteria_b": "ecoli",
+    "competition_alpha": 0.55,
+    "synergy_alpha": 0,
+    "mechanism": "Prodigiosin toksisitesi ve besin rekabeti",
+    "biofilm_effect": "S. marcescens swarming ile yüzey kolonizasyonunda avantajlı",
+    "literature_mic_shift": 0.6,
+    "references": [
+      "PMID:17586837",
+      "PMID:23335973"
+    ]
+  },
+  {
+    "bacteria_a": "mluteus",
+    "bacteria_b": "saureus",
+    "competition_alpha": 0.35,
+    "synergy_alpha": 0,
+    "mechanism": "Deri mikrobiyom niş rekabeti; lysostaphin benzeri enzimler",
+    "biofilm_effect": "M. luteus deri biyofilminde kommensal dominant",
+    "literature_mic_shift": 0.8,
+    "references": [
+      "PMID:15184167",
+      "PMID:28878049"
+    ]
+  },
+  {
+    "bacteria_a": "banthracis",
+    "bacteria_b": "bsubtilis",
+    "competition_alpha": 0.4,
+    "synergy_alpha": 0,
+    "mechanism": "Bacillus cereus sensu lato grup içi rekabet; besin ve spor oluşumu rekabeti",
+    "biofilm_effect": "B. subtilis surfaktin B. anthracis biyofilmini bozabilir",
+    "literature_mic_shift": 1.5,
+    "references": [
+      "PMID:18083831",
+      "PMID:25049410"
+    ]
+  },
+  {
+    "bacteria_a": "senterica",
+    "bacteria_b": "lacidophilus",
+    "competition_alpha": 0.75,
+    "synergy_alpha": 0,
+    "mechanism": "Organik asitler + kompetitif dışlama (bağırsak epiteli)",
+    "biofilm_effect": "L. acidophilus Salmonella adezyonunu engeller",
+    "literature_mic_shift": 0.3,
+    "references": [
+      "PMID:17259371",
+      "PMID:25762137"
+    ]
+  },
+  {
+    "bacteria_a": "cviolaceum",
+    "bacteria_b": "ecoli",
+    "competition_alpha": 0.4,
+    "synergy_alpha": 0,
+    "mechanism": "Violacein pigmentinin antimikrobiyal etkisi",
+    "biofilm_effect": "Violacein düşük konsantrasyonlarda E. coli biyofilm oluşumunu inhibe eder",
+    "literature_mic_shift": 0.55,
+    "references": [
+      "PMID:18191154",
+      "PMID:24358012"
+    ]
+  },
+  {
+    "bacteria_a": "scoelicolor",
+    "bacteria_b": "ecoli",
+    "competition_alpha": 0.65,
+    "synergy_alpha": 0,
+    "mechanism": "Aktinorhodin ve undesilaprodijinin antibiyotik üretimi",
+    "biofilm_effect": "S. coelicolor toprak biyofilminde antibiyotik bariyeri oluşturur",
+    "literature_mic_shift": 0.2,
+    "references": [
+      "PMID:12634340",
+      "PMID:21335454"
+    ]
+  },
+  {
+    "bacteria_a": "lmonocytogenes",
+    "bacteria_b": "lacidophilus",
+    "competition_alpha": 0.7,
+    "synergy_alpha": 0,
+    "mechanism": "Laktik asit + kompetitif dışlama + bakteriyosin",
+    "biofilm_effect": "L. acidophilus Listeria biyofilm formasyonunu %60-80 azaltır",
+    "literature_mic_shift": 0.2,
+    "references": [
+      "PMID:16751554",
+      "PMID:23840894"
+    ]
+  },
+  {
+    "bacteria_a": "bbifidum",
+    "bacteria_b": "ecoli",
+    "competition_alpha": 0.5,
+    "synergy_alpha": 0,
+    "mechanism": "Kısa zincirli yağ asitleri (SCFA) ile pH düşürme + mukus tabakası rekabeti",
+    "biofilm_effect": "B. bifidum mukus tabakasında baskın kolonizasyon sağlar",
+    "literature_mic_shift": 0.45,
+    "references": [
+      "PMID:18230130",
+      "PMID:26602836"
+    ]
+  },
+  {
+    "bacteria_a": "paeruginosa",
+    "bacteria_b": "smarcescens",
+    "competition_alpha": 0.7,
+    "synergy_alpha": 0,
+    "mechanism": "Piyosiyanin + elastaz + T6SS rekabeti",
+    "biofilm_effect": "P. aeruginosa hastane ortamında S. marcescens'i baskılar",
+    "literature_mic_shift": 0.55,
+    "references": [
+      "PMID:21255107",
+      "PMID:28232581"
+    ]
+  },
+  {
+    "bacteria_a": "saureus",
+    "bacteria_b": "bsubtilis",
+    "competition_alpha": 0.55,
+    "synergy_alpha": 0,
+    "mechanism": "B. subtilis subtilisin ve surfaktin üretimi ile S. aureus inhibisyonu",
+    "biofilm_effect": "B. subtilis biyofilmi S. aureus kolonizasyonunu engeller",
+    "literature_mic_shift": 0.35,
+    "references": [
+      "PMID:24973286",
+      "PMID:29213044"
+    ]
+  }
+]

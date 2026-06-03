@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3D Tissue View — BacteriaLab</title>
+  
+  <!-- Kök dizindeki dosyalara erişim için base path -->
+  <base href="../">
+  
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg: #0a0c0d;
+      --bg2: rgba(17, 20, 23, 0.85);
+      --bg3: #181c1f;
+      --border: #2a2f35;
+      --text: #e8eaed;
+      --text2: #9aa0a8;
+      --accent: #00e5a0;
+      --font-mono: 'Space Mono', monospace;
+      --font-sans: 'DM Sans', sans-serif;
+    }
+    
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-sans);
+      overflow: hidden;
+      height: 100vh;
+      width: 100vw;
+    }
+    
+    .header {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      background: var(--bg2);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      z-index: 100;
+    }
+    
+    .logo { color: var(--accent); font-weight: 700; font-family: var(--font-mono); font-size: 13px; letter-spacing: 0.08em; }
+    
+    .back-btn {
+      background: transparent; border: 1px solid var(--border); color: var(--text2);
+      padding: 4px 12px; border-radius: 4px; font-family: var(--font-mono); font-size: 11px;
+      cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 6px;
+    }
+    .back-btn:hover { border-color: var(--accent); color: var(--accent); }
+    
+    .right-panel {
+      position: absolute;
+      top: 44px; right: 0; bottom: 0;
+      width: 280px;
+      background: var(--bg2);
+      backdrop-filter: blur(8px);
+      border-left: 1px solid var(--border);
+      padding: 20px;
+      z-index: 90;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    
+    .panel-title { font-family: var(--font-mono); font-size: 11px; color: var(--text2); letter-spacing: 0.1em; border-bottom: 1px solid var(--border); padding-bottom: 8px; margin-bottom: 4px; }
+    
+    .control-group { display: flex; flex-direction: column; gap: 8px; }
+    .control-label { font-size: 11px; color: var(--text); display: flex; justify-content: space-between; font-family: var(--font-mono); }
+    .control-val { color: var(--accent); }
+    
+    input[type=range] { 
+      width: 100%; 
+      -webkit-appearance: none;
+      background: transparent;
+    }
+    input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      height: 12px; width: 12px;
+      border-radius: 50%;
+      background: var(--accent);
+      cursor: pointer;
+      margin-top: -5px;
+    }
+    input[type=range]::-webkit-slider-runnable-track {
+      width: 100%; height: 2px;
+      cursor: pointer;
+      background: var(--border);
+      border-radius: 2px;
+    }
+    
+    #canvas-container {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      z-index: 10;
+    }
+    
+    .fps-counter {
+      position: absolute;
+      bottom: 16px; right: 296px; /* 280px + 16px */
+      background: rgba(0,0,0,0.6);
+      padding: 4px 8px;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--accent);
+      z-index: 100;
+    }
+
+    .camera-presets {
+      display: flex;
+      gap: 6px;
+      margin-top: 10px;
+    }
+    .cam-btn {
+      flex: 1;
+      padding: 6px 0;
+      font-family: var(--font-mono);
+      font-size: 9px;
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text2);
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .cam-btn:hover, .cam-btn.active {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: rgba(0, 229, 160, 0.05);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <div class="logo">BacteriaLab 3D</div>
+    <button class="back-btn" onclick="window.close(); window.location.href='index.html'">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="19" y1="12" x2="5" y2="12"></line>
+        <polyline points="12 19 5 12 12 5"></polyline>
+      </svg>
+      2D MODE
+    </button>
+  </div>
+  
+  <div class="right-panel">
+    <div class="panel-title">LIVE SYNC PARAMETERS</div>
+    
+    <div class="control-group">
+      <div class="control-label"><span>Time (h)</span> <span class="control-val" id="valTime">0.0</span></div>
+      <input type="range" id="sliderTime" min="0" max="168" step="0.5" value="0">
+    </div>
+    
+    <div class="control-group">
+      <div class="control-label"><span>Temperature (°C)</span> <span class="control-val" id="valTemp">37.0</span></div>
+      <input type="range" id="sliderTemp" min="20" max="45" step="0.5" value="37">
+    </div>
+    
+    <div class="control-group">
+      <div class="control-label"><span>pH Level</span> <span class="control-val" id="valPh">7.0</span></div>
+      <input type="range" id="sliderPh" min="4" max="9" step="0.1" value="7.0">
+    </div>
+
+    <div class="control-group" style="margin-top: 10px; padding-top: 16px; border-top: 1px solid var(--border);">
+      <div class="control-label"><span>Drug Concentration</span> <span class="control-val" id="valDrug">0.00 mg/L</span></div>
+      <div class="control-label" style="color: var(--text3); font-size: 9px; margin-top: 4px;" id="valDrugName">-</div>
+    </div>
+
+    <div class="control-group" style="margin-top: 10px; padding-top: 16px; border-top: 1px solid var(--border);">
+      <div class="panel-title" style="border:none; margin:0; padding:0;">CAMERA VIEW</div>
+      <div class="camera-presets">
+        <button class="cam-btn" onclick="setCameraView('angle', this)">ANGLE</button>
+        <button class="cam-btn" onclick="setCameraView('top', this)">TOP</button>
+        <button class="cam-btn" onclick="setCameraView('side', this)">SIDE</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="canvas-container"></div>
+  <div class="fps-counter">FPS: <span id="fpsValue">60</span></div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.164.1/examples/js/controls/OrbitControls.js"></script>
+  <script src="src/render/three-tissue.js"></script>
+  
+  <script>
+    // Initialize 3D Scene
+    const tissueScene = new TissueScene3D('canvas-container', {
+      width: window.innerWidth,
+      height: window.innerHeight,
+      backgroundColor: 0x0a0c0d
+    });
+    
+    tissueScene.init();
+
+    // Default active camera button
+    document.querySelector('.cam-btn').classList.add('active');
+
+    function setCameraView(view, btnElement) {
+      tissueScene.setView(view);
+      document.querySelectorAll('.cam-btn').forEach(b => b.classList.remove('active'));
+      if (btnElement) btnElement.classList.add('active');
+    }
+    
+    // FPS Calculation
+    let frameCount = 0;
+    let lastTime = performance.now();
+    const fpsValue = document.getElementById('fpsValue');
+    
+    function measureFPS() {
+      const now = performance.now();
+      frameCount++;
+      if (now - lastTime >= 1000) {
+        fpsValue.textContent = Math.round((frameCount * 1000) / (now - lastTime));
+        frameCount = 0;
+        lastTime = now;
+      }
+      requestAnimationFrame(measureFPS);
+    }
+    requestAnimationFrame(measureFPS);
+
+    // Resize handling
+    window.addEventListener('resize', () => {
+      tissueScene.width = window.innerWidth;
+      tissueScene.height = window.innerHeight;
+      if (tissueScene.camera && tissueScene.renderer) {
+        tissueScene.camera.aspect = window.innerWidth / window.innerHeight;
+        tissueScene.camera.updateProjectionMatrix();
+        tissueScene.renderer.setSize(window.innerWidth, window.innerHeight);
+      }
+    });
+
+    // LocalStorage Synchronization Protocol
+    let lastSyncState = null;
+    let isEditingSlider = false;
+
+    // Attach interaction events to sliders so we don't overwrite them while user drags
+    document.querySelectorAll('input[type=range]').forEach(slider => {
+      slider.addEventListener('mousedown', () => isEditingSlider = true);
+      slider.addEventListener('touchstart', () => isEditingSlider = true);
+      slider.addEventListener('mouseup', () => isEditingSlider = false);
+      slider.addEventListener('touchend', () => isEditingSlider = false);
+    });
+    
+    function pollSyncData() {
+      const dataStr = localStorage.getItem('bacterialab_sync');
+      if (!dataStr) return;
+      
+      if (dataStr !== lastSyncState) {
+        lastSyncState = dataStr;
+        try {
+          const state = JSON.parse(dataStr);
+          if (!isEditingSlider) {
+            updateUI(state);
+          }
+          updateScene(state);
+        } catch(e) {
+          console.warn('[3D Sync] Parse error', e);
+        }
+      }
+    }
+    
+    function updateUI(state) {
+      document.getElementById('sliderTime').value = state.time || 0;
+      document.getElementById('valTime').textContent = (state.time || 0).toFixed(1);
+      
+      document.getElementById('sliderTemp').value = state.temp || 37;
+      document.getElementById('valTemp').textContent = (state.temp || 37).toFixed(1);
+      
+      document.getElementById('sliderPh').value = state.ph || 7.0;
+      document.getElementById('valPh').textContent = (state.ph || 7.0).toFixed(1);
+
+      if (state.drug && state.drug.concentration) {
+        document.getElementById('valDrug').textContent = state.drug.concentration.toFixed(2) + ' mg/L';
+        document.getElementById('valDrugName').textContent = state.drug.id || '-';
+      } else {
+        document.getElementById('valDrug').textContent = '0.00 mg/L';
+        document.getElementById('valDrugName').textContent = '-';
+      }
+    }
+    
+    function updateScene(state) {
+      if (state.bacteria && Array.isArray(state.bacteria)) {
+        tissueScene.updateBacteria(state.bacteria);
+      }
+      
+      if (state.drug && state.drug.concentration > 0) {
+        tissueScene.updateDrugConcentration(state.drug.concentration, state.time || 0, state.drug.id);
+      } else {
+        // Clear drug plane if none
+        if (tissueScene.drugPlane) {
+          if (tissueScene.drugPlane.userData._backPlane) {
+            tissueScene.scene.remove(tissueScene.drugPlane.userData._backPlane);
+          }
+          tissueScene.scene.remove(tissueScene.drugPlane);
+          tissueScene.drugPlane = null;
+        }
+      }
+    }
+    
+    setInterval(pollSyncData, 500);
+    pollSyncData(); // Initial poll
+    
+    // Reverse sync: 3D to 2D
+    function writeBackSync() {
+      if (!lastSyncState) return;
+      try {
+        const state = JSON.parse(lastSyncState);
+        state.time = parseFloat(document.getElementById('sliderTime').value);
+        state.temp = parseFloat(document.getElementById('sliderTemp').value);
+        state.ph = parseFloat(document.getElementById('sliderPh').value);
+        
+        // Sadece kendi UI'ımızı anlık güncelliyoruz
+        document.getElementById('valTime').textContent = state.time.toFixed(1);
+        document.getElementById('valTemp').textContent = state.temp.toFixed(1);
+        document.getElementById('valPh').textContent = state.ph.toFixed(1);
+
+        const newStateStr = JSON.stringify(state);
+        localStorage.setItem('bacterialab_sync', newStateStr);
+        lastSyncState = newStateStr; // Prevent infinite loop reflection
+        
+        // Scene'i anında güncelle
+        updateScene(state);
+      } catch(e) {}
+    }
+    
+    document.getElementById('sliderTime').addEventListener('input', writeBackSync);
+    document.getElementById('sliderTemp').addEventListener('input', writeBackSync);
+    document.getElementById('sliderPh').addEventListener('input', writeBackSync);
+
+  </script>
+</body>
+</html>
