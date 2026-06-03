@@ -2,6 +2,7 @@
 
 Web tabanlı mikrobiyoloji simülasyon platformu. Birden fazla patojen tarafından enfekte olan doku modellerinde antibiyotik tedavi optimizasyonu için geliştirilmiştir.
 
+Siteyi deneyimlemek için: https://semadogaan.github.io/BacteriaLab/
 ## Kurulum
 
 Sunucu gerekmez. Proje klasörünü açın, `index.html` dosyasını bir tarayıcıda çalıştırın.
